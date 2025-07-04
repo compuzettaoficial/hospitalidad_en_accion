@@ -1,140 +1,158 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hospitalidad en Acción</title>
-  <link rel="stylesheet" href="css/styles.css">
-  <!-- Firebase v8 -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventos - Hospitalidad en Acción</title>
+    <!-- Firebase v8 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #6b4b9a;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .event-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 15px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .event-card:hover {
+            transform: translateY(-5px);
+        }
+        .event-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #6b4b9a;
+            margin-bottom: 10px;
+        }
+        .event-description {
+            font-size: 0.95em;
+            color: #555;
+            margin-bottom: 10px;
+        }
+        .event-meta {
+            font-size: 0.85em;
+            color: #777;
+            display: flex;
+            justify-content: space-between;
+        }
+        .event-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background-color: #e8e5f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b4b9a;
+            font-size: 3rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #6b4b9a;
+            font-size: 1.2em;
+        }
+    </style>
 </head>
 <body>
-  <header class="header">
+    <div class="header">Eventos Disponibles</div>
     <div class="container">
-      <div class="nav-brand">
-        <h1>🏠 Hospitalidad en Acción</h1>
-      </div>
-      <nav class="nav-menu">
-        <a href="#" class="nav-link" onclick="showSection('eventos')">Eventos</a>
-        <a href="#" class="nav-link" onclick="showSection('profile')" id="profileLink" style="display:none;">Mi Perfil</a>
-        <a href="#" class="nav-link" onclick="showLogin()" id="loginLink">Iniciar Sesión</a>
-        <a href="#" class="nav-link" onclick="logout()" id="logoutLink" style="display:none;">Cerrar Sesión</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="main-content">
-    <section id="eventos" class="section active">
-      <div class="container">
-        <div class="welcome-banner">
-          <h2>Bienvenido a Hospitalidad en Acción</h2>
-          <p>Conectamos eventos cristianos con anfitriones y visitantes</p>
+        <div id="eventsGrid" class="events-grid">
+            <div class="loading">Cargando eventos...</div>
         </div>
-        <div class="events-grid" id="eventsGrid">
-          <div class="loading">Cargando eventos...</div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="container">
-      <p>&copy; 2024 Hospitalidad en Acción - Derechos reservados: Néstor Manrique</p>
     </div>
-  </footer>
 
-  <script>
-    // Firebase config
-    const firebaseConfig = {
-      apiKey: "AIzaSyBFaCbNqpd93Eirj7NDnkKtOS6Ym0rMoiA",
-      authDomain: "hospitalidad-29c5c.firebaseapp.com",
-      projectId: "hospitalidad-29c5c",
-      storageBucket: "hospitalidad-29c5c.appspot.com",
-      messagingSenderId: "1061561367897",
-      appId: "1:1061561367897:web:57921b5aa3eb7bc3132048"
-    };
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
-    const db = firebase.firestore();
-    const auth = firebase.auth();
+    <script>
+        // Firebase Configuración
+        const firebaseConfig = {
+            apiKey: "AIzaSyBFaCbNqpd93Eirj7NDnkKtOS6Ym0rMoiA",
+            authDomain: "hospitalidad-29c5c.firebaseapp.com",
+            projectId: "hospitalidad-29c5c",
+            storageBucket: "hospitalidad-29c5c.appspot.com",
+            messagingSenderId: "1061561367897",
+            appId: "1:1061561367897:web:57921b5aa3eb7bc3132048"
+        };
 
-    function showSection(id) {
-      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-    }
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.firestore();
+        const auth = firebase.auth();
 
-    function showLogin() {
-      showSection('login');
-    }
+        // ✅ Corrección: mostrar imagen real del evento si existe
+        function loadEvents() {
+            const eventsGrid = document.getElementById('eventsGrid');
+            db.collection('eventos').orderBy('fecha_inicio', 'asc').get()
+                .then(snapshot => {
+                    if (snapshot.empty) {
+                        eventsGrid.innerHTML = '<div class="loading">No hay eventos disponibles.</div>';
+                        return;
+                    }
+                    eventsGrid.innerHTML = '';
+                    snapshot.forEach(doc => {
+                        const evento = doc.data();
+                        const card = document.createElement('div');
+                        card.className = 'event-card';
+                        card.onclick = () => window.location.href = `event-detail.html?id=${doc.id}`;
 
-    function logout() {
-      auth.signOut().then(() => {
-        document.getElementById('loginLink').style.display = 'block';
-        document.getElementById('logoutLink').style.display = 'none';
-        document.getElementById('profileLink').style.display = 'none';
-        showSection('eventos');
-      });
-    }
+                        // Mostrar imagen si existe
+                        const imgHTML = evento.imagenURL
+                            ? `<img src="${evento.imagenURL}" alt="Imagen del evento" class="event-image">`
+                            : `<div class="event-image">📅</div>`;
 
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        document.getElementById('loginLink').style.display = 'none';
-        document.getElementById('logoutLink').style.display = 'block';
-        document.getElementById('profileLink').style.display = 'block';
-      } else {
-        document.getElementById('loginLink').style.display = 'block';
-        document.getElementById('logoutLink').style.display = 'none';
-        document.getElementById('profileLink').style.display = 'none';
-      }
-    });
+                        // Fecha
+                        const fecha = evento.fecha_inicio?.toDate
+                            ? evento.fecha_inicio.toDate().toLocaleDateString('es-ES')
+                            : new Date(evento.fecha_inicio).toLocaleDateString('es-ES');
 
-    function loadEvents() {
-      const eventsGrid = document.getElementById('eventsGrid');
-      db.collection('eventos').orderBy('fecha_inicio', 'asc').get()
-        .then(snapshot => {
-          if (snapshot.empty) {
-            eventsGrid.innerHTML = '<div class="loading">No hay eventos disponibles.</div>';
-            return;
-          }
-          eventsGrid.innerHTML = '';
-          snapshot.forEach(doc => {
-            const evento = doc.data();
-            const card = document.createElement('div');
-            card.className = 'event-card';
-            card.onclick = () => window.location.href = `event-detail.html?id=${doc.id}`;
+                        card.innerHTML = `
+                            ${imgHTML}
+                            <div class="event-title">${evento.titulo || 'Sin título'}</div>
+                            <div class="event-description">${evento.descripcion?.substring(0,100) || 'Sin descripción'}...</div>
+                            <div class="event-meta">
+                                <span>📍 ${evento.lugar || 'Lugar no especificado'}</span>
+                                <span>📅 ${fecha}</span>
+                            </div>
+                        `;
+                        eventsGrid.appendChild(card);
+                    });
+                })
+                .catch(err => {
+                    console.error('Error cargando eventos:', err);
+                    eventsGrid.innerHTML = `<div class="loading">Error al cargar eventos.</div>`;
+                });
+        }
 
-            // ✅ CAMBIO IMPORTANTE:
-            // Usamos <img> real si existe imagenURL; si no, mostramos un ícono por defecto.
-            const imgHTML = evento.imagenURL
-              ? `<img src="${evento.imagenURL}" alt="Imagen del evento" class="event-image" style="width:100%; height:200px; object-fit:cover; border-radius:10px; margin-bottom:1rem;">`
-              : `<div class="event-image">📅</div>`;
-
-            const fecha = evento.fecha_inicio?.toDate 
-              ? evento.fecha_inicio.toDate().toLocaleDateString('es-ES')
-              : new Date(evento.fecha_inicio).toLocaleDateString('es-ES');
-
-            card.innerHTML = `
-              ${imgHTML}
-              <div class="event-title">${evento.titulo || 'Sin título'}</div>
-              <div class="event-description">${evento.descripcion?.substring(0,100) || 'Sin descripción'}...</div>
-              <div class="event-meta">
-                <span>📍 ${evento.lugar || 'Lugar no especificado'}</span>
-                <span>📅 ${fecha}</span>
-              </div>
-            `;
-            eventsGrid.appendChild(card);
-          });
-        })
-        .catch(err => {
-          console.error('Error cargando eventos:', err);
-          eventsGrid.innerHTML = `<div class="loading">Error al cargar eventos.</div>`;
-        });
-    }
-
-    document.addEventListener('DOMContentLoaded', loadEvents);
-  </script>
+        document.addEventListener('DOMContentLoaded', loadEvents);
+    </script>
 </body>
 </html>
