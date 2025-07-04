@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalle del Evento - Hospitalidad en Acción</title>
+    <!-- Firebase v8 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <style>
         * {
             margin: 0;
@@ -53,8 +57,12 @@
         .event-image {
             width: 100%;
             height: 300px;
-            object-fit: cover;
-            position: relative;
+            background: linear-gradient(135deg, #e8e5f0, #6b4b9a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 4rem;
         }
 
         .event-content {
@@ -214,6 +222,17 @@
             border-left: 4px solid #6b4b9a;
         }
 
+        .schedule-day {
+            font-weight: bold;
+            color: #6b4b9a;
+            margin-bottom: 5px;
+        }
+
+        .schedule-time {
+            color: #666;
+            font-size: 0.9em;
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
@@ -248,7 +267,7 @@
         <div id="event-detail" style="display: none;">
             <!-- Tarjeta principal del evento -->
             <div class="event-detail-card">
-                <img id="event-image" src="" alt="Imagen del evento" class="event-image">
+                <div id="event-image" class="event-image">📅</div>
                 <div class="event-content">
                     <h1 id="event-title" class="event-title"></h1>
                     <p id="event-description" class="event-description"></p>
@@ -263,3 +282,250 @@
                             <p id="event-end-date"></p>
                         </div>
                         <div class="info-item">
+                            <h3>📍 Lugar</h3>
+                            <p id="event-location"></p>
+                        </div>
+                        <div class="info-item">
+                            <h3>🏢 Organizador</h3>
+                            <p id="event-organizer"></p>
+                        </div>
+                        <div class="info-item">
+                            <h3>💰 Costo</h3>
+                            <p id="event-cost"></p>
+                        </div>
+                        <div class="info-item">
+                            <h3>👥 Cupos Disponibles</h3>
+                            <p id="event-capacity"></p>
+                        </div>
+                        <div class="info-item">
+                            <h3>📝 Categoría</h3>
+                            <p id="event-category"></p>
+                        </div>
+                        <div class="info-item">
+                            <h3>🏙️ Ciudad</h3>
+                            <p id="event-city"></p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item" style="margin-bottom: 20px;">
+                        <h3>✅ Incluye</h3>
+                        <p id="event-includes"></p>
+                    </div>
+                    
+                    <div class="info-item">
+                        <h3>📋 Requisitos</h3>
+                        <p id="event-requirements"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección de Horarios -->
+            <div id="schedule-section" class="schedule-section">
+                <h3>📅 Horarios del Evento</h3>
+                <div id="schedule-content">
+                    <!-- Los horarios se cargarán aquí -->
+                </div>
+            </div>
+
+            <!-- Mapa -->
+            <div class="map-container">
+                <h3>📍 Ubicación</h3>
+                <div id="map">
+                    <p>Mapa de ubicación (GPS: <span id="gps-coordinates"></span>)</p>
+                </div>
+            </div>
+
+            <!-- Botones de acción -->
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="registerForEvent()">
+                    Inscribirse al Evento
+                </button>
+                <button class="btn btn-secondary" onclick="shareEvent()">
+                    Compartir Evento
+                </button>
+                <button class="btn btn-tertiary" onclick="contactOrganizer()">
+                    Contactar Organizador
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBFaCbNqpd93Eirj7NDnkKtOS6Ym0rMoiA",
+            authDomain: "hospitalidad-29c5c.firebaseapp.com",
+            projectId: "hospitalidad-29c5c",
+            storageBucket: "hospitalidad-29c5c.appspot.com",
+            messagingSenderId: "1061561367897",
+            appId: "1:1061561367897:web:57921b5aa3eb7bc3132048"
+        };
+
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        // Get event ID from URL parameters
+        function getEventIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id');
+        }
+
+        // Load event details
+        function loadEventDetails() {
+            const eventId = getEventIdFromUrl();
+            
+            if (!eventId) {
+                showError('ID de evento no encontrado');
+                return;
+            }
+
+            console.log('Loading event with ID:', eventId);
+
+            db.collection('eventos').doc(eventId).get()
+                .then((doc) => {
+                    if (doc.exists) {
+                        const evento = doc.data();
+                        console.log('Event data:', evento);
+                        displayEventDetails(evento);
+                        hideLoading();
+                    } else {
+                        showError('Evento no encontrado');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error loading event:', error);
+                    showError('Error al cargar el evento: ' + error.message);
+                });
+        }
+
+        // Display event details
+        function displayEventDetails(evento) {
+            // Basic info
+            document.getElementById('event-title').textContent = evento.titulo || 'Sin título';
+            document.getElementById('event-description').textContent = evento.descripcion || 'Sin descripción';
+            document.getElementById('event-location').textContent = evento.lugar || 'Sin ubicación';
+            document.getElementById('event-organizer').textContent = evento.organizador || 'Sin organizador';
+            document.getElementById('event-cost').textContent = evento.costo || 'No especificado';
+            document.getElementById('event-category').textContent = evento.categoria || 'Sin categoría';
+            document.getElementById('event-city').textContent = evento.ciudad || 'Sin ciudad';
+            document.getElementById('event-includes').textContent = evento.incluye || 'No especificado';
+            document.getElementById('event-requirements').textContent = evento.requisitos || 'Sin requisitos';
+
+            // Dates
+            if (evento.fecha_inicio) {
+                const fechaInicio = evento.fecha_inicio.toDate ? evento.fecha_inicio.toDate() : new Date(evento.fecha_inicio);
+                document.getElementById('event-start-date').textContent = fechaInicio.toLocaleDateString('es-ES', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            }
+
+            if (evento.fecha_fin) {
+                const fechaFin = evento.fecha_fin.toDate ? evento.fecha_fin.toDate() : new Date(evento.fecha_fin);
+                document.getElementById('event-end-date').textContent = fechaFin.toLocaleDateString('es-ES', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            }
+
+            // Capacity
+            const cuposDisponibles = evento.cupos - (evento.inscritos || 0);
+            document.getElementById('event-capacity').textContent = `${cuposDisponibles} de ${evento.cupos} disponibles`;
+
+            // GPS coordinates
+            if (evento.gps) {
+                const gpsText = `${evento.gps.latitude}°, ${evento.gps.longitude}°`;
+                document.getElementById('gps-coordinates').textContent = gpsText;
+            }
+
+            // Schedule
+            if (evento.horario && Array.isArray(evento.horario)) {
+                displaySchedule(evento.horario);
+            }
+
+            // Show the event detail section
+            document.getElementById('event-detail').style.display = 'block';
+        }
+
+        // Display schedule
+        function displaySchedule(horarios) {
+            const scheduleContent = document.getElementById('schedule-content');
+            scheduleContent.innerHTML = '';
+
+            horarios.forEach(horario => {
+                if (horario.horarios) {
+                    const scheduleItem = document.createElement('div');
+                    scheduleItem.className = 'schedule-item';
+                    scheduleItem.innerHTML = `
+                        <div class="schedule-day">${horario.horarios.dia || 'Sin día'}</div>
+                        <div class="schedule-time">${horario.horarios.hora || 'Sin hora'} - ${horario.horarios.actividad || 'Sin actividad'}</div>
+                    `;
+                    scheduleContent.appendChild(scheduleItem);
+                }
+            });
+
+            if (scheduleContent.children.length === 0) {
+                scheduleContent.innerHTML = '<p>No hay horarios disponibles</p>';
+            }
+        }
+
+        // Show error
+        function showError(message) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('error').style.display = 'block';
+            document.getElementById('error').textContent = message;
+        }
+
+        // Hide loading
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        // Event actions
+        function registerForEvent() {
+            // Check if user is logged in
+            if (!auth.currentUser) {
+                alert('Debes iniciar sesión para inscribirte al evento');
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            alert('Funcionalidad de inscripción en desarrollo');
+        }
+
+        function shareEvent() {
+            if (navigator.share) {
+                navigator.share({
+                    title: document.getElementById('event-title').textContent,
+                    text: document.getElementById('event-description').textContent,
+                    url: window.location.href
+                });
+            } else {
+                // Fallback for browsers that don't support Web Share API
+                const url = window.location.href;
+                navigator.clipboard.writeText(url).then(() => {
+                    alert('Enlace copiado al portapapeles');
+                });
+            }
+        }
+
+        function contactOrganizer() {
+            alert('Funcionalidad de contacto en desarrollo');
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            loadEventDetails();
+        });
+    </script>
+</body>
+</html>
