@@ -1,10 +1,20 @@
-// Configuración de Firebase
+// js/firebase-config.js
+// Importa e inicializa Firebase
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore.js";
+
 const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_AUTH_DOMAIN",
-  projectId: "TU_PROJECT_ID",
-  storageBucket: "TU_STORAGE_BUCKET",
-  messagingSenderId: "TU_MSG_SENDER_ID",
-  appId: "TU_APP_ID"
+  apiKey: "AIzaSyBFaCbNqpd93Eirj7NDnkKtOS6Ym0rMoiA",
+  authDomain: "hospitalidad-29c5c.firebaseapp.com",
+  projectId: "hospitalidad-29c5c",
+  storageBucket: "hospitalidad-29c5c.appspot.com",
+  messagingSenderId: "1061561367897",
+  appId: "1:1061561367897:web:57921b5aa3eb7bc3132048"
 };
-firebase.initializeApp(firebaseConfig);
+
+// Inicializa Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Exporta db para usarlo en otros archivos
+export { db };
