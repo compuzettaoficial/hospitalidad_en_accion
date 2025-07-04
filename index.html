@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -38,6 +38,7 @@
                 </div>
                 
                 <div class="events-grid" id="eventsGrid">
+                    <!-- Los eventos se cargarán aquí dinámicamente -->
                     <div class="loading">Cargando eventos...</div>
                 </div>
             </div>
@@ -123,7 +124,15 @@
             </div>
         </section>
     </main>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Hospitalidad en Acción - Derechos reservados: Néstor Manrique</p>
+        </div>
+    </footer>
+
     <style>
+        /* CSS Base - Hospitalidad en Acción */
         * {
             margin: 0;
             padding: 0;
@@ -246,13 +255,6 @@
             justify-content: center;
             color: white;
             font-size: 3rem;
-            overflow: hidden;
-        }
-
-        .event-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
         }
 
         .event-title {
@@ -411,7 +413,7 @@
         }
     </style>
     <script>
-        // ✅ Firebase Configuration
+        // Firebase Configuration
         if (!firebase.apps.length) {
             const firebaseConfig = {
                 apiKey: "AIzaSyBFaCbNqpd93Eirj7NDnkKtOS6Ym0rMoiA",
@@ -423,24 +425,32 @@
             };
             firebase.initializeApp(firebaseConfig);
         }
-
+        
         const db = firebase.firestore();
         const auth = firebase.auth();
-        const storage = firebase.storage(); // para cargar imágenes reales
 
+        // Global variables
         let currentUser = null;
 
-        // ✅ Navegación
+        // Navigation Functions
         function showSection(sectionId) {
-            document.querySelectorAll('.section').forEach(section =>
-                section.classList.remove('active'));
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Show selected section
             document.getElementById(sectionId).classList.add('active');
         }
 
-        function showLogin() { showSection('login'); }
-        function showRegister() { showSection('register'); }
+        function showLogin() {
+            showSection('login');
+        }
 
-        // ✅ Cerrar sesión
+        function showRegister() {
+            showSection('register');
+        }
+
+        // Auth Functions
         function logout() {
             auth.signOut().then(() => {
                 updateUIForUser(null);
@@ -448,110 +458,195 @@
             });
         }
 
-        // ✅ Actualizar UI según login
         function updateUIForUser(user) {
             currentUser = user;
-            document.getElementById('loginLink').style.display = user ? 'none' : 'block';
-            document.getElementById('logoutLink').style.display = user ? 'block' : 'none';
-            document.getElementById('profileLink').style.display = user ? 'block' : 'none';
-            if (user) loadUserProfile(user);
+            const loginLink = document.getElementById('loginLink');
+            const logoutLink = document.getElementById('logoutLink');
+            const profileLink = document.getElementById('profileLink');
+
+            if (user) {
+                loginLink.style.display = 'none';
+                logoutLink.style.display = 'block';
+                profileLink.style.display = 'block';
+                loadUserProfile(user);
+            } else {
+                loginLink.style.display = 'block';
+                logoutLink.style.display = 'none';
+                profileLink.style.display = 'none';
+            }
         }
 
-        // ✅ Cargar perfil
+        // Load user profile
         function loadUserProfile(user) {
-            db.collection('usuarios').doc(user.uid).get().then(doc => {
+            db.collection('usuarios').doc(user.uid).get().then((doc) => {
                 if (doc.exists) {
-                    const u = doc.data();
-                    document.getElementById('profileContent').innerHTML = `
+                    const userData = doc.data();
+                    const profileContent = document.getElementById('profileContent');
+                    profileContent.innerHTML = `
                         <div class="profile-info">
                             <h3>Información Personal</h3>
-                            <p><strong>Nombre:</strong> ${u.nombre} ${u.apellido}</p>
-                            <p><strong>Email:</strong> ${u.email}</p>
-                            <p><strong>Rol:</strong> ${u.rol}</p>
+                            <p><strong>Nombre:</strong> ${userData.nombre} ${userData.apellido}</p>
+                            <p><strong>Email:</strong> ${userData.email}</p>
+                            <p><strong>Rol:</strong> ${userData.rol}</p>
                         </div>
                     `;
                 }
             });
         }
 
-        // ✅ Cargar eventos y mostrar imagen real (corregido)
+        // Load events from Firestore
         function loadEvents() {
-            const grid = document.getElementById('eventsGrid');
-            grid.innerHTML = `<div class="loading">Cargando eventos...</div>`;
-            db.collection('eventos').orderBy('fecha_inicio','asc').get()
-                .then(snap => {
-                    if (snap.empty) {
-                        grid.innerHTML = `<div class="loading">No hay eventos disponibles.</div>`;
-                        return;
-                    }
-                    grid.innerHTML = '';
-                    snap.forEach(doc => {
-                        const e = doc.data();
-                        const card = document.createElement('div');
-                        card.className = 'event-card';
-                        card.onclick = () => showEventDetail(doc.id);
-                        const fecha = new Date(e.fecha_inicio).toLocaleDateString('es-ES');
-
-                        // ✅ Mostrar imagen real del evento (url_imagen)
-                        card.innerHTML = `
-                            <div class="event-image">
-                                <img src="${e.url_imagen || ''}" alt="${e.titulo}">
-                            </div>
-                            <div class="event-title">${e.titulo}</div>
-                            <div class="event-description">${e.descripcion.substring(0,100)}...</div>
-                            <div class="event-meta">
-                                <span>📍 ${e.lugar}</span>
-                                <span>📅 ${fecha}</span>
+            const eventsGrid = document.getElementById('eventsGrid');
+            
+            if (!eventsGrid) {
+                console.error('Element eventsGrid not found');
+                return;
+            }
+            
+            db.collection('eventos')
+                .orderBy('fecha_inicio', 'asc')
+                .get()
+                .then((querySnapshot) => {
+                    if (querySnapshot.empty) {
+                        eventsGrid.innerHTML = `
+                            <div class="loading">
+                                <p>No hay eventos disponibles.</p>
+                                <p>Los eventos se mostrarán aquí una vez que se agreguen a la base de datos.</p>
                             </div>
                         `;
-                        grid.appendChild(card);
+                        return;
+                    }
+
+                    eventsGrid.innerHTML = '';
+                    querySnapshot.forEach((doc) => {
+                        const evento = doc.data();
+                        const eventCard = document.createElement('div');
+                        eventCard.className = 'event-card';
+                        
+                        // CAMBIO PRINCIPAL: Cambiar la función onclick para redirigir a event-detail.html
+                        eventCard.onclick = () => showEventDetail(doc.id);
+                        
+                        // Formatear fecha
+                        const fechaInicio = new Date(evento.fecha_inicio).toLocaleDateString('es-ES');
+                        
+                        eventCard.innerHTML = `
+                            <div class="event-image">
+                                <img src="${evento.imagenURL || ''}" alt="Imagen del evento" class="event-img" onerror="this.style.display='none'; document.querySelector('.event-image-placeholder').style.display='flex';" style="display: ${evento.imagenURL ? 'block' : 'none'};">
+                                <div class="event-image-placeholder" style="display: ${evento.imagenURL ? 'none' : 'flex'};">📅</div>
+                            </div>
+                            <div class="event-title">${evento.titulo}</div>
+                            <div class="event-description">${evento.descripcion.substring(0, 100)}...</div>
+                            <div class="event-meta">
+                                <span>📍 ${evento.lugar}</span>
+                                <span>📅 ${fechaInicio}</span>
+                            </div>
+                        `;
+                        eventsGrid.appendChild(eventCard);
                     });
                 })
-                .catch(err => {
-                    console.error('Error cargando eventos:', err);
-                    grid.innerHTML = `<div class="loading">Error: ${err.message}</div>`;
+                .catch((error) => {
+                    console.error('Error loading events:', error);
+                    
+                    if (error.code === 'failed-precondition') {
+                        console.log('Intentando query simple...');
+                        db.collection('eventos')
+                            .get()
+                            .then((querySnapshot) => {
+                                eventsGrid.innerHTML = '';
+                                querySnapshot.forEach((doc) => {
+                                    const evento = doc.data();
+                                    const eventCard = document.createElement('div');
+                                    eventCard.className = 'event-card';
+                                    
+                                    // CAMBIO PRINCIPAL: Usar la nueva función también aquí
+                                    eventCard.onclick = () => showEventDetail(doc.id);
+                                    
+                                    eventCard.innerHTML = `
+                                        <div class="event-image">
+                                            <img src="${evento.imagenURL || ''}" alt="Imagen del evento" class="event-img" onerror="this.style.display='none'; document.querySelector('.event-image-placeholder').style.display='flex';" style="display: ${evento.imagenURL ? 'block' : 'none'};">
+                                            <div class="event-image-placeholder" style="display: ${evento.imagenURL ? 'none' : 'flex'};">📅</div>
+                                        </div>
+                                        <div class="event-title">${evento.titulo}</div>
+                                        <div class="event-description">${evento.descripcion.substring(0, 100)}...</div>
+                                        <div class="event-meta">
+                                            <span>📍 ${evento.lugar}</span>
+                                            <span>📅 ${evento.fecha_inicio}</span>
+                                        </div>
+                                    `;
+                                    eventsGrid.appendChild(eventCard);
+                                });
+                            });
+                    } else {
+                        eventsGrid.innerHTML = `
+                            <div class="loading">
+                                <p>Error al cargar eventos: ${error.message}</p>
+                                <button onclick="loadEvents()" class="btn btn-primary">Reintentar</button>
+                            </div>
+                        `;
+                    }
                 });
         }
 
-        // ✅ Ir a detalle (redirigir)
-        function showEventDetail(id) {
-            window.location.href = `event-detail.html?id=${id}`;
+        // NUEVA FUNCIÓN: Redirigir a la página de detalles del evento
+        function showEventDetail(eventId) {
+            // Construir la URL con el ID del evento como parámetro
+            const detailUrl = `event-detail.html?id=${eventId}`;
+            
+            // Redirigir a la página de detalles
+            window.location.href = detailUrl;
         }
 
-        // ✅ Login
-        document.getElementById('loginForm').addEventListener('submit', e => {
+        // Auth forms
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            const email = loginEmail.value;
-            const password = loginPassword.value;
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
             auth.signInWithEmailAndPassword(email, password)
-                .then(() => showSection('eventos'))
-                .catch(err => alert('Error: ' + err.message));
+                .then((userCredential) => {
+                    showSection('eventos');
+                })
+                .catch((error) => {
+                    alert('Error al iniciar sesión: ' + error.message);
+                });
         });
 
-        // ✅ Registro
-        document.getElementById('registerForm').addEventListener('submit', e => {
+        document.getElementById('registerForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            const nombre = registerNombre.value;
-            const apellido = registerApellido.value;
-            const email = registerEmail.value;
-            const password = registerPassword.value;
-            const rol = registerRol.value;
+            const nombre = document.getElementById('registerNombre').value;
+            const apellido = document.getElementById('registerApellido').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const rol = document.getElementById('registerRol').value;
 
             auth.createUserWithEmailAndPassword(email, password)
-                .then(cred =>
-                    db.collection('usuarios').doc(cred.user.uid).set({
-                        nombre, apellido, email, rol,
+                .then((userCredential) => {
+                    // Save user data to Firestore
+                    return db.collection('usuarios').doc(userCredential.user.uid).set({
+                        nombre: nombre,
+                        apellido: apellido,
+                        email: email,
+                        rol: rol,
                         createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    }))
-                .then(() => showSection('eventos'))
-                .catch(err => alert('Error: ' + err.message));
+                    });
+                })
+                .then(() => {
+                    showSection('eventos');
+                })
+                .catch((error) => {
+                    alert('Error al crear cuenta: ' + error.message);
+                });
         });
 
-        // ✅ Observar auth
-        auth.onAuthStateChanged(user => updateUIForUser(user));
+        // Auth state observer
+        auth.onAuthStateChanged((user) => {
+            updateUIForUser(user);
+        });
 
-        // ✅ Al cargar
-        document.addEventListener('DOMContentLoaded', loadEvents);
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', () => {
+            loadEvents();
+        });
     </script>
 </body>
 </html>
