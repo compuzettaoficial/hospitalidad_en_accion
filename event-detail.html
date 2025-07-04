@@ -57,6 +57,13 @@
         .event-image {
             width: 100%;
             height: 300px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #e8e5f0, #6b4b9a);
+        }
+
+        .event-image-placeholder {
+            width: 100%;
+            height: 300px;
             background: linear-gradient(135deg, #e8e5f0, #6b4b9a);
             display: flex;
             align-items: center;
@@ -267,7 +274,10 @@
         <div id="event-detail" style="display: none;">
             <!-- Tarjeta principal del evento -->
             <div class="event-detail-card">
-                <div id="event-image" class="event-image">📅</div>
+                <div id="event-image-container">
+                    <img id="event-image" class="event-image" alt="Imagen del evento" style="display: none;">
+                    <div id="event-image-placeholder" class="event-image-placeholder">📅</div>
+                </div>
                 <div class="event-content">
                     <h1 id="event-title" class="event-title"></h1>
                     <p id="event-description" class="event-description"></p>
@@ -415,6 +425,28 @@
             document.getElementById('event-city').textContent = evento.ciudad || 'Sin ciudad';
             document.getElementById('event-includes').textContent = evento.incluye || 'No especificado';
             document.getElementById('event-requirements').textContent = evento.requisitos || 'Sin requisitos';
+
+            // Image
+            if (evento.imagenURL) {
+                const img = document.getElementById('event-image');
+                const placeholder = document.getElementById('event-image-placeholder');
+                
+                img.onload = function() {
+                    placeholder.style.display = 'none';
+                    img.style.display = 'block';
+                };
+                
+                img.onerror = function() {
+                    console.log('Error loading image:', evento.imagenURL);
+                    placeholder.style.display = 'flex';
+                    img.style.display = 'none';
+                };
+                
+                img.src = evento.imagenURL;
+            } else {
+                document.getElementById('event-image-placeholder').style.display = 'flex';
+                document.getElementById('event-image').style.display = 'none';
+            }
 
             // Dates
             if (evento.fecha_inicio) {
