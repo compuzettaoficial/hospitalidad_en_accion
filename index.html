@@ -3,171 +3,552 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Detalle del Evento - Hospitalidad en Acción</title>
+  <title>Hospitalidad en Acción</title>
+  <link rel="stylesheet" href="css/styles.css">
   <!-- Firebase v8 -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
-
-  <style>
-    /* ... TODO TU CSS ORIGINAL TAL CUAL ... */
-    body { font-family: Arial, sans-serif; background: #f5f5f5; }
-    .container { max-width: 1200px; margin: auto; padding: 20px; }
-    .back-button { background: #6b4b9a; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; }
-    .event-detail-card { background: white; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 30px; }
-    .event-image { width: 100%; height: 300px; object-fit: cover; }
-    .event-image-placeholder { width: 100%; height: 300px; background: linear-gradient(135deg, #e8e5f0, #6b4b9a); display: flex; align-items: center; justify-content: center; color: white; font-size: 4rem; }
-    .event-title { font-size: 2.5em; color: #6b4b9a; margin: 15px 0; }
-    .event-description { color: #666; margin-bottom: 20px; }
-    .loading { text-align: center; padding: 50px; color: #6b4b9a; font-size: 1.2em; }
-    .error { text-align: center; padding: 50px; color: #e74c3c; font-size: 1.2em; }
-    /* ... resto de tu CSS ... */
-  </style>
 </head>
 <body>
-  <div class="container">
-    <a href="index.html" class="back-button">← Volver a Eventos</a>
-
-    <div id="loading" class="loading">Cargando detalle del evento...</div>
-    <div id="error" class="error" style="display: none;">Error al cargar el evento. Por favor, intenta nuevamente.</div>
-
-    <div id="event-detail" style="display: none;">
-      <div class="event-detail-card">
-        <div id="event-image-container">
-          <img id="event-image" class="event-image" alt="Imagen del evento" style="display: none;">
-          <div id="event-image-placeholder" class="event-image-placeholder">📅</div>
-        </div>
-        <div class="event-content">
-          <h1 id="event-title" class="event-title"></h1>
-          <p id="event-description" class="event-description"></p>
-          <!-- Aquí seguirían más datos, ejemplo: fechas, lugar, cupos, etc. -->
-        </div>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="nav-brand">
+        <h1>🏠 Hospitalidad en Acción</h1>
       </div>
-
-      <!-- Resto de secciones: horarios, mapa, botones -->
-      <div class="action-buttons">
-        <button class="btn btn-primary" onclick="registerForEvent()">Inscribirse al Evento</button>
-        <button class="btn btn-secondary" onclick="shareEvent()">Compartir Evento</button>
-        <button class="btn btn-tertiary" onclick="contactOrganizer()">Contactar Organizador</button>
-      </div>
+      <nav class="nav-menu">
+        <a href="#" class="nav-link" onclick="showSection('eventos')">Eventos</a>
+        <a href="#" class="nav-link" onclick="showSection('profile')" id="profileLink" style="display:none;">Mi Perfil</a>
+        <a href="#" class="nav-link" onclick="showLogin()" id="loginLink">Iniciar Sesión</a>
+        <a href="#" class="nav-link" onclick="logout()" id="logoutLink" style="display:none;">Cerrar Sesión</a>
+      </nav>
     </div>
-  </div>
+  </header>
 
-  <script>
-    // Configuración Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyBFaCbNqpd93Eirj7NDnkKtOS6Ym0rMoiA",
-      authDomain: "hospitalidad-29c5c.firebaseapp.com",
-      projectId: "hospitalidad-29c5c",
-      storageBucket: "hospitalidad-29c5c.appspot.com",
-      messagingSenderId: "1061561367897",
-      appId: "1:1061561367897:web:57921b5aa3eb7bc3132048"
-    };
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Sección de Eventos -->
+    <section id="eventos" class="section active">
+      <div class="container">
+        <div class="welcome-banner">
+          <h2>Bienvenido a Hospitalidad en Acción</h2>
+          <p>Conectamos eventos cristianos con anfitriones y visitantes</p>
+        </div>
+        <div class="events-grid" id="eventsGrid">
+          <div class="loading">Cargando eventos...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección de Login -->
+    <section id="login" class="section">
+      <div class="container">
+        <div class="auth-container">
+          <div class="auth-card">
+            <h2>Iniciar Sesión</h2>
+            <form id="loginForm">
+              <div class="form-group">
+                <label for="loginEmail">Email:</label>
+                <input type="email" id="loginEmail" required>
+              </div>
+              <div class="form-group">
+                <label for="loginPassword">Contraseña:</label>
+                <input type="password" id="loginPassword" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+            </form>
+            <p class="auth-switch">¿No tienes cuenta? <a href="#" onclick="showRegister()">Regístrate</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección de Registro -->
+    <section id="register" class="section">
+      <div class="container">
+        <div class="auth-container">
+          <div class="auth-card">
+            <h2>Crear Cuenta</h2>
+            <form id="registerForm">
+              <div class="form-group">
+                <label for="registerNombre">Nombre:</label>
+                <input type="text" id="registerNombre" required>
+              </div>
+              <div class="form-group">
+                <label for="registerApellido">Apellido:</label>
+                <input type="text" id="registerApellido" required>
+              </div>
+              <div class="form-group">
+                <label for="registerEmail">Email:</label>
+                <input type="email" id="registerEmail" required>
+              </div>
+              <div class="form-group">
+                <label for="registerPassword">Contraseña:</label>
+                <input type="password" id="registerPassword" required>
+              </div>
+              <div class="form-group">
+                <label for="registerRol">Rol:</label>
+                <select id="registerRol" required>
+                  <option value="">Selecciona tu rol</option>
+                  <option value="visitante">Visitante</option>
+                  <option value="anfitrion">Anfitrión</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary">Crear Cuenta</button>
+            </form>
+            <p class="auth-switch">¿Ya tienes cuenta? <a href="#" onclick="showLogin()">Inicia sesión</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección de Perfil -->
+    <section id="profile" class="section">
+      <div class="container">
+        <div class="profile-container">
+          <div class="profile-card">
+            <h2>Mi Perfil</h2>
+            <div id="profileContent"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
     }
+
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background-color: #f8f9fa;
+        color: #333;
+        line-height: 1.6;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .header {
+        background-color: #6b4b9a;
+        color: white;
+        padding: 1rem 0;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .nav-brand h1 {
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    .nav-menu {
+        display: flex;
+        gap: 2rem;
+    }
+
+    .nav-link {
+        color: white;
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+
+    .nav-link:hover {
+        background-color: rgba(255,255,255,0.1);
+    }
+
+    .main-content {
+        min-height: calc(100vh - 140px);
+        padding: 2rem 0;
+    }
+
+    .section {
+        display: none;
+    }
+
+    .section.active {
+        display: block;
+    }
+
+    .welcome-banner {
+        text-align: center;
+        background: linear-gradient(135deg, #6b4b9a, #8b6bb1);
+        color: white;
+        padding: 3rem 2rem;
+        border-radius: 15px;
+        margin-bottom: 3rem;
+    }
+
+    .welcome-banner h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .welcome-banner p {
+        font-size: 1.2rem;
+        opacity: 0.9;
+    }
+
+    .events-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .event-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+        cursor: pointer;
+    }
+
+    .event-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    .event-image {
+        width: 100%;
+        height: 200px;
+        background: linear-gradient(135deg, #e8e5f0, #6b4b9a);
+        border-radius: 10px;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 3rem;
+        overflow: hidden;
+    }
+
+    .event-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #6b4b9a;
+    }
+
+    .event-description {
+        color: #666;
+        margin-bottom: 1rem;
+    }
+
+    .event-meta {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.9rem;
+        color: #888;
+    }
+
+    .auth-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 60vh;
+    }
+
+    .auth-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .auth-card h2 {
+        text-align: center;
+        color: #6b4b9a;
+        margin-bottom: 2rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #333;
+        font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid #e8e5f0;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: #6b4b9a;
+    }
+
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-primary {
+        background-color: #6b4b9a;
+        color: white;
+        width: 100%;
+    }
+
+    .btn-primary:hover {
+        background-color: #5a3d82;
+    }
+
+    .auth-switch {
+        text-align: center;
+        margin-top: 1rem;
+    }
+
+    .auth-switch a {
+        color: #6b4b9a;
+        text-decoration: none;
+    }
+
+    .profile-container {
+        display: flex;
+        justify-content: center;
+    }
+
+    .profile-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        width: 100%;
+        max-width: 600px;
+    }
+
+    .profile-card h2 {
+        color: #6b4b9a;
+        margin-bottom: 2rem;
+    }
+
+    .loading {
+        text-align: center;
+        padding: 3rem;
+        color: #666;
+        font-size: 1.1rem;
+    }
+
+    .footer {
+        background-color: #333;
+        color: white;
+        text-align: center;
+        padding: 1rem 0;
+        margin-top: 3rem;
+    }
+
+    @media (max-width: 768px) {
+        .header .container {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .nav-menu {
+            gap: 1rem;
+        }
+
+        .welcome-banner h2 {
+            font-size: 2rem;
+        }
+
+        .events-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+<script>
+    // Firebase Configuration
+    if (!firebase.apps.length) {
+        const firebaseConfig = {
+            apiKey: "AIzaSyBFaCbNqpd93Eirj7NDnkKtOS6Ym0rMoiA",
+            authDomain: "hospitalidad-29c5c.firebaseapp.com",
+            projectId: "hospitalidad-29c5c",
+            storageBucket: "hospitalidad-29c5c.appspot.com",
+            messagingSenderId: "1061561367897",
+            appId: "1:1061561367897:web:57921b5aa3eb7bc3132048"
+        };
+        firebase.initializeApp(firebaseConfig);
+    }
+
     const db = firebase.firestore();
     const auth = firebase.auth();
+    let currentUser = null;
 
-    // Obtener ID de la URL
-    function getEventIdFromUrl() {
-      const params = new URLSearchParams(window.location.search);
-      return params.get('id');
+    // Navegación
+    function showSection(sectionId) {
+        document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+        document.getElementById(sectionId).classList.add('active');
     }
 
-    // Cargar detalles del evento
-    function loadEventDetails() {
-      const eventId = getEventIdFromUrl();
-      if (!eventId) {
-        showError('ID de evento no encontrado');
-        return;
-      }
+    function showLogin() {
+        showSection('login');
+    }
 
-      db.collection('eventos').doc(eventId).get()
-        .then((doc) => {
-          if (doc.exists) {
-            const evento = doc.data();
-            displayEventDetails(evento);
-            hideLoading();
-          } else {
-            showError('Evento no encontrado');
-          }
+    function showRegister() {
+        showSection('register');
+    }
+
+    function logout() {
+        auth.signOut().then(() => {
+            updateUIForUser(null);
+            showSection('eventos');
+        });
+    }
+
+    function updateUIForUser(user) {
+        currentUser = user;
+        const loginLink = document.getElementById('loginLink');
+        const logoutLink = document.getElementById('logoutLink');
+        const profileLink = document.getElementById('profileLink');
+
+        if (user) {
+            loginLink.style.display = 'none';
+            logoutLink.style.display = 'block';
+            profileLink.style.display = 'block';
+            loadUserProfile(user);
+        } else {
+            loginLink.style.display = 'block';
+            logoutLink.style.display = 'none';
+            profileLink.style.display = 'none';
+        }
+    }
+
+    function loadUserProfile(user) {
+        db.collection('usuarios').doc(user.uid).get().then((doc) => {
+            if (doc.exists) {
+                const userData = doc.data();
+                document.getElementById('profileContent').innerHTML = `
+                    <div class="profile-info">
+                        <h3>Información Personal</h3>
+                        <p><strong>Nombre:</strong> ${userData.nombre} ${userData.apellido}</p>
+                        <p><strong>Email:</strong> ${userData.email}</p>
+                        <p><strong>Rol:</strong> ${userData.rol}</p>
+                    </div>
+                `;
+            }
+        });
+    }
+
+    // CORREGIDO: Cargar eventos mostrando imagen de Firestore
+    function loadEvents() {
+        const eventsGrid = document.getElementById('eventsGrid');
+        if (!eventsGrid) {
+            console.error('No se encontró el contenedor de eventos');
+            return;
+        }
+
+        db.collection('eventos').orderBy('fecha_inicio', 'asc').get()
+        .then((querySnapshot) => {
+            if (querySnapshot.empty) {
+                eventsGrid.innerHTML = `<div class="loading">No hay eventos disponibles por ahora.</div>`;
+                return;
+            }
+
+            eventsGrid.innerHTML = '';
+            querySnapshot.forEach((doc) => {
+                const evento = doc.data();
+                const fechaInicio = evento.fecha_inicio ? new Date(evento.fecha_inicio).toLocaleDateString('es-ES') : '';
+
+                // Usar imagen si existe, si no poner ícono
+                const imageHTML = evento.imagen_url
+                    ? `<img src="${evento.imagen_url}" alt="Evento" style="width:100%; height:200px; object-fit:cover; border-radius:10px; margin-bottom:1rem;">`
+                    : `<div class="event-image">📅</div>`;
+
+                const card = document.createElement('div');
+                card.className = 'event-card';
+                card.onclick = () => showEventDetail(doc.id);
+                card.innerHTML = `
+                    ${imageHTML}
+                    <div class="event-title">${evento.titulo}</div>
+                    <div class="event-description">${evento.descripcion.substring(0, 100)}...</div>
+                    <div class="event-meta">
+                        <span>📍 ${evento.lugar}</span>
+                        <span>📅 ${fechaInicio}</span>
+                    </div>
+                `;
+                eventsGrid.appendChild(card);
+            });
         })
         .catch((error) => {
-          console.error(error);
-          showError('Error al cargar el evento');
+            console.error('Error cargando eventos:', error);
+            eventsGrid.innerHTML = `<div class="loading">Error al cargar eventos: ${error.message}</div>`;
         });
     }
 
-    // Mostrar detalles del evento
-    function displayEventDetails(evento) {
-      document.getElementById('event-title').textContent = evento.titulo || 'Sin título';
-      document.getElementById('event-description').textContent = evento.descripcion || 'Sin descripción';
-      // ... aquí seguirían más campos: lugar, fechas, etc.
-
-      // ✅ CORREGIDO: Mostrar imagen del evento
-      if (evento.imagenURL) {
-        const img = document.getElementById('event-image');
-        img.src = evento.imagenURL;
-        img.onload = () => {
-          document.getElementById('event-image-placeholder').style.display = 'none';
-          img.style.display = 'block';
-        };
-        img.onerror = () => {
-          img.style.display = 'none';
-          document.getElementById('event-image-placeholder').style.display = 'flex';
-        };
-      } else {
-        document.getElementById('event-image').style.display = 'none';
-        document.getElementById('event-image-placeholder').style.display = 'flex';
-      }
-
-      document.getElementById('event-detail').style.display = 'block';
+    function showEventDetail(eventId) {
+        window.location.href = `event-detail.html?id=${eventId}`;
     }
 
-    function showError(message) {
-      document.getElementById('loading').style.display = 'none';
-      const errorDiv = document.getElementById('error');
-      errorDiv.textContent = message;
-      errorDiv.style.display = 'block';
-    }
+    // Formularios de autenticación
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
 
-    function hideLoading() {
-      document.getElementById('loading').style.display = 'none';
-    }
-
-    // Botones de acción
-    function registerForEvent() {
-      if (!auth.currentUser) {
-        alert('Debes iniciar sesión para inscribirte.');
-        return;
-      }
-      alert('Funcionalidad de inscripción en desarrollo');
-    }
-
-    function shareEvent() {
-      if (navigator.share) {
-        navigator.share({
-          title: document.getElementById('event-title').textContent,
-          text: document.getElementById('event-description').textContent,
-          url: window.location.href
-        });
-      } else {
-        navigator.clipboard.writeText(window.location.href).then(() => {
-          alert('Enlace copiado al portapapeles');
-        });
-      }
-    }
-
-    function contactOrganizer() {
-      alert('Funcionalidad de contacto en desarrollo');
-    }
-
-    // Iniciar al cargar
-    document.addEventListener('DOMContentLoaded', () => {
-      loadEventDetails();
+        auth.signInWithEmailAndPassword(email, password)
+        .then(() => showSection('eventos'))
+        .catch((error) => alert('Error al iniciar sesión: ' + error.message));
     });
-  </script>
+
+    document.getElementById('registerForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const nombre = document.getElementById('registerNombre').value;
+        const apellido = document.getElementById('registerApellido').value;
+        const email = document.getElementById('registerEmail').value;
+        const password = document.getElementById('registerPassword').value;
+        const rol = document.getElementById('registerRol').value;
+
+        auth.createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            return db.collection('usuarios').doc(userCredential.user.uid).set({
+                nombre, apellido, email, rol,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        })
+        .then(() => showSection('eventos'))
+        .catch((error) => alert('Error al crear cuenta: ' + error.message));
+    });
+
+    // Estado de autenticación
+    auth.onAuthStateChanged((user) => {
+        updateUIForUser(user);
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        loadEvents();
+    });
+</script>
 </body>
 </html>
