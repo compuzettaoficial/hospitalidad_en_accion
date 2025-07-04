@@ -3,100 +3,54 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eventos - Hospitalidad en Acción</title>
+  <title>Detalle del Evento - Hospitalidad en Acción</title>
   <!-- Firebase v8 -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+
   <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: #f5f5f5;
-      margin: 0;
-      padding: 0;
-    }
-    .header {
-      background-color: #6b4b9a;
-      color: white;
-      padding: 20px;
-      text-align: center;
-      font-size: 1.8em;
-      font-weight: bold;
-    }
-    .container {
-      max-width: 1200px;
-      margin: auto;
-      padding: 20px;
-    }
-    .events-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 20px;
-    }
-    .event-card {
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      padding: 15px;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    .event-card:hover {
-      transform: translateY(-5px);
-    }
-    .event-image {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      border-radius: 10px;
-      margin-bottom: 1rem;
-      background-color: #e8e5f0;
-    }
-    .event-title {
-      font-size: 1.2em;
-      font-weight: bold;
-      color: #6b4b9a;
-      margin-bottom: 10px;
-    }
-    .event-description {
-      font-size: 0.95em;
-      color: #555;
-      margin-bottom: 10px;
-    }
-    .event-meta {
-      font-size: 0.85em;
-      color: #777;
-      display: flex;
-      justify-content: space-between;
-    }
-    .btn-login {
-      display: inline-block;
-      margin: 10px 0;
-      padding: 10px 20px;
-      background-color: #6b4b9a;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      text-decoration: none;
-      cursor: pointer;
-    }
-    .loading {
-      text-align: center;
-      padding: 50px;
-      color: #6b4b9a;
-      font-size: 1.2em;
-    }
+    /* ... TODO TU CSS ORIGINAL TAL CUAL ... */
+    body { font-family: Arial, sans-serif; background: #f5f5f5; }
+    .container { max-width: 1200px; margin: auto; padding: 20px; }
+    .back-button { background: #6b4b9a; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; }
+    .event-detail-card { background: white; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 30px; }
+    .event-image { width: 100%; height: 300px; object-fit: cover; }
+    .event-image-placeholder { width: 100%; height: 300px; background: linear-gradient(135deg, #e8e5f0, #6b4b9a); display: flex; align-items: center; justify-content: center; color: white; font-size: 4rem; }
+    .event-title { font-size: 2.5em; color: #6b4b9a; margin: 15px 0; }
+    .event-description { color: #666; margin-bottom: 20px; }
+    .loading { text-align: center; padding: 50px; color: #6b4b9a; font-size: 1.2em; }
+    .error { text-align: center; padding: 50px; color: #e74c3c; font-size: 1.2em; }
+    /* ... resto de tu CSS ... */
   </style>
 </head>
 <body>
-  <div class="header">Eventos Disponibles</div>
   <div class="container">
-    <!-- Botón de inicio de sesión -->
-    <button id="btnLogin" class="btn-login">Iniciar Sesión</button>
+    <a href="index.html" class="back-button">← Volver a Eventos</a>
 
-    <!-- Contenedor de eventos -->
-    <div id="eventsGrid" class="events-grid">
-      <div class="loading">Cargando eventos...</div>
+    <div id="loading" class="loading">Cargando detalle del evento...</div>
+    <div id="error" class="error" style="display: none;">Error al cargar el evento. Por favor, intenta nuevamente.</div>
+
+    <div id="event-detail" style="display: none;">
+      <div class="event-detail-card">
+        <div id="event-image-container">
+          <img id="event-image" class="event-image" alt="Imagen del evento" style="display: none;">
+          <div id="event-image-placeholder" class="event-image-placeholder">📅</div>
+        </div>
+        <div class="event-content">
+          <h1 id="event-title" class="event-title"></h1>
+          <p id="event-description" class="event-description"></p>
+          <!-- Aquí seguirían más datos, ejemplo: fechas, lugar, cupos, etc. -->
+        </div>
+      </div>
+
+      <!-- Resto de secciones: horarios, mapa, botones -->
+      <div class="action-buttons">
+        <button class="btn btn-primary" onclick="registerForEvent()">Inscribirse al Evento</button>
+        <button class="btn btn-secondary" onclick="shareEvent()">Compartir Evento</button>
+        <button class="btn btn-tertiary" onclick="contactOrganizer()">Contactar Organizador</button>
+      </div>
     </div>
   </div>
 
@@ -113,62 +67,107 @@
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
     }
-    const auth = firebase.auth();
     const db = firebase.firestore();
+    const auth = firebase.auth();
 
-    // Manejar inicio de sesión (ejemplo simple)
-    document.getElementById('btnLogin').addEventListener('click', () => {
-      const email = prompt('Ingresa tu email');
-      const password = prompt('Ingresa tu contraseña');
-      auth.signInWithEmailAndPassword(email, password)
-        .then(() => alert('Sesión iniciada'))
-        .catch(err => alert('Error al iniciar sesión: ' + err.message));
-    });
+    // Obtener ID de la URL
+    function getEventIdFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('id');
+    }
 
-    // ✅ Corrección SOLO aquí: mostrar imagen real si existe, si no mostrar placeholder
-    function loadEvents() {
-      const eventsGrid = document.getElementById('eventsGrid');
-      db.collection('eventos').orderBy('fecha_inicio', 'asc').get()
-        .then(snapshot => {
-          if (snapshot.empty) {
-            eventsGrid.innerHTML = '<div class="loading">No hay eventos disponibles.</div>';
-            return;
-          }
-          eventsGrid.innerHTML = '';
-          snapshot.forEach(doc => {
+    // Cargar detalles del evento
+    function loadEventDetails() {
+      const eventId = getEventIdFromUrl();
+      if (!eventId) {
+        showError('ID de evento no encontrado');
+        return;
+      }
+
+      db.collection('eventos').doc(eventId).get()
+        .then((doc) => {
+          if (doc.exists) {
             const evento = doc.data();
-            const card = document.createElement('div');
-            card.className = 'event-card';
-            card.onclick = () => window.location.href = `event-detail.html?id=${doc.id}`;
-
-            // Mostrar imagen si existe
-            const imgHTML = evento.imagenURL
-              ? `<img src="${evento.imagenURL}" alt="Imagen del evento" class="event-image">`
-              : `<div class="event-image">📅</div>`;
-
-            const fecha = evento.fecha_inicio?.toDate
-              ? evento.fecha_inicio.toDate().toLocaleDateString('es-ES')
-              : new Date(evento.fecha_inicio).toLocaleDateString('es-ES');
-
-            card.innerHTML = `
-              ${imgHTML}
-              <div class="event-title">${evento.titulo || 'Sin título'}</div>
-              <div class="event-description">${evento.descripcion?.substring(0,100) || 'Sin descripción'}...</div>
-              <div class="event-meta">
-                <span>📍 ${evento.lugar || 'Lugar no especificado'}</span>
-                <span>📅 ${fecha}</span>
-              </div>
-            `;
-            eventsGrid.appendChild(card);
-          });
+            displayEventDetails(evento);
+            hideLoading();
+          } else {
+            showError('Evento no encontrado');
+          }
         })
-        .catch(err => {
-          console.error('Error cargando eventos:', err);
-          eventsGrid.innerHTML = '<div class="loading">Error al cargar eventos.</div>';
+        .catch((error) => {
+          console.error(error);
+          showError('Error al cargar el evento');
         });
     }
 
-    document.addEventListener('DOMContentLoaded', loadEvents);
+    // Mostrar detalles del evento
+    function displayEventDetails(evento) {
+      document.getElementById('event-title').textContent = evento.titulo || 'Sin título';
+      document.getElementById('event-description').textContent = evento.descripcion || 'Sin descripción';
+      // ... aquí seguirían más campos: lugar, fechas, etc.
+
+      // ✅ CORREGIDO: Mostrar imagen del evento
+      if (evento.imagenURL) {
+        const img = document.getElementById('event-image');
+        img.src = evento.imagenURL;
+        img.onload = () => {
+          document.getElementById('event-image-placeholder').style.display = 'none';
+          img.style.display = 'block';
+        };
+        img.onerror = () => {
+          img.style.display = 'none';
+          document.getElementById('event-image-placeholder').style.display = 'flex';
+        };
+      } else {
+        document.getElementById('event-image').style.display = 'none';
+        document.getElementById('event-image-placeholder').style.display = 'flex';
+      }
+
+      document.getElementById('event-detail').style.display = 'block';
+    }
+
+    function showError(message) {
+      document.getElementById('loading').style.display = 'none';
+      const errorDiv = document.getElementById('error');
+      errorDiv.textContent = message;
+      errorDiv.style.display = 'block';
+    }
+
+    function hideLoading() {
+      document.getElementById('loading').style.display = 'none';
+    }
+
+    // Botones de acción
+    function registerForEvent() {
+      if (!auth.currentUser) {
+        alert('Debes iniciar sesión para inscribirte.');
+        return;
+      }
+      alert('Funcionalidad de inscripción en desarrollo');
+    }
+
+    function shareEvent() {
+      if (navigator.share) {
+        navigator.share({
+          title: document.getElementById('event-title').textContent,
+          text: document.getElementById('event-description').textContent,
+          url: window.location.href
+        });
+      } else {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+          alert('Enlace copiado al portapapeles');
+        });
+      }
+    }
+
+    function contactOrganizer() {
+      alert('Funcionalidad de contacto en desarrollo');
+    }
+
+    // Iniciar al cargar
+    document.addEventListener('DOMContentLoaded', () => {
+      loadEventDetails();
+    });
   </script>
 </body>
 </html>
