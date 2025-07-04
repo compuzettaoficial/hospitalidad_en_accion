@@ -1,27 +1,105 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hospitalidad en Acción</title>
-  <link rel="stylesheet" href="css/style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospitalidad en Acción - "No os olvidéis de la hospitalidad"</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <header>
-    <h1>Hospitalidad en Acción</h1>
-    <p>"No os olvidéis de la hospitalidad" - Hebreos 13:2</p>
-  </header>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <i class="fas fa-home"></i> Hospitalidad en Acción
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="#eventos">Eventos</a></li>
+                <li><a href="profile.html" id="profileLink" style="display: none;">Mi Perfil</a></li>
+                <li><a href="login.html" id="loginLink">Iniciar Sesión</a></li>
+                <li><a href="#" id="logoutLink" style="display: none;">Cerrar Sesión</a></li>
+            </ul>
+            <div class="mobile-menu" id="mobileMenu">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+    </header>
 
-  <main>
-    <h2>Próximos Eventos</h2>
-    <div id="events-container" class="events-grid"></div>
-  </main>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="particles"></div>
+        <div class="hero-content">
+            <div class="bible-verse">"No os olvidéis de la hospitalidad"</div>
+            <div class="verse-reference">Hebreos 13:2</div>
+            <h1>Abriendo Nuestros Corazones y Hogares</h1>
+            <p>Conectando hermanos en la fe para eventos cristianos con hospedaje seguro, lleno de amor fraternal y hospitalidad bíblica</p>
+            <a href="#eventos" class="cta-button">
+                <i class="fas fa-calendar-alt"></i> Ver Eventos
+            </a>
+        </div>
+    </section>
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
-  <!-- Config y lógica -->
-  <script src="js/firebase-config.js"></script>
-  <script src="js/events.js"></script>
+    <!-- Sección de Hospitalidad Bíblica -->
+    <section class="hospitality-section animate-on-scroll">
+        <div class="hospitality-quote">
+            "porque por ella algunos, sin saberlo, hospedaron ángeles"
+        </div>
+        <div class="hospitality-text">
+            La hospitalidad cristiana es más que ofrecer un lugar donde dormir; es abrir nuestros corazones, compartir nuestra mesa y extender el amor de Cristo a nuestros hermanos. Cada acto de hospitalidad es una oportunidad de servir a Dios y bendecir a otros en su caminar de fe.
+        </div>
+    </section>
+
+    <!-- Sección Eventos -->
+    <section id="eventos" class="section animate-on-scroll">
+        <h2 class="section-title">
+            <i class="fas fa-calendar-star"></i> Próximos Eventos
+        </h2>
+        <div id="events-container" class="events-grid">
+            <!-- Los eventos se cargarán dinámicamente desde Firebase -->
+            <div class="loading-spinner" id="loadingSpinner">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Cargando eventos...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Floating Action Button -->
+    <div class="fab" onclick="checkAuthAndRedirect()" title="Solicitar Hospitalidad">
+        <i class="fas fa-home"></i>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3><i class="fas fa-home"></i> Hospitalidad en Acción</h3>
+                <p>Conectando hermanos en la fe a través de la hospitalidad cristiana</p>
+            </div>
+            <div class="footer-section">
+                <h4>Contacto</h4>
+                <p><i class="fas fa-envelope"></i> info@hospitalidadenaccion.com</p>
+                <p><i class="fas fa-phone"></i> +51 999 999 999</p>
+            </div>
+            <div class="footer-section">
+                <h4>Síguenos</h4>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Hospitalidad en Acción - Derechos reservados: Néstor Manrique</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/events.js"></script>
+    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>
