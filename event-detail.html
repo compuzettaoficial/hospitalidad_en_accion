@@ -2,22 +2,516 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Detalle de Evento</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del Evento - Hospitalidad en Acción</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-button {
+            background-color: #6b4b9a;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 20px;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+
+        .back-button:hover {
+            background-color: #5a3d85;
+        }
+
+        .event-detail-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .event-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            position: relative;
+        }
+
+        .event-content {
+            padding: 30px;
+        }
+
+        .event-title {
+            font-size: 2.5em;
+            color: #6b4b9a;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .event-description {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.7;
+        }
+
+        .event-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-item {
+            background-color: #e8e5f0;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #6b4b9a;
+        }
+
+        .info-item h3 {
+            color: #6b4b9a;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .info-item p {
+            color: #555;
+            font-size: 1em;
+        }
+
+        .map-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .map-container h3 {
+            color: #6b4b9a;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        #map {
+            height: 300px;
+            border-radius: 10px;
+            background-color: #e8e5f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b4b9a;
+            font-size: 1.1em;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: #6b4b9a;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #5a3d85;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: #e8e5f0;
+            color: #6b4b9a;
+            border: 2px solid #6b4b9a;
+        }
+
+        .btn-secondary:hover {
+            background-color: #6b4b9a;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-tertiary {
+            background-color: #f8f9fa;
+            color: #6b4b9a;
+            border: 2px solid #e8e5f0;
+        }
+
+        .btn-tertiary:hover {
+            background-color: #e8e5f0;
+            transform: translateY(-2px);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #6b4b9a;
+            font-size: 1.2em;
+        }
+
+        .error {
+            text-align: center;
+            padding: 50px;
+            color: #e74c3c;
+            font-size: 1.2em;
+        }
+
+        .schedule-section {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .schedule-section h3 {
+            color: #6b4b9a;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .schedule-item {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #6b4b9a;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .event-title {
+                font-size: 2em;
+            }
+            
+            .event-content {
+                padding: 20px;
+            }
+            
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Detalle del Evento</h1>
-    <div id="event-detail"></div>
+    <div class="container">
+        <a href="index.html" class="back-button">← Volver a Eventos</a>
+        
+        <div id="loading" class="loading">
+            Cargando detalle del evento...
+        </div>
+        
+        <div id="error" class="error" style="display: none;">
+            Error al cargar el evento. Por favor, intenta nuevamente.
+        </div>
+        
+        <div id="event-detail" style="display: none;">
+            <!-- Tarjeta principal del evento -->
+            <div class="event-detail-card">
+                <img id="event-image" src="" alt="Imagen del evento" class="event-image">
+                <div class="event-content">
+                    <h1 id="event-title" class="event-title"></h1>
+                    <p id="event-description" class="event-description"></p>
+                    
+                    <div class="event-info">
+                        <div class="info-item">
+                            <h3>📅 Fecha de Inicio</h3>
+                            <p id="event-start-date"></p>
+                        </div>
+                        <div class="info-item">
+                            <h3>📅 Fecha de Fin</h3>
+                            <p id="event-end-date"></p>
+                        </div>
+                        <div class="info-item">
+                            <h3>📍 Lugar</h3>
+                            <p id="event-location"></p>
+                        </div>
+                        <div class="info-item">
+                            <h3>👥 Estado</h3>
+                            <p id="event-status">Evento Activo</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección de horarios -->
+            <div id="schedule-section" class="schedule-section" style="display: none;">
+                <h3>🕐 Horarios del Evento</h3>
+                <div id="schedule-content"></div>
+            </div>
+
+            <!-- Mapa -->
+            <div class="map-container">
+                <h3>🗺️ Ubicación</h3>
+                <div id="map">
+                    <div>
+                        <p>📍 Mapa de ubicación</p>
+                        <p id="map-coordinates"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botones de acción -->
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="registerAsVisitor()">
+                    🏠 Registrarme como Visitante
+                </button>
+                <button class="btn btn-secondary" onclick="registerAsHost()">
+                    🤝 Registrarme como Anfitrión
+                </button>
+                <button class="btn btn-tertiary" onclick="viewHotels()">
+                    🏨 Ver Hoteles Cercanos
+                </button>
+                <button class="btn btn-tertiary" onclick="viewParking()">
+                    🚗 Ver Cocheras Cercanas
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
 
     <script>
-        const data = JSON.parse(localStorage.getItem('currentEvent'));
-        if (data) {
-            document.getElementById('event-detail').innerHTML = `
-                <h2>${data.titulo}</h2>
-                <p>${data.descripcion}</p>
-                <p>${new Date(data.fecha_inicio).toLocaleDateString()}</p>
-                <p>${data.lugar}</p>
-            `;
+        // Tu configuración Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBFaCbNqpd93Eirj7NDnkKtOS6Ym0rMoiA",
+            authDomain: "hospitalidad-29c5c.firebaseapp.com",
+            projectId: "hospitalidad-29c5c",
+            storageBucket: "hospitalidad-29c5c.appspot.com",
+            messagingSenderId: "1061561367897",
+            appId: "1:1061561367897:web:57921b5aa3eb7bc3132048"
+        };
+
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        // Variables globales
+        let currentEventId = null;
+        let currentEvent = null;
+
+        // Función para obtener el ID del evento desde la URL
+        function getEventIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id');
         }
+
+        // Función para formatear fechas
+        function formatDate(dateString) {
+            if (!dateString) return 'No especificada';
+            
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('es-ES', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            } catch (error) {
+                return dateString;
+            }
+        }
+
+        // Función para cargar los detalles del evento
+        async function loadEventDetails() {
+            currentEventId = getEventIdFromUrl();
+            
+            if (!currentEventId) {
+                showError('ID de evento no encontrado en la URL');
+                return;
+            }
+
+            try {
+                const eventDoc = await db.collection('eventos').doc(currentEventId).get();
+                
+                if (!eventDoc.exists) {
+                    showError('Evento no encontrado');
+                    return;
+                }
+
+                currentEvent = eventDoc.data();
+                displayEventDetails(currentEvent);
+                
+                // Ocultar loading y mostrar contenido
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('event-detail').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error al cargar evento:', error);
+                showError('Error al cargar el evento. Por favor, intenta nuevamente.');
+            }
+        }
+
+        // Función para mostrar los detalles del evento
+        function displayEventDetails(event) {
+            document.getElementById('event-title').textContent = event.titulo || 'Título no disponible';
+            document.getElementById('event-description').textContent = event.descripcion || 'Descripción no disponible';
+            document.getElementById('event-start-date').textContent = formatDate(event.fecha_inicio);
+            document.getElementById('event-end-date').textContent = formatDate(event.fecha_fin);
+            document.getElementById('event-location').textContent = event.lugar || 'Ubicación no especificada';
+            
+            // Imagen del evento
+            const eventImage = document.getElementById('event-image');
+            if (event.imagenURL) {
+                eventImage.src = event.imagenURL;
+                eventImage.alt = event.titulo || 'Imagen del evento';
+            } else {
+                eventImage.src = 'https://via.placeholder.com/800x300/6b4b9a/white?text=Evento+Cristiano';
+                eventImage.alt = 'Imagen por defecto del evento';
+            }
+
+            // Mostrar horarios si existen
+            if (event.horarios && event.horarios.length > 0) {
+                displaySchedule(event.horarios);
+            }
+
+            // Mostrar coordenadas GPS si existen
+            if (event.gps) {
+                document.getElementById('map-coordinates').textContent = `Coordenadas: ${event.gps}`;
+                // Aquí podrías integrar Google Maps o OpenStreetMap
+            }
+        }
+
+        // Función para mostrar horarios
+        function displaySchedule(horarios) {
+            const scheduleSection = document.getElementById('schedule-section');
+            const scheduleContent = document.getElementById('schedule-content');
+            
+            scheduleContent.innerHTML = '';
+            
+            horarios.forEach(horario => {
+                const scheduleItem = document.createElement('div');
+                scheduleItem.className = 'schedule-item';
+                scheduleItem.innerHTML = `
+                    <strong>${horario.dia || 'Día no especificado'}</strong><br>
+                    ${horario.actividad || 'Actividad no especificada'}<br>
+                    <small>Horario: ${horario.hora || 'Por confirmar'}</small>
+                `;
+                scheduleContent.appendChild(scheduleItem);
+            });
+            
+            scheduleSection.style.display = 'block';
+        }
+
+        // Función para mostrar errores
+        function showError(message) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('error').style.display = 'block';
+            document.getElementById('error').textContent = message;
+        }
+
+        // Función para registrarse como visitante
+        function registerAsVisitor() {
+            if (!auth.currentUser) {
+                alert('Debes iniciar sesión para registrarte como visitante');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Aquí implementarías la lógica para registrar como visitante
+            if (confirm('¿Deseas registrarte como visitante para este evento?')) {
+                registerUserForEvent('visitante');
+            }
+        }
+
+        // Función para registrarse como anfitrión
+        function registerAsHost() {
+            if (!auth.currentUser) {
+                alert('Debes iniciar sesión para registrarte como anfitrión');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Aquí implementarías la lógica para registrar como anfitrión
+            if (confirm('¿Deseas registrarte como anfitrión para este evento?')) {
+                registerUserForEvent('anfitrion');
+            }
+        }
+
+        // Función para registrar usuario en el evento
+        async function registerUserForEvent(tipo) {
+            try {
+                const userId = auth.currentUser.uid;
+                const collection = tipo === 'visitante' ? 'visitantes' : 'anfitriones';
+                
+                const registrationData = {
+                    eventoID: currentEventId,
+                    fechaRegistro: new Date().toISOString(),
+                    estado: 'pendiente'
+                };
+
+                await db.collection(collection).doc(userId).set(registrationData, { merge: true });
+                
+                alert(`¡Te has registrado exitosamente como ${tipo}!`);
+                
+                // Redirigir al perfil
+                window.location.href = 'profile.html';
+                
+            } catch (error) {
+                console.error('Error al registrar usuario:', error);
+                alert('Error al registrarte. Por favor, intenta nuevamente.');
+            }
+        }
+
+        // Función para ver hoteles cercanos
+        function viewHotels() {
+            // Implementar vista de hoteles
+            alert('Funcionalidad de hoteles en desarrollo');
+        }
+
+        // Función para ver cocheras cercanas
+        function viewParking() {
+            // Implementar vista de cocheras
+            alert('Funcionalidad de cocheras en desarrollo');
+        }
+
+        // Cargar evento al cargar la página
+        document.addEventListener('DOMContentLoaded', loadEventDetails);
     </script>
 </body>
 </html>
