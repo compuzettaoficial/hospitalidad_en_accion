@@ -4,56 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hospitalidad en Acción</title>
-
-  <!-- Estilos -->
   <link rel="stylesheet" href="css/styles.css">
-
-  <!-- Font Awesome para íconos -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-  <!-- Loader simple -->
-  <style>
-    #loader {
-      display: none;
-      position: fixed;
-      top:0; left:0; right:0; bottom:0;
-      background: rgba(255,255,255,0.8);
-      z-index: 9999;
-      justify-content: center;
-      align-items: center;
-    }
-    #loader .spinner {
-      border: 5px solid #ccc;
-      border-top: 5px solid #7c3aed;
-      border-radius: 50%;
-      width: 50px; height: 50px;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin { 100% { transform: rotate(360deg); } }
-  </style>
 </head>
-
 <body>
+  <div id="loader" style="display: none;">Cargando...</div>
+  
+  <section id="eventos">
+    <div class="events-grid" id="events-container"></div>
+  </section>
 
-  <header>
-    <h1>Hospitalidad en Acción</h1>
-  </header>
-
-  <main id="eventos">
-    <!-- Contenedor de filtros (se inserta dinámicamente) -->
-
-    <!-- Contenedor de eventos -->
-    <div id="events-container" class="events-grid" style="display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));"></div>
-  </main>
-
-  <!-- Loader -->
-  <div id="loader"><div class="spinner"></div></div>
-
-  <!-- Firebase SDK -->
+  <!-- Firebase CDN -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
-  <!-- Configuración Firebase -->
+  <!-- Tu config -->
   <script src="js/firebase-config.js"></script>
 
   <!-- Lógica de eventos -->
