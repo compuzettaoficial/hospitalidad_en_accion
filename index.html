@@ -132,13 +132,6 @@
         </div>
     </footer>
 
-    <!-- Scripts -->
-    <!-- NO incluir archivos externos para evitar conflictos -->
-    <!-- <script src="js/firebase-config.js"></script> -->
-    <!-- <script src="js/auth.js"></script> -->
-    <!-- <script src="js/events.js"></script> -->
-    <!-- <script src="js/main.js"></script> -->
-
     <style>
         /* CSS Base - Hospitalidad en Acción */
         * {
@@ -422,7 +415,7 @@
     </style>
 
     <script>
-        // Firebase Configuration (solo si no existe)
+        // Firebase Configuration
         if (!firebase.apps.length) {
             const firebaseConfig = {
                 apiKey: "AIzaSyBFaCbNqpd93Eirj7NDnkKtOS6Ym0rMoiA",
@@ -503,7 +496,7 @@
             });
         }
 
-        // Load events from Firestore (ARREGLADO)
+        // Load events from Firestore
         function loadEvents() {
             const eventsGrid = document.getElementById('eventsGrid');
             
@@ -512,7 +505,6 @@
                 return;
             }
             
-            // Query simple sin filtros complejos para evitar error de índice
             db.collection('eventos')
                 .orderBy('fecha_inicio', 'asc')
                 .get()
@@ -532,11 +524,12 @@
                         const evento = doc.data();
                         const eventCard = document.createElement('div');
                         eventCard.className = 'event-card';
-                        eventCard.onclick = () => showEventDetail(doc.id, evento);
+                        
+                        // CAMBIO PRINCIPAL: Cambiar la función onclick para redirigir a event-detail.html
+                        eventCard.onclick = () => showEventDetail(doc.id);
                         
                         // Formatear fecha
                         const fechaInicio = new Date(evento.fecha_inicio).toLocaleDateString('es-ES');
-                        const fechaFin = new Date(evento.fecha_fin).toLocaleDateString('es-ES');
                         
                         eventCard.innerHTML = `
                             <div class="event-image">📅</div>
@@ -553,7 +546,6 @@
                 .catch((error) => {
                     console.error('Error loading events:', error);
                     
-                    // Si el error es de índice, hacer query más simple
                     if (error.code === 'failed-precondition') {
                         console.log('Intentando query simple...');
                         db.collection('eventos')
@@ -564,7 +556,9 @@
                                     const evento = doc.data();
                                     const eventCard = document.createElement('div');
                                     eventCard.className = 'event-card';
-                                    eventCard.onclick = () => showEventDetail(doc.id, evento);
+                                    
+                                    // CAMBIO PRINCIPAL: Usar la nueva función también aquí
+                                    eventCard.onclick = () => showEventDetail(doc.id);
                                     
                                     eventCard.innerHTML = `
                                         <div class="event-image">📅</div>
@@ -589,9 +583,13 @@
                 });
         }
 
-        // Función para mostrar detalle del evento
-        function showEventDetail(eventId, evento) {
-            alert(`Detalle del evento: ${evento.titulo}\n\nEsta función se implementará en el próximo bloque.`);
+        // NUEVA FUNCIÓN: Redirigir a la página de detalles del evento
+        function showEventDetail(eventId) {
+            // Construir la URL con el ID del evento como parámetro
+            const detailUrl = `event-detail.html?id=${eventId}`;
+            
+            // Redirigir a la página de detalles
+            window.location.href = detailUrl;
         }
 
         // Auth forms
