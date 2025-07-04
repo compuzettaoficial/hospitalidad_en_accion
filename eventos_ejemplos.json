@@ -1,0 +1,254 @@
+[
+  {
+    "titulo": "Convención Nacional Arequipa",
+    "descripcion": "Gran convención nacional con predicadores internacionales. Esperamos más de 3,000 asistentes de todo el país para tres días de bendición y comunión fraternal.",
+    "fecha_inicio": "2025-07-15",
+    "fecha_fin": "2025-07-17",
+    "lugar": "Arequipa, Cercado - Coliseo Dibós",
+    "ciudad": "arequipa",
+    "imagenURL": "img/evento-arequipa.jpg",
+    "gps": {
+      "lat": -16.409047,
+      "lng": -71.537451
+    },
+    "horarios": [
+      {
+        "dia": "Martes 15",
+        "actividad": "Inauguración",
+        "hora": "19:00"
+      },
+      {
+        "dia": "Miércoles 16",
+        "actividad": "Conferencias",
+        "hora": "09:00 - 21:00"
+      },
+      {
+        "dia": "Jueves 17",
+        "actividad": "Clausura",
+        "hora": "09:00 - 12:00"
+      }
+    ],
+    "categoria": "convencion",
+    "estado": "activo",
+    "organizador": "Iglesia Central Arequipa",
+    "contacto": {
+      "telefono": "+51 954 123 456",
+      "email": "eventos@iglesiaarequipa.pe",
+      "whatsapp": "+51 954 123 456"
+    },
+    "cupos": 3000,
+    "inscritos": 1250,
+    "costo": "Gratuito",
+    "incluye": [
+      "Alimentación",
+      "Materiales",
+      "Certificado"
+    ],
+    "requisitos": [
+      "Ser mayor de edad",
+      "Registrarse con anticipación"
+    ]
+  },
+  {
+    "titulo": "Retiro Juvenil Huancayo",
+    "descripcion": "Retiro especial para jóvenes con talleres, conferencias y actividades recreativas en un ambiente de comunión y crecimiento espiritual.",
+    "fecha_inicio": "2025-07-22",
+    "fecha_fin": "2025-07-24",
+    "lugar": "Huancayo, El Tambo - Centro de Convenciones",
+    "ciudad": "huancayo",
+    "imagenURL": "img/evento-huancayo.jpg",
+    "gps": {
+      "lat": -12.069099,
+      "lng": -75.204963
+    },
+    "horarios": [
+      {
+        "dia": "Martes 22",
+        "actividad": "Llegada y Bienvenida",
+        "hora": "15:00"
+      },
+      {
+        "dia": "Miércoles 23",
+        "actividad": "Talleres y Dinámicas",
+        "hora": "08:00 - 22:00"
+      },
+      {
+        "dia": "Jueves 24",
+        "actividad": "Ceremonia de Clausura",
+        "hora": "08:00 - 14:00"
+      }
+    ],
+    "categoria": "retiro",
+    "estado": "activo",
+    "organizador": "Ministerio Juvenil Huancayo",
+    "contacto": {
+      "telefono": "+51 964 789 123",
+      "email": "jovenes@iglesiahuancayo.pe",
+      "whatsapp": "+51 964 789 123"
+    },
+    "cupos": 150,
+    "inscritos": 89,
+    "costo": "S/. 50",
+    "incluye": [
+      "Hospedaje",
+      "Alimentación",
+      "Materiales",
+      "Transporte local"
+    ],
+    "requisitos": [
+      "14-30 años",
+      "Autorización de padres (menores)"
+    ]
+  },
+  {
+    "titulo": "Campaña Evangelística Trujillo",
+    "descripcion": "Campaña masiva de evangelización con actividades para toda la familia y predicación del evangelio en el corazón de la ciudad.",
+    "fecha_inicio": "2025-08-05",
+    "fecha_fin": "2025-08-07",
+    "lugar": "Trujillo, Centro - Plaza de Armas",
+    "ciudad": "trujillo",
+    "imagenURL": "img/evento-trujillo.jpg",
+    "gps": {
+      "lat": -8.110883,
+      "lng": -79.029414
+    },
+    "horarios": [
+      {
+        "dia": "Martes 5",
+        "actividad": "Apertura Evangelística",
+        "hora": "18:00"
+      },
+      {
+        "dia": "Miércoles 6",
+        "actividad": "Jornada Familiar",
+        "hora": "16:00 - 21:00"
+      },
+      {
+        "dia": "Jueves 7",
+        "actividad": "Gran Cierre",
+        "hora": "17:00 - 21:00"
+      }
+    ],
+    "categoria": "evangelismo",
+    "estado": "activo",
+    "organizador": "Iglesias Unidas Trujillo",
+    "contacto": {
+      "telefono": "+51 944 567 890",
+      "email": "campana@iglesiastrujillo.pe",
+      "whatsapp": "+51 944 567 890"
+    },
+    "cupos": 5000,
+    "inscritos": 2100,
+    "costo": "Gratuito",
+    "incluye": [
+      "Materiales evangelísticos",
+      "Refrigerio"
+    ],
+    "requisitos": [
+      "Participación voluntaria"
+    ]
+  },
+  {
+    "titulo": "Conferencia Matrimonial Lima",
+    "descripcion": "Conferencia especializada para parejas casadas con temas de comunicación, finanzas y crecimiento espiritual en matrimonio.",
+    "fecha_inicio": "2025-08-12",
+    "fecha_fin": "2025-08-14",
+    "lugar": "Lima, San Isidro - Auditorio Central",
+    "ciudad": "lima",
+    "imagenURL": "img/evento-lima.jpg",
+    "gps": {
+      "lat": -12.046374,
+      "lng": -77.042793
+    },
+    "horarios": [
+      {
+        "dia": "Sábado 12",
+        "actividad": "Sesión Inaugural",
+        "hora": "09:00 - 18:00"
+      },
+      {
+        "dia": "Domingo 13",
+        "actividad": "Talleres Prácticos",
+        "hora": "09:00 - 17:00"
+      },
+      {
+        "dia": "Lunes 14",
+        "actividad": "Ceremonia de Compromiso",
+        "hora": "10:00 - 13:00"
+      }
+    ],
+    "categoria": "conferencia",
+    "estado": "activo",
+    "organizador": "Ministerio Familiar Lima",
+    "contacto": {
+      "telefono": "+51 999 888 777",
+      "email": "matrimonios@iglesialimacentral.pe",
+      "whatsapp": "+51 999 888 777"
+    },
+    "cupos": 200,
+    "inscritos": 145,
+    "costo": "S/. 80",
+    "incluye": [
+      "Almuerzo",
+      "Materiales",
+      "Certificado",
+      "Kit matrimonial"
+    ],
+    "requisitos": [
+      "Ser pareja casada",
+      "Registrarse ambos cónyuges"
+    ]
+  },
+  {
+    "titulo": "Taller de Liderazgo Cusco",
+    "descripcion": "Taller intensivo para líderes de iglesias locales con enfoque en desarrollo de ministerios y gestión pastoral.",
+    "fecha_inicio": "2025-08-20",
+    "fecha_fin": "2025-08-22",
+    "lugar": "Cusco, Centro Histórico - Salón Qorikancha",
+    "ciudad": "cusco",
+    "imagenURL": "img/evento-cusco.jpg",
+    "gps": {
+      "lat": -13.516667,
+      "lng": -71.978771
+    },
+    "horarios": [
+      {
+        "dia": "Martes 20",
+        "actividad": "Fundamentos del Liderazgo",
+        "hora": "08:00 - 18:00"
+      },
+      {
+        "dia": "Miércoles 21",
+        "actividad": "Gestión y Organización",
+        "hora": "08:00 - 18:00"
+      },
+      {
+        "dia": "Jueves 22",
+        "actividad": "Práctica y Evaluación",
+        "hora": "08:00 - 15:00"
+      }
+    ],
+    "categoria": "taller",
+    "estado": "activo",
+    "organizador": "Instituto Bíblico Cusco",
+    "contacto": {
+      "telefono": "+51 984 333 222",
+      "email": "liderazgo@institutocusco.pe",
+      "whatsapp": "+51 984 333 222"
+    },
+    "cupos": 50,
+    "inscritos": 38,
+    "costo": "S/. 120",
+    "incluye": [
+      "Materiales de estudio",
+      "Almuerzo",
+      "Certificado",
+      "Libro de liderazgo"
+    ],
+    "requisitos": [
+      "Ser líder activo",
+      "Experiencia mínima 2 años",
+      "Carta de recomendación"
+    ]
+  }
+]
