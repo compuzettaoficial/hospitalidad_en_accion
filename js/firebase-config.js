@@ -1,16 +1,18 @@
-// js/firebase-config.js
-// Configuración real de Firebase (reemplaza por tus datos reales)
+// Configuración Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyD5xKq-REAL_API_KEY",
-  authDomain: "mi-proyecto-id.firebaseapp.com",
-  projectId: "mi-proyecto-id",
-  storageBucket: "mi-proyecto-id.appspot.com",
-  messagingSenderId: "1234567890",
-  appId: "1:1234567890:web:abcdefghijk"
+  apiKey: "AIzaSyBFaCbNqpd93Eirj7NDnkKtOS6Ym0rMoiA",
+  authDomain: "hospitalidad-29c5c.firebaseapp.com",
+  projectId: "hospitalidad-29c5c",
+  storageBucket: "hospitalidad-29c5c.appspot.com",
+  messagingSenderId: "1061561367897",
+  appId: "1:1061561367897:web:57921b5aa3eb7bc3132048"
 };
 
-// Inicializar Firebase solo una vez
+// Inicializar Firebase
 firebase.initializeApp(firebaseConfig);
 
-// Exportar db para usarlo en events.js
+// Firestore
 const db = firebase.firestore();
+
+// Debug: ver si está bien inicializado
+console.log('Firebase inicializado con projectId:', firebaseConfig.projectId);
