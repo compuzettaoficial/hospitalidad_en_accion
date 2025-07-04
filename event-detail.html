@@ -267,6 +267,14 @@
                             <p id="event-location"></p>
                         </div>
                         <div class="info-item">
+                            <h3>🏢 Capacidad</h3>
+                            <p id="event-capacity"></p>
+                        </div>
+                        <div class="info-item">
+                            <h3>📍 Dirección</h3>
+                            <p id="event-address"></p>
+                        </div>
+                        <div class="info-item">
                             <h3>👥 Estado</h3>
                             <p id="event-status">Evento Activo</p>
                         </div>
@@ -395,6 +403,20 @@
             document.getElementById('event-end-date').textContent = formatDate(event.fecha_fin);
             document.getElementById('event-location').textContent = event.lugar || 'Ubicación no especificada';
             
+            // Mostrar dirección si existe
+            if (event.direccion) {
+                document.getElementById('event-address').textContent = event.direccion;
+            } else {
+                document.getElementById('event-address').textContent = 'Dirección no especificada';
+            }
+            
+            // Mostrar capacidad si existe
+            if (event.capacidad) {
+                document.getElementById('event-capacity').textContent = `${event.capacidad} personas`;
+            } else {
+                document.getElementById('event-capacity').textContent = 'No especificada';
+            }
+            
             // Imagen del evento
             const eventImage = document.getElementById('event-image');
             if (event.imagenURL) {
@@ -405,37 +427,79 @@
                 eventImage.alt = 'Imagen por defecto del evento';
             }
 
-            // Mostrar horarios si existen
-            if (event.horarios && event.horarios.length > 0) {
+            // Mostrar horarios si existen (formato mapa con días)
+            if (event.horarios && typeof event.horarios === 'object') {
                 displaySchedule(event.horarios);
             }
 
-            // Mostrar coordenadas GPS si existen
-            if (event.gps) {
-                document.getElementById('map-coordinates').textContent = `Coordenadas: ${event.gps}`;
+            // Mostrar coordenadas GPS si existen (formato mapa con lat/lng)
+            if (event.gps && event.gps.lat && event.gps.lng) {
+                document.getElementById('map-coordinates').textContent = `Coordenadas: ${event.gps.lat}, ${event.gps.lng}`;
                 // Aquí podrías integrar Google Maps o OpenStreetMap
+                initializeMap(event.gps.lat, event.gps.lng);
+            }
+            
+            // Mostrar estado del evento basado en si está activo
+            const statusElement = document.getElementById('event-status');
+            if (event.activo !== undefined) {
+                statusElement.textContent = event.activo ? 'Evento Activo ✅' : 'Evento Inactivo ❌';
+                statusElement.style.color = event.activo ? '#28a745' : '#dc3545';
+            } else {
+                statusElement.textContent = 'Estado no especificado';
             }
         }
 
-        // Función para mostrar horarios
+        // Función para mostrar horarios (formato mapa con días)
         function displaySchedule(horarios) {
             const scheduleSection = document.getElementById('schedule-section');
             const scheduleContent = document.getElementById('schedule-content');
             
             scheduleContent.innerHTML = '';
             
-            horarios.forEach(horario => {
-                const scheduleItem = document.createElement('div');
-                scheduleItem.className = 'schedule-item';
-                scheduleItem.innerHTML = `
-                    <strong>${horario.dia || 'Día no especificado'}</strong><br>
-                    ${horario.actividad || 'Actividad no especificada'}<br>
-                    <small>Horario: ${horario.hora || 'Por confirmar'}</small>
-                `;
-                scheduleContent.appendChild(scheduleItem);
+            // Orden de días para mostrar
+            const diasOrden = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'];
+            const diasNombres = {
+                'lunes': 'Lunes',
+                'martes': 'Martes', 
+                'miercoles': 'Miércoles',
+                'jueves': 'Jueves',
+                'viernes': 'Viernes',
+                'sabado': 'Sábado',
+                'domingo': 'Domingo'
+            };
+            
+            // Mostrar horarios en orden
+            diasOrden.forEach(dia => {
+                if (horarios[dia]) {
+                    const scheduleItem = document.createElement('div');
+                    scheduleItem.className = 'schedule-item';
+                    scheduleItem.innerHTML = `
+                        <strong>${diasNombres[dia]}</strong><br>
+                        <span style="color: #6b4b9a; font-weight: bold;">${horarios[dia]}</span>
+                    `;
+                    scheduleContent.appendChild(scheduleItem);
+                }
             });
             
             scheduleSection.style.display = 'block';
+        }
+
+        // Función para inicializar el mapa (placeholder - puedes integrar Google Maps aquí)
+        function initializeMap(lat, lng) {
+            const mapElement = document.getElementById('map');
+            mapElement.innerHTML = `
+                <div style="text-align: center;">
+                    <p style="margin-bottom: 10px;"><strong>📍 Ubicación del Evento</strong></p>
+                    <p>Latitud: ${lat}</p>
+                    <p>Longitud: ${lng}</p>
+                    <p style="margin-top: 15px; font-size: 0.9em; color: #666;">
+                        <a href="https://www.google.com/maps?q=${lat},${lng}" target="_blank" 
+                           style="color: #6b4b9a; text-decoration: none;">
+                           🗺️ Abrir en Google Maps
+                        </a>
+                    </p>
+                </div>
+            `;
         }
 
         // Función para mostrar errores
