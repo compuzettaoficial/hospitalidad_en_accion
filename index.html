@@ -1,36 +1,27 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hospitalidad en Acción</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <!-- Si quieres, luego separa estilos a css/style.css -->
-  <style>
-    body { font-family: sans-serif; margin:0; background:#f5f4f9; }
-    header { background:#6b4b9a; color:white; padding:1rem; text-align:center; }
-    .events-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1rem; padding:1rem; }
-    .event-card { background:white; border-radius:15px; padding:1rem; box-shadow:0 2px 10px rgba(0,0,0,0.1); }
-    .event-title { color:#6b4b9a; }
-    .btn { background:#6b4b9a; color:white; padding:0.5rem 1rem; border:none; border-radius:5px; text-decoration:none; }
-  </style>
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <header>
     <h1>Hospitalidad en Acción</h1>
-    <p>"No os olvidéis de la hospitalidad" – Hebreos 13:2</p>
+    <p>"No os olvidéis de la hospitalidad" - Hebreos 13:2</p>
   </header>
 
   <main>
-    <section>
-      <h2 style="text-align:center; margin:1rem;">Próximos Eventos</h2>
-      <div id="eventsGrid" class="events-grid">
-        <!-- Aquí se insertarán los eventos -->
-      </div>
-    </section>
+    <h2>Próximos Eventos</h2>
+    <div id="events-container" class="events-grid"></div>
   </main>
 
-  <!-- Importar scripts -->
-  <script type="module" src="./js/events.js"></script>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
+  <!-- Config y lógica -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/events.js"></script>
 </body>
 </html>
