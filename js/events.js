@@ -22,11 +22,11 @@ class EventsManager {
     // Cargar eventos desde Firebase
     static async loadEvents() {
         if (this.isLoading) return;
-        
+
         try {
             this.isLoading = true;
             this.showLoader(true);
-            
+
             // Verificar si Firebase está disponible
             if (typeof db !== 'undefined' && db) {
                 const eventsRef = db.collection('eventos');
@@ -34,28 +34,28 @@ class EventsManager {
                     .where('estado', '==', 'activo')
                     .orderBy('fecha_inicio', 'asc')
                     .get();
-                
+
                 this.events = snapshot.docs.map(doc => ({
                     id: doc.id,
                     ...doc.data()
                 }));
-                
+
                 console.log(`Cargados ${this.events.length} eventos desde Firebase`);
             } else {
-                // Usar datos de ejemplo para desarrollo
-                this.events = this.getSampleEvents();
+                // Cargar datos desde el archivo JSON
+                this.events = await this.loadSampleEvents();
                 console.log('Usando datos de ejemplo - Firebase no disponible');
             }
-            
+
             this.renderEvents();
             this.updateStats();
-            
+
         } catch (error) {
             console.error('Error cargando eventos:', error);
             this.showNotification('Error al cargar eventos. Mostrando datos de ejemplo.', 'warning');
-            
+
             // Usar datos de ejemplo en caso de error
-            this.events = this.getSampleEvents();
+            this.events = await this.loadSampleEvents();
             this.renderEvents();
         } finally {
             this.isLoading = false;
@@ -63,97 +63,11 @@ class EventsManager {
         }
     }
 
-    // Datos de ejemplo para desarrollo
-    static getSampleEvents() {
-        return [
-            {
-                id: 'evento1',
-                titulo: 'Convención Nacional Arequipa',
-                descripcion: 'Gran convención nacional con predicadores internacionales. Esperamos más de 3,000 asistentes de todo el país para tres días de bendición y comunión fraternal.',
-                fecha_inicio: '2025-07-15',
-                fecha_fin: '2025-07-17',
-                lugar: 'Arequipa, Cercado - Coliseo Dibós',
-                ciudad: 'arequipa',
-                imagenURL: 'img/evento-arequipa.jpg',
-                gps: { lat: -16.409047, lng: -71.537451 },
-                horarios: [
-                    { dia: 'Martes 15', actividad: 'Inauguración', hora: '19:00' },
-                    { dia: 'Miércoles 16', actividad: 'Conferencias', hora: '09:00 - 21:00' },
-                    { dia: 'Jueves 17', actividad: 'Clausura', hora: '09:00 - 12:00' }
-                ],
-                categoria: 'convencion',
-                estado: 'activo',
-                organizador: 'Iglesia Central Arequipa',
-                contacto: {
-                    telefono: '+51 954 123 456',
-                    email: 'eventos@iglesiaarequipa.pe',
-                    whatsapp: '+51 954 123 456'
-                },
-                cupos: 3000,
-                inscritos: 1250,
-                costo: 'Gratuito',
-                incluye: ['Alimentación', 'Materiales', 'Certificado'],
-                requisitos: ['Ser mayor de edad', 'Registrarse con anticipación']
-            },
-            {
-                id: 'evento2',
-                titulo: 'Retiro Juvenil Huancayo',
-                descripcion: 'Retiro especial para jóvenes con talleres, conferencias y actividades recreativas en un ambiente de comunión y crecimiento espiritual.',
-                fecha_inicio: '2025-07-22',
-                fecha_fin: '2025-07-24',
-                lugar: 'Huancayo, El Tambo - Centro de Convenciones',
-                ciudad: 'huancayo',
-                imagenURL: 'img/evento-huancayo.jpg',
-                gps: { lat: -12.069099, lng: -75.204963 },
-                horarios: [
-                    { dia: 'Martes 22', actividad: 'Llegada y Bienvenida', hora: '15:00' },
-                    { dia: 'Miércoles 23', actividad: 'Talleres y Dinámicas', hora: '08:00 - 22:00' },
-                    { dia: 'Jueves 24', actividad: 'Ceremonia de Clausura', hora: '08:00 - 14:00' }
-                ],
-                categoria: 'retiro',
-                estado: 'activo',
-                organizador: 'Ministerio Juvenil Huancayo',
-                contacto: {
-                    telefono: '+51 964 789 123',
-                    email: 'jovenes@iglesiahuancayo.pe',
-                    whatsapp: '+51 964 789 123'
-                },
-                cupos: 150,
-                inscritos: 89,
-                costo: 'S/. 50',
-                incluye: ['Hospedaje', 'Alimentación', 'Materiales', 'Transporte local'],
-                requisitos: ['14-30 años', 'Autorización de padres (menores)']
-            },
-            {
-                id: 'evento3',
-                titulo: 'Campaña Evangelística Trujillo',
-                descripcion: 'Campaña masiva de evangelización con actividades para toda la familia y predicación del evangelio en el corazón de la ciudad.',
-                fecha_inicio: '2025-08-05',
-                fecha_fin: '2025-08-07',
-                lugar: 'Trujillo, Centro - Plaza de Armas',
-                ciudad: 'trujillo',
-                imagenURL: 'img/evento-trujillo.jpg',
-                gps: { lat: -8.110883, lng: -79.029414 },
-                horarios: [
-                    { dia: 'Martes 5', actividad: 'Apertura Evangelística', hora: '18:00' },
-                    { dia: 'Miércoles 6', actividad: 'Jornada Familiar', hora: '16:00 - 21:00' },
-                    { dia: 'Jueves 7', actividad: 'Gran Cierre', hora: '17:00 - 21:00' }
-                ],
-                categoria: 'evangelismo',
-                estado: 'activo',
-                organizador: 'Iglesias Unidas Trujillo',
-                contacto: {
-                    telefono: '+51 944 567 890',
-                    email: 'campana@iglesiastrujillo.pe',
-                    whatsapp: '+51 944 567 890'
-                },
-                cupos: 5000,
-                inscritos: 2100,
-                costo: 'Gratuito',
-                incluye: ['Materiales evangelísticos', 'Refrigerio'],
-                requisitos: ['Participación voluntaria']
-            }
-        ];
+    // Cargar eventos desde un archivo JSON
+    static async loadSampleEvents() {
+        const response = await fetch('eventos_ejemplos.json');
+        if (!response.ok) throw new Error('Error al cargar el archivo JSON');
+        return await response.json();
     }
 
     // Renderizar eventos en la página
@@ -161,14 +75,14 @@ class EventsManager {
         const eventsContainer = document.getElementById('events-container') || 
                                document.querySelector('.events-grid') || 
                                document.querySelector('#eventos .events-grid');
-        
+
         if (!eventsContainer) {
             console.warn('No se encontró el contenedor de eventos');
             return;
         }
 
         const eventsToRender = filteredEvents || this.events;
-        
+
         if (eventsToRender.length === 0) {
             eventsContainer.innerHTML = `
                 <div class="no-events" style="
@@ -188,7 +102,7 @@ class EventsManager {
         }
 
         eventsContainer.innerHTML = eventsToRender.map(event => this.createEventCard(event)).join('');
-        
+
         // Aplicar animaciones
         this.animateCards();
     }
@@ -197,8 +111,7 @@ class EventsManager {
     static createEventCard(event) {
         const fechaFormateada = this.formatDateRange(event.fecha_inicio, event.fecha_fin);
         const cuposDisponibles = event.cupos - event.inscritos;
-        const porcentajeOcupacion = (event.inscritos / event.cupos) * 100;
-        
+
         return `
             <div class="event-card animate-on-scroll" data-event-id="${event.id}">
                 <div class="event-date">${fechaFormateada}</div>
@@ -208,7 +121,7 @@ class EventsManager {
                     ${event.lugar}
                 </div>
                 <p class="event-description">${event.descripcion}</p>
-                
+
                 <div class="event-stats" style="
                     display: flex; 
                     justify-content: space-between; 
@@ -275,29 +188,6 @@ class EventsManager {
         `;
     }
 
-    // Formatear rango de fechas
-    static formatDateRange(fechaInicio, fechaFin) {
-        const inicio = new Date(fechaInicio);
-        const fin = new Date(fechaFin);
-        
-        const opciones = { 
-            day: 'numeric', 
-            month: 'short',
-            year: 'numeric'
-        };
-        
-        if (fechaInicio === fechaFin) {
-            return inicio.toLocaleDateString('es-PE', opciones);
-        }
-        
-        // Si es el mismo mes
-        if (inicio.getMonth() === fin.getMonth() && inicio.getFullYear() === fin.getFullYear()) {
-            return `${inicio.getDate()}-${fin.getDate()} ${inicio.toLocaleDateString('es-PE', { month: 'short', year: 'numeric' })}`;
-        }
-        
-        return `${inicio.toLocaleDateString('es-PE', opciones)} - ${fin.toLocaleDateString('es-PE', opciones)}`;
-    }
-
     // Inicializar event listeners
     static initializeEventListeners() {
         // Búsqueda de eventos
@@ -352,7 +242,7 @@ class EventsManager {
                     <button class="filter-btn" data-filter="free">Gratuitos</button>
                 </div>
             `;
-            
+
             const eventsGrid = eventsSection.querySelector('.events-grid');
             if (eventsGrid) {
                 eventsGrid.insertAdjacentHTML('beforebegin', filtersHTML);
@@ -364,16 +254,16 @@ class EventsManager {
     // Filtrar eventos
     static filterEvents(filter) {
         this.currentFilter = filter;
-        
+
         let filteredEvents = this.events;
-        
+
         if (filter !== 'all') {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
-            
+
             filteredEvents = this.events.filter(event => {
                 const eventDate = new Date(event.fecha_inicio);
-                
+
                 switch (filter) {
                     case 'upcoming':
                         return eventDate >= today;
@@ -388,7 +278,7 @@ class EventsManager {
                 }
             });
         }
-        
+
         this.renderEvents(filteredEvents);
         this.updateFilterUI(filter);
     }
@@ -409,16 +299,16 @@ class EventsManager {
             this.renderEvents();
             return;
         }
-        
+
         const searchTerm = query.toLowerCase().trim();
-        const filteredEvents = this.events.filter(event => 
+        const filteredEvents = this.events.filter(event =>
             event.titulo.toLowerCase().includes(searchTerm) ||
             event.descripcion.toLowerCase().includes(searchTerm) ||
             event.lugar.toLowerCase().includes(searchTerm) ||
             event.organizador.toLowerCase().includes(searchTerm) ||
             event.categoria.toLowerCase().includes(searchTerm)
         );
-        
+
         this.renderEvents(filteredEvents);
     }
 
@@ -429,7 +319,7 @@ class EventsManager {
         if (event) {
             localStorage.setItem('currentEvent', JSON.stringify(event));
         }
-        
+
         window.location.href = `event-detail.html?id=${eventId}`;
     }
 
@@ -454,7 +344,7 @@ class EventsManager {
     // Animaciones de tarjetas
     static animateCards() {
         const cards = document.querySelectorAll('.event-card');
-        
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -546,7 +436,7 @@ class EventsManager {
     static showErrorMessage(message) {
         const eventsContainer = document.getElementById('events-container') || 
                                document.querySelector('.events-grid');
-        
+
         if (eventsContainer) {
             eventsContainer.innerHTML = `
                 <div class="error-message" style="
