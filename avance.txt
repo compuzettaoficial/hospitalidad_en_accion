@@ -1,0 +1,792 @@
+# 🏠 ESTRUCTURA COMPLETA - WEBAPP HOSPITALIDAD CRISTIANA
+
+## 🎯 PROPÓSITO Y VALORES FUNDAMENTALES
+
+**Misión**: Webapp que conecta cristianos para ofrecer hospitalidad gratuita durante eventos religiosos. Los hermanos sin recursos pueden encontrar hospedaje gratuito en casas de otros cristianos.
+
+**Valores Cristianos Fundamentales**:
+- ⭐ **LA VALORACIÓN ES POR COMPORTAMIENTO CRISTIANO, NO POR LUJOS**
+- 🏠 Pueden participar personas humildes con casas humildes
+- ❤️ El trato y semejanza al carácter de Cristo es lo que se valora
+- 🆓 Servicio completamente gratuito
+- 🤝 Fomentar la hospitalidad bíblica entre hermanos
+
+---
+
+## 🏗️ ESTRUCTURA DE ARCHIVOS ACTUALIZADA
+
+```
+/
+├── index.html                     → Página principal (grilla eventos)
+├── welcome.html                   → Presentación inicial
+├── event-detail.html             → Detalle de evento
+├── profile.html                   → Mi Perfil (centro de notificaciones)
+├── auth/
+│   ├── login.html                 → Login
+│   ├── register.html              → Registro de usuario
+│   └── forgot-password.html       → Recuperar contraseña
+├── admin/
+│   ├── dashboard.html             → Panel administrador
+│   ├── events-management.html     → Gestión de eventos
+│   ├── users-management.html      → Gestión de usuarios
+│   ├── editors-assignment.html    → Asignación editores a eventos
+│   ├── verification-center.html   → Centro de verificación manual
+│   ├── matching-manual.html       → Sistema de emparejamiento manual
+│   ├── ratings-management.html    → Gestión de valoraciones
+│   ├── event-observations.html    → Observaciones por evento
+│   ├── backup-management.html     → Gestión de contingencias
+│   └── reports.html               → Reportes y estadísticas
+├── editor/
+│   ├── dashboard.html             → Panel editor (eventos asignados)
+│   ├── my-events.html             → Mis eventos asignados
+│   ├── verification-assigned.html → Verificación eventos asignados
+│   ├── matching-assigned.html     → Emparejamiento eventos asignados
+│   ├── observations-assigned.html → Observaciones eventos asignados
+│   └── reports-assigned.html      → Reportes de eventos asignados
+├── event/
+│   ├── create-event.html          → Crear evento (admin)
+│   ├── edit-event.html            → Editar evento (admin/editor asignado)
+│   ├── hotels-management.html     → Gestión hoteles/cocheras
+│   ├── participants.html          → Gestión participantes
+│   ├── accommodation-info.html    → Info de alojamientos para asistentes
+│   └── contingency-plan.html      → Plan de contingencia
+├── forms/
+│   ├── host-registration.html     → Registro anfitrión
+│   ├── visitor-application.html   → Postulación visitante
+│   ├── attendee-registration.html → Registro asistente
+│   ├── verification-form.html     → Formulario verificación
+│   └── application-review.html    → Revisión de postulaciones
+├── ratings/
+│   ├── rate-host.html             → Valorar anfitrión (comportamiento cristiano)
+│   ├── rate-visitor.html          → Valorar visitante (comportamiento cristiano)
+│   ├── ratings-display.html       → Mostrar valoraciones
+│   └── christian-criteria.html    → Criterios de valoración cristiana
+├── verification/
+│   ├── pending-verification.html  → Verificaciones pendientes
+│   ├── verification-process.html  → Proceso de verificación
+│   └── verification-history.html  → Historial de verificaciones
+├── notifications/
+│   ├── profile-notifications.html → Notificaciones en perfil
+│   └── status-updates.html        → Actualizaciones de estado
+├── css/
+│   ├── main.css                   → Estilos principales
+│   ├── admin.css                  → Estilos panel admin
+│   ├── editor.css                 → Estilos panel editor
+│   ├── forms.css                  → Estilos formularios
+│   ├── ratings.css                → Estilos sistema valoración
+│   ├── verification.css           → Estilos verificación
+│   ├── notifications.css          → Estilos notificaciones
+│   └── components.css             → Estilos componentes
+├── js/
+│   ├── main.js                    → Lógica principal
+│   ├── firebase-config.js         → Configuración Firebase
+│   ├── auth.js                    → Autenticación
+│   ├── events.js                  → Gestión eventos
+│   ├── users.js                   → Gestión usuarios
+│   ├── permissions.js             → Control de permisos por evento
+│   ├── verification.js            → Sistema verificación manual
+│   ├── matching-manual.js         → Sistema emparejamiento manual
+│   ├── ratings-christian.js       → Sistema valoraciones cristianas
+│   ├── notifications.js           → Sistema notificaciones internas
+│   ├── backup-system.js           → Sistema de contingencia
+│   ├── observations.js            → Sistema de observaciones
+│   └── utils.js                   → Funciones utilitarias
+├── img/
+│   ├── logos/
+│   ├── banners/
+│   ├── events/
+│   ├── hotels/
+│   ├── christian-values/
+│   └── icons/
+└── components/
+    ├── header.html
+    ├── footer.html
+    ├── event-card.html
+    ├── star-rating-christian.html
+    ├── verification-badge.html
+    ├── notification-center.html
+    └── navigation.html
+```
+
+---
+
+## 🎭 SISTEMA DE ROLES Y PERMISOS ACTUALIZADO
+
+### 🔑 ADMINISTRADOR (compuzettaoficial@gmail.com)
+- ✅ Acceso total a todos los eventos
+- ✅ Asignar editores a eventos específicos
+- ✅ Crear/eliminar eventos en cualquier ciudad
+- ✅ Gestionar usuarios y cambiar roles
+- ✅ **Sistema de verificación manual completo**
+- ✅ **Sistema de emparejamiento manual**
+- ✅ **Gestión de observaciones por evento**
+- ✅ **Sistema de backup y contingencias**
+- ✅ Acceso completo al sistema de valoraciones cristianas
+- ✅ Ver reportes globales de toda la plataforma
+
+### ✏️ EDITOR
+- ✅ Acceso limitado solo a eventos asignados por el admin
+- ✅ Verificación manual solo de sus eventos asignados
+- ✅ Emparejamiento manual solo en sus eventos asignados
+- ✅ Editar información solo de sus eventos asignados
+- ✅ Gestionar hoteles/cocheras solo de sus eventos
+- ✅ Crear observaciones solo de sus eventos asignados
+- ✅ Ver reportes solo de sus eventos
+- ❌ No puede crear eventos nuevos
+- ❌ No puede acceder a eventos no asignados
+
+### 👤 USUARIO
+- ✅ Acceso básico a funcionalidades
+- ✅ Participar en cualquier evento
+- ✅ Ver información de todos los eventos
+- ✅ **Centro de notificaciones en Mi Perfil**
+- ✅ **Sistema de valoración bidireccional**
+- ✅ **Proceso de verificación personal**
+
+---
+
+## 📊 ESTRUCTURA DE BASE DE DATOS ACTUALIZADA
+
+### 🗂️ Colección: usuarios (ACTUALIZADA)
+```javascript
+{
+  uid: "user_id",
+  nombre: "string",
+  apellido: "string",
+  email: "string",
+  rol: "administrador|editor|usuario",
+  telefono: "string",
+  estado: "activo|inactivo",
+  
+  // SISTEMA DE VERIFICACIÓN MANUAL
+  verificacion: {
+    estado: "pendiente_verificacion|verificado|rechazado",
+    fecha_solicitud: "timestamp",
+    fecha_verificacion: "timestamp",
+    verificado_por: "admin_user_id",
+    notas_verificador: "string",
+    metodo_verificacion: "whatsapp|llamada|presencial",
+    contacto_verificacion: "string",
+    documentos_verificados: ["cedula", "referencias", "etc"]
+  },
+  
+  // SISTEMA DE VALORACIÓN CRISTIANA
+  valoracion: {
+    base_registro: 1, // +1 estrella por registrarse
+    base_verificacion: 1, // +1 estrella por verificación
+    valoraciones_recibidas: [{
+      evento_id: "string",
+      valorador_id: "string",
+      puntos: "number (1-5)",
+      comentario: "string",
+      criterios_cristianos: {
+        amabilidad: "number (1-5)",
+        hospitalidad: "number (1-5)", 
+        respeto: "number (1-5)",
+        caracter_cristiano: "number (1-5)",
+        servicio_desinteresado: "number (1-5)"
+      },
+      fecha_valoracion: "timestamp"
+    }],
+    promedio_total: "number",
+    total_valoraciones: "number"
+  },
+  
+  // NOTIFICACIONES INTERNAS (SIN COSTO)
+  notificaciones_internas: {
+    verificacion_estado: "pendiente|completada|rechazada",
+    postulaciones: [{
+      evento_id: "string",
+      tipo: "hospedador|visitante",
+      estado: "postulado|verificado|asignado|rechazado",
+      fecha_postulacion: "timestamp",
+      fecha_actualizacion: "timestamp"
+    }],
+    asignaciones_actuales: [{
+      evento_id: "string",
+      tipo: "hospedador|visitante",
+      asignado_con: "user_id",
+      fecha_asignacion: "timestamp"
+    }],
+    mensajes_admin: [{
+      mensaje: "string",
+      fecha: "timestamp",
+      leido: "boolean"
+    }]
+  },
+  
+  // SISTEMA DE EDITORES
+  eventos_asignados: ["evento_id1", "evento_id2"], // Solo para editores
+  asignado_por: "admin_user_id",
+  fecha_asignacion: "timestamp",
+  createdAt: "timestamp"
+}
+```
+
+### 🗂️ Colección: eventos (ACTUALIZADA)
+```javascript
+{
+  id: "evento_id",
+  titulo: "string",
+  descripcion: "string",
+  lugar: "string",
+  ciudad: "string",
+  direccion_completa: "string", // Ubicación manual
+  coordenadas_gps: "string", // Opcional, llenado manual
+  fecha_inicio: "timestamp",
+  fecha_fin: "timestamp",
+  imagenURL: "string",
+  estado: "activo|inactivo",
+  creado_por: "user_id",
+  
+  // SISTEMA DE EDITORES
+  editores_asignados: ["editor_id1", "editor_id2"],
+  region: "string",
+  
+  // ESTADÍSTICAS
+  estadisticas: {
+    anfitriones: "number",
+    visitantes: "number",
+    asistentes: "number",
+    emparejamientos: "number",
+    verificaciones_completadas: "number"
+  },
+  
+  // ALOJAMIENTOS CERCANOS (MANUAL)
+  hoteles: [{
+    nombre: "string",
+    direccion: "string",
+    telefono: "string",
+    precio_aproximado: "string",
+    distancia_evento: "string", // Escrito manualmente
+    notas: "string"
+  }],
+  
+  cocheras: [{
+    nombre: "string",
+    direccion: "string",
+    telefono: "string",
+    precio_por_dia: "string",
+    capacidad: "number",
+    distancia_evento: "string",
+    notas: "string"
+  }],
+  
+  // SISTEMA DE CONTINGENCIA
+  contingencia: {
+    anfitriones_backup: ["user_id1", "user_id2"],
+    contactos_emergencia: [{
+      nombre: "string",
+      telefono: "string",
+      relacion: "string",
+      disponibilidad: "string"
+    }],
+    protocolo_cancelacion: "string",
+    hoteles_emergencia: ["hotel_id1", "hotel_id2"]
+  }
+}
+```
+
+### 🗂️ Colección: postulaciones (ACTUALIZADA)
+```javascript
+{
+  id: "postulacion_id",
+  evento_id: "string",
+  usuario_id: "string",
+  tipo: "hospedador|visitante",
+  
+  // ESTADOS DETALLADOS
+  estado: "postulado|verificado|asignado|rechazado",
+  fecha_postulacion: "timestamp",
+  fecha_verificacion: "timestamp",
+  fecha_asignacion: "timestamp",
+  
+  // VERIFICACIÓN MANUAL
+  verificacion_admin: {
+    verificado_por: "admin_user_id",
+    fecha_verificacion: "timestamp",
+    metodo_verificacion: "whatsapp|llamada|presencial",
+    notas_verificacion: "string",
+    documentos_revisados: ["string"],
+    aprobado: "boolean"
+  },
+  
+  // DATOS HOSPEDADOR
+  datos_hospedador: {
+    numero_habitaciones: "number",
+    numero_camas: "number",
+    personas_puede_hospedar: "number",
+    tiene_cochera: "boolean",
+    servicios_adicionales: ["desayuno", "transporte", "etc"],
+    reglas_casa: "string",
+    ubicacion_detalle: "string"
+  },
+  
+  // DATOS VISITANTE
+  datos_visitante: {
+    numero_personas: "number",
+    habitaciones_solicitadas: "number",
+    tiene_vehiculo: "boolean",
+    necesidades_especiales: "string",
+    preferencias: "string",
+    referencias: "string"
+  },
+  
+  // ASIGNACIÓN MANUAL
+  asignacion: {
+    asignado_con: "user_id",
+    asignado_por: "admin_user_id",
+    fecha_asignacion: "timestamp",
+    notas_asignacion: "string",
+    es_asignacion_backup: "boolean"
+  }
+}
+```
+
+### 🗂️ Colección: emparejamientos (NUEVA)
+```javascript
+{
+  id: "emparejamiento_id",
+  evento_id: "string",
+  anfitrion_id: "string",
+  visitante_id: "string",
+  
+  // PROCESO MANUAL
+  sugerido_por_algoritmo: "boolean",
+  confirmado_por_admin: "admin_user_id",
+  fecha_sugerencia: "timestamp",
+  fecha_confirmacion: "timestamp",
+  estado: "sugerido|confirmado|cancelado",
+  
+  // COMPATIBILIDAD
+  compatibilidad_score: "number", // Para vista previa
+  criterios_compatibilidad: {
+    ubicacion: "number",
+    capacidad: "number",
+    vehiculo: "boolean",
+    necesidades_especiales: "boolean"
+  },
+  
+  // INFORMACIÓN DEL EMPAREJAMIENTO
+  detalles: {
+    habitaciones_asignadas: "number",
+    camas_asignadas: "number",
+    cochera_asignada: "boolean",
+    servicios_incluidos: ["string"],
+    reglas_especiales: "string"
+  },
+  
+  // BACKUP
+  es_asignacion_backup: "boolean",
+  emparejamiento_original: "emparejamiento_id"
+}
+```
+
+### 🗂️ Colección: valoraciones_cristianas (NUEVA)
+```javascript
+{
+  id: "valoracion_id",
+  evento_id: "string",
+  valorador_id: "string",
+  valorado_id: "string",
+  tipo_relacion: "anfitrion_a_visitante|visitante_a_anfitrion",
+  
+  // CRITERIOS CRISTIANOS ESPECÍFICOS
+  criterios: {
+    amabilidad: "number (1-5)",
+    hospitalidad: "number (1-5)",
+    respeto: "number (1-5)",
+    caracter_cristiano: "number (1-5)",
+    servicio_desinteresado: "number (1-5)",
+    paciencia: "number (1-5)",
+    generosidad: "number (1-5)"
+  },
+  
+  // COMENTARIOS
+  comentario_positivo: "string",
+  areas_mejora: "string", // Constructivo, en amor cristiano
+  recomendaria: "boolean",
+  
+  // ACLARACIÓN IMPORTANTE
+  aclaracion: "Esta valoración se basa en el comportamiento cristiano y el trato recibido, NO en la calidad material del alojamiento o lujos ofrecidos",
+  
+  fecha_valoracion: "timestamp",
+  verificado_por_admin: "boolean"
+}
+```
+
+### 🗂️ Colección: observaciones_eventos (NUEVA)
+```javascript
+{
+  id: "observacion_id",
+  evento_id: "string",
+  admin_id: "string",
+  fecha: "timestamp",
+  
+  // TIPOS DE OBSERVACIÓN
+  tipo: "incidente|mejora|observacion_general|problema_tecnico|sugerencia",
+  gravedad: "baja|media|alta|critica",
+  
+  // CONTENIDO
+  titulo: "string",
+  descripcion: "string",
+  usuarios_involucrados: ["user_id"],
+  
+  // SEGUIMIENTO
+  estado: "abierto|en_revision|resuelto|cerrado",
+  acciones_tomadas: "string",
+  responsable_seguimiento: "admin_user_id",
+  fecha_resolucion: "timestamp",
+  
+  // MEJORAS PARA LA APP
+  impacto_futuro: "string",
+  cambios_sugeridos: "string"
+}
+```
+
+### 🗂️ Colección: verificaciones_manuales (NUEVA)
+```javascript
+{
+  id: "verificacion_id",
+  usuario_id: "string",
+  admin_verificador: "string",
+  fecha_inicio: "timestamp",
+  fecha_completada: "timestamp",
+  
+  // PROCESO DE VERIFICACIÓN
+  metodo: "whatsapp|llamada|presencial|combinado",
+  contacto_usado: "string",
+  documentos_solicitados: ["cedula", "referencias", "carta_pastor"],
+  documentos_recibidos: ["string"],
+  
+  // VERIFICACIÓN DETALLADA
+  verificaciones: {
+    identidad: "boolean",
+    telefono: "boolean",
+    direccion: "boolean",
+    referencias_cristianas: "boolean",
+    antecedentes: "boolean"
+  },
+  
+  // RESULTADO
+  resultado: "aprobado|rechazado|pendiente_documentos",
+  notas_verificador: "string",
+  observaciones: "string",
+  
+  // SEGUIMIENTO
+  requiere_seguimiento: "boolean",
+  fecha_siguiente_revision: "timestamp"
+}
+```
+
+---
+
+## 🔄 FLUJOS DE TRABAJO ACTUALIZADOS
+
+### 1. 📋 FLUJO DE VERIFICACIÓN MANUAL
+```
+Usuario se registra → Estado: "pendiente_verificacion"
+     ↓
+Admin/Editor revisa solicitud → Contacta por WhatsApp/llamada
+     ↓
+Verificación exitosa → Estado: "verificado" + 1 estrella
+     ↓
+Usuario habilitado para postular a eventos
+```
+
+### 2. 🤝 FLUJO DE EMPAREJAMIENTO MANUAL
+```
+Múltiples usuarios postulan (anfitriones + visitantes)
+     ↓
+Algoritmo genera vista previa con compatibilidad
+     ↓
+Admin revisa sugerencias → Decide manualmente
+     ↓
+Admin confirma emparejamiento → Notifica a usuarios
+     ↓
+Sistema actualiza estados → Visible en "Mi Perfil"
+```
+
+### 3. 🔄 FLUJO DE CONTINGENCIA
+```
+Anfitrión cancela → Sistema detecta
+     ↓
+Admin busca en lista de backup
+     ↓
+Reasigna visitante → Notifica cambio
+     ↓
+Si no hay backup → Deriva a hoteles de emergencia
+```
+
+### 4. ⭐ FLUJO DE VALORACIÓN CRISTIANA
+```
+Evento termina → Habilita valoración mutua
+     ↓
+Anfitrión valora visitante + Visitante valora anfitrión
+     ↓
+Sistema calcula promedio → Actualiza perfil
+     ↓
+Admin revisa valoraciones → Modera si es necesario
+```
+
+---
+
+## 🛡️ SISTEMA DE SEGURIDAD ACTUALIZADO
+
+### 1. 🔐 Middleware de Verificación
+```javascript
+// Verificar estado de verificación antes de postular
+function checkVerificationStatus(req, res, next) {
+  const userId = req.user.uid;
+  
+  getUserVerificationStatus(userId)
+    .then(status => {
+      if (status === 'verificado') {
+        next();
+      } else {
+        res.status(403).json({ 
+          error: 'Debe completar la verificación antes de postular',
+          redirect: '/verification/verification-process.html'
+        });
+      }
+    });
+}
+```
+
+### 2. 🔒 Control de Emparejamiento Manual
+```javascript
+// Solo admin puede confirmar emparejamientos
+function checkMatchingPermission(req, res, next) {
+  const userId = req.user.uid;
+  const eventoId = req.params.eventoId;
+  
+  if (req.user.rol === 'administrador') {
+    next();
+  } else if (req.user.rol === 'editor') {
+    // Verificar si el editor tiene este evento asignado
+    verificarEventoAsignado(userId, eventoId)
+      .then(hasPermission => {
+        if (hasPermission) {
+          next();
+        } else {
+          res.status(403).json({ error: 'No tienes permisos para este evento' });
+        }
+      });
+  } else {
+    res.status(403).json({ error: 'Solo admin/editor pueden confirmar emparejamientos' });
+  }
+}
+```
+
+### 3. 🔍 Reglas de Firestore Actualizadas
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Valoraciones: solo participantes del evento pueden valorar
+    match /valoraciones_cristianas/{valoracionId} {
+      allow create: if request.auth != null && 
+        exists(/databases/$(database)/documents/emparejamientos/$(getEmparejamientoId())) &&
+        (request.resource.data.valorador_id == request.auth.uid);
+      
+      allow read: if request.auth != null;
+      allow update: if false; // No se pueden modificar valoraciones
+      allow delete: if false; // No se pueden eliminar valoraciones
+    }
+    
+    // Observaciones: solo admin/editor asignado
+    match /observaciones_eventos/{observacionId} {
+      allow create, update: if request.auth != null && 
+        (get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data.rol == 'administrador' ||
+         (get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data.rol == 'editor' &&
+          request.resource.data.evento_id in get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data.eventos_asignados));
+    }
+    
+    // Verificaciones: solo admin/editor
+    match /verificaciones_manuales/{verificacionId} {
+      allow create, update: if request.auth != null && 
+        (get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data.rol in ['administrador', 'editor']);
+      
+      allow read: if request.auth != null && 
+        (request.auth.uid == resource.data.usuario_id || 
+         get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data.rol in ['administrador', 'editor']);
+    }
+  }
+}
+```
+
+---
+
+## 🎨 INTERFACES ACTUALIZADAS
+
+### 1. 👤 Mi Perfil - Centro de Notificaciones
+```html
+<!-- profile.html -->
+<div class="profile-notifications">
+  <h2>Mi Centro de Notificaciones</h2>
+  
+  <!-- Estado de Verificación -->
+  <div class="verification-status">
+    <h3>Estado de Verificación</h3>
+    <div class="status-badge" id="verificationBadge">
+      <!-- Pendiente/Verificado/Rechazado -->
+    </div>
+  </div>
+  
+  <!-- Mis Postulaciones -->
+  <div class="my-applications">
+    <h3>Mis Postulaciones</h3>
+    <div class="applications-list">
+      <!-- Lista de postulaciones por evento -->
+    </div>
+  </div>
+  
+  <!-- Mis Asignaciones -->
+  <div class="my-assignments">
+    <h3>Mis Asignaciones Actuales</h3>
+    <div class="assignments-list">
+      <!-- Lista de asignaciones activas -->
+    </div>
+  </div>
+  
+  <!-- Mi Valoración -->
+  <div class="my-rating">
+    <h3>Mi Valoración Cristiana</h3>
+    <div class="rating-display">
+      <div class="stars">⭐⭐⭐⭐⭐</div>
+      <p>Basada en comportamiento cristiano</p>
+    </div>
+  </div>
+  
+  <!-- Mensajes del Admin -->
+  <div class="admin-messages">
+    <h3>Mensajes Administrativos</h3>
+    <div class="messages-list">
+      <!-- Mensajes internos -->
+    </div>
+  </div>
+</div>
+```
+
+### 2. 🔍 Panel de Verificación Manual
+```html
+<!-- verification-center.html -->
+<div class="verification-center">
+  <h2>Centro de Verificación Manual</h2>
+  
+  <!-- Pendientes de Verificación -->
+  <div class="pending-verifications">
+    <h3>Verificaciones Pendientes</h3>
+    <div class="verification-queue">
+      <div class="verification-item">
+        <div class="user-info">
+          <img src="avatar.jpg" alt="Usuario">
+          <div>
+            <h4>Juan Pérez</h4>
+            <p>📞 +51 999 888 777</p>
+            <p>📧 juan@email.com</p>
+          </div>
+        </div>
+        <div class="verification-actions">
+          <button onclick="iniciarVerificacion('user123')">
+            📞 Verificar por WhatsApp
+          </button>
+          <button onclick="iniciarVerificacion('user123', 'call')">
+            ☎️ Verificar por Llamada
+          </button>
+          <button onclick="rechazarVerificacion('user123')">
+            ❌ Rechazar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Formulario de Verificación -->
+  <div class="verification-form" id="verificationForm" style="display:none;">
+    <h3>Proceso de Verificación</h3>
+    <form>
+      <input type="hidden" id="userId" value="">
+      
+      <div class="form-group">
+        <label>Método de Verificación:</label>
+        <select id="verificationMethod">
+          <option value="whatsapp">WhatsApp</option>
+          <option value="llamada">Llamada telefónica</option>
+          <option value="presencial">Presencial</option>
+        </select>
+      </div>
+      
+      <div class="verification-checklist">
+        <h4>Verificaciones Realizadas:</h4>
+        <label><input type="checkbox" name="identidad"> Identidad verificada</label>
+        <label><input type="checkbox" name="telefono"> Teléfono verificado</label>
+        <label><input type="checkbox" name="direccion"> Dirección verificada</label>
+        <label><input type="checkbox" name="referencias"> Referencias cristianas</label>
+        <label><input type="checkbox" name="antecedentes"> Antecedentes verificados</label>
+      </div>
+      
+      <div class="form-group">
+        <label>Notas del Verificador:</label>
+        <textarea id="verificationNotes" placeholder="Observaciones del proceso de verificación..."></textarea>
+      </div>
+      
+      <div class="form-actions">
+        <button type="button" onclick="aprobarVerificacion()">
+          ✅ Aprobar Verificación
+        </button>
+        <button type="button" onclick="rechazarVerificacion()">
+          ❌ Rechazar Verificación
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+```
+
+### 3. 🤝 Sistema de Emparejamiento Manual
+```html
+<!-- matching-manual.html -->
+<div class="manual-matching">
+  <h2>Sistema de Emparejamiento Manual</h2>
+  
+  <!-- Selección de Evento -->
+  <div class="event-selector">
+    <label>Seleccionar Evento:</label>
+    <select id="eventSelect" onchange="loadEventParticipants()">
+      <option value="">Seleccionar evento...</option>
+    </select>
+  </div>
+  
+  <!-- Vista Previa de Compatibilidad -->
+  <div class="compatibility-preview">
+    <h3>Sugerencias de Emparejamiento</h3>
+    <div class="suggestions-list" id="suggestionsList">
+      <!-- Sugerencias automáticas -->
+    </div>
+  </div>
+  
+  <!-- Emparejamiento Manual -->
+  <div class="manual-pairing">
+    <div class="hosts-column">
+      <h3>Anfitriones Disponibles</h3>
+      <div class="hosts-list" id="hostsList">
+        <!-- Lista de anfitriones -->
+      </div>
+    </div>
+    
+    <div class="visitors-column">
+      <h3>Visitantes Esperando</h3>
+      <div class="visitors-list" id="visitorsList">
+        <!-- Lista de visitantes -->
+      </div>
+    </div>
+  </div>
+  
+  <!-- Confirmación de Emparejamiento -->
+  <div class="pairing-confirmation">
+    <h3>Confirmar Emparejamiento</h3>
+    <div class="pairing-details">
+      <div class="host-details">
+        <h4>
