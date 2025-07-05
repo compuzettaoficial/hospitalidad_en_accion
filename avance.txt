@@ -1517,11 +1517,705 @@ class ManualMatchingSystem {
     return hosts;
   }
   
-  async loadVisitors(eventId) {
-    const snapshot = await this.db.collection('postulaciones')
-      .where('evento_id', '==', eventId)
-      .where('tipo', '==', 'visitante')
-      .where('estado', '==', 'verificado')
-      .get();
-    
-    const
+    async loadVisitors(eventId) {
+        try {
+            const visitorsRef = collection(db, 'postulaciones');
+            const q = query(
+                visitorsRef,
+                where('evento_id', '==', eventId),
+                where('tipo', '==', 'visitante'),
+                where('estado', '==', 'verificado')
+            );
+            
+            const snapshot = await getDocs(q);
+            const visitors = [];
+            
+            for (const doc of snapshot.docs) {
+                const postulacion = doc.data();
+                const userDoc = await getDoc(doc(db, 'usuarios', postulacion.usuario_id));
+                
+                if (userDoc.exists()) {
+                    visitors.push({
+                        id: doc.id,
+                        postulacion: postulacion,
+                        usuario: userDoc.data(),
+                        userId: postulacion.usuario_id
+                    });
+                }
+            }
+            
+            return visitors;
+        } catch (error) {
+            console.error('Error cargando visitantes:', error);
+            return [];
+        }
+    }
+
+    // SISTEMA DE VALORACIÓN CRISTIANA
+    async displayChristianRating(userId, containerId) {
+        try {
+            const userDoc = await getDoc(doc(db, 'usuarios', userId));
+            const userData = userDoc.data();
+            
+            const container = document.getElementById(containerId);
+            
+            if (!userData.valoracion) {
+                container.innerHTML = `
+                    <div class="rating-display">
+                        <div class="stars">⭐⭐</div>
+                        <p class="rating-text">Nuevo usuario (2 estrellas base)</p>
+                        <small>Valoración basada en comportamiento cristiano</small>
+                    </div>
+                `;
+                return;
+            }
+            
+            const totalStars = userData.valoracion.promedio_total || 2;
+            const starDisplay = '⭐'.repeat(Math.floor(totalStars));
+            
+            container.innerHTML = `
+                <div class="rating-display">
+                    <div class="stars">${starDisplay}</div>
+                    <p class="rating-text">${totalStars.toFixed(1)} estrellas</p>
+                    <p class="rating-count">${userData.valoracion.total_valoraciones || 0} valoraciones</p>
+                    <small>Basada en comportamiento cristiano y hospitalidad</small>
+                </div>
+            `;
+            
+        } catch (error) {
+            console.error('Error mostrando valoración:', error);
+        }
+    }
+
+    // SISTEMA DE NOTIFICACIONES INTERNAS (SIN COSTO)
+    async updateUserNotifications(userId, eventId, type, status) {
+        try {
+            const userRef = doc(db, 'usuarios', userId);
+            const userDoc = await getDoc(userRef);
+            
+            if (!userDoc.exists()) return;
+            
+            const userData = userDoc.data();
+            let notifications = userData.notificaciones_internas || {
+                verificacion_estado: 'pendiente',
+                postulaciones: [],
+                asignaciones_actuales: [],
+                mensajes_admin: []
+            };
+            
+            // Actualizar postulaciones
+            const existingPostulation = notifications.postulaciones.find(p => 
+                p.evento_id === eventId && p.tipo === type
+            );
+            
+            if (existingPostulation) {
+                existingPostulation.estado = status;
+                existingPostulation.fecha_actualizacion = new Date();
+            } else {
+                notifications.postulaciones.push({
+                    evento_id: eventId,
+                    tipo: type,
+                    estado: status,
+                    fecha_postulacion: new Date(),
+                    fecha_actualizacion: new Date()
+                });
+            }
+            
+            await updateDoc(userRef, {
+                notificaciones_internas: notifications
+            });
+            
+        } catch (error) {
+            console.error('Error actualizando notificaciones:', error);
+        }
+    }
+
+    // SISTEMA DE VERIFICACIÓN MANUAL
+    async iniciarVerificacion(userId, method = 'whatsapp') {
+        try {
+            const currentUser = auth.currentUser;
+            if (!currentUser) throw new Error('Usuario no autenticado');
+            
+            const verificationData = {
+                usuario_id: userId,
+                admin_verificador: currentUser.uid,
+                fecha_inicio: new Date(),
+                metodo: method,
+                estado: 'en_proceso',
+                verificaciones: {
+                    identidad: false,
+                    telefono: false,
+                    direccion: false,
+                    referencias_cristianas: false,
+                    antecedentes: false
+                }
+            };
+            
+            const verificationRef = await addDoc(collection(db, 'verificaciones_manuales'), verificationData);
+            
+            // Mostrar formulario de verificación
+            this.showVerificationForm(userId, verificationRef.id);
+            
+        } catch (error) {
+            console.error('Error iniciando verificación:', error);
+            alert('Error al iniciar verificación');
+        }
+    }
+
+    showVerificationForm(userId, verificationId) {
+        const form = document.getElementById('verificationForm');
+        form.style.display = 'block';
+        form.setAttribute('data-user-id', userId);
+        form.setAttribute('data-verification-id', verificationId);
+        
+        // Cargar datos del usuario
+        this.loadUserForVerification(userId);
+    }
+
+    async loadUserForVerification(userId) {
+        try {
+            const userDoc = await getDoc(doc(db, 'usuarios', userId));
+            if (userDoc.exists()) {
+                const userData = userDoc.data();
+                
+                // Llenar información del usuario en el formulario
+                document.querySelector('.user-verification-info').innerHTML = `
+                    <h4>Verificando a: ${userData.nombre} ${userData.apellido}</h4>
+                    <p><strong>Teléfono:</strong> ${userData.telefono}</p>
+                    <p><strong>Email:</strong> ${userData.email}</p>
+                    <p><strong>Fecha registro:</strong> ${userData.createdAt?.toDate().toLocaleDateString()}</p>
+                `;
+            }
+        } catch (error) {
+            console.error('Error cargando usuario para verificación:', error);
+        }
+    }
+
+    async aprobarVerificacion() {
+        try {
+            const form = document.getElementById('verificationForm');
+            const userId = form.getAttribute('data-user-id');
+            const verificationId = form.getAttribute('data-verification-id');
+            
+            const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+            const verificaciones = {};
+            
+            checkboxes.forEach(checkbox => {
+                verificaciones[checkbox.name] = checkbox.checked;
+            });
+            
+            const notas = document.getElementById('verificationNotes').value;
+            const metodo = document.getElementById('verificationMethod').value;
+            
+            // Actualizar verificación manual
+            await updateDoc(doc(db, 'verificaciones_manuales', verificationId), {
+                verificaciones: verificaciones,
+                resultado: 'aprobado',
+                notas_verificador: notas,
+                metodo: metodo,
+                fecha_completada: new Date()
+            });
+            
+            // Actualizar usuario - cambiar estado y dar estrella
+            const userRef = doc(db, 'usuarios', userId);
+            await updateDoc(userRef, {
+                'verificacion.estado': 'verificado',
+                'verificacion.fecha_verificacion': new Date(),
+                'verificacion.verificado_por': auth.currentUser.uid,
+                'verificacion.metodo_verificacion': metodo,
+                'verificacion.notas_verificador': notas,
+                'valoracion.base_verificacion': 1,
+                'notificaciones_internas.verificacion_estado': 'completada'
+            });
+            
+            // Recalcular valoración total
+            await this.recalculateUserRating(userId);
+            
+            alert('Verificación aprobada exitosamente. Usuario habilitado.');
+            this.loadPendingVerifications();
+            form.style.display = 'none';
+            
+        } catch (error) {
+            console.error('Error aprobando verificación:', error);
+            alert('Error al aprobar verificación');
+        }
+    }
+
+    async rechazarVerificacion() {
+        try {
+            const form = document.getElementById('verificationForm');
+            const userId = form.getAttribute('data-user-id');
+            const verificationId = form.getAttribute('data-verification-id');
+            
+            const notas = document.getElementById('verificationNotes').value;
+            
+            if (!notas.trim()) {
+                alert('Por favor, indique el motivo del rechazo');
+                return;
+            }
+            
+            // Actualizar verificación manual
+            await updateDoc(doc(db, 'verificaciones_manuales', verificationId), {
+                resultado: 'rechazado',
+                notas_verificador: notas,
+                fecha_completada: new Date()
+            });
+            
+            // Actualizar usuario
+            await updateDoc(doc(db, 'usuarios', userId), {
+                'verificacion.estado': 'rechazado',
+                'verificacion.fecha_verificacion': new Date(),
+                'verificacion.verificado_por': auth.currentUser.uid,
+                'verificacion.notas_verificador': notas,
+                'notificaciones_internas.verificacion_estado': 'rechazada'
+            });
+            
+            alert('Verificación rechazada');
+            this.loadPendingVerifications();
+            form.style.display = 'none';
+            
+        } catch (error) {
+            console.error('Error rechazando verificación:', error);
+            alert('Error al rechazar verificación');
+        }
+    }
+
+    async recalculateUserRating(userId) {
+        try {
+            const userDoc = await getDoc(doc(db, 'usuarios', userId));
+            if (!userDoc.exists()) return;
+            
+            const userData = userDoc.data();
+            let totalStars = 0;
+            
+            // Estrellas base
+            totalStars += userData.valoracion?.base_registro || 1;
+            totalStars += userData.valoracion?.base_verificacion || 0;
+            
+            // Estrellas de valoraciones
+            if (userData.valoracion?.valoraciones_recibidas) {
+                const valoraciones = userData.valoracion.valoraciones_recibidas;
+                if (valoraciones.length > 0) {
+                    const sum = valoraciones.reduce((acc, val) => acc + val.puntos, 0);
+                    const promedio = sum / valoraciones.length;
+                    totalStars += promedio;
+                }
+            }
+            
+            // Actualizar promedio total
+            await updateDoc(doc(db, 'usuarios', userId), {
+                'valoracion.promedio_total': totalStars,
+                'valoracion.total_valoraciones': userData.valoracion?.valoraciones_recibidas?.length || 0
+            });
+            
+        } catch (error) {
+            console.error('Error recalculando valoración:', error);
+        }
+    }
+
+    // SISTEMA DE BACKUP Y CONTINGENCIA
+    async setupBackupSystem(eventId) {
+        try {
+            const eventDoc = await getDoc(doc(db, 'eventos', eventId));
+            if (!eventDoc.exists()) return;
+            
+            // Cargar anfitriones verificados del evento
+            const hostesRef = collection(db, 'postulaciones');
+            const q = query(
+                hostesRef,
+                where('evento_id', '==', eventId),
+                where('tipo', '==', 'hospedador'),
+                where('estado', '==', 'verificado')
+            );
+            
+            const snapshot = await getDocs(q);
+            const availableHosts = [];
+            
+            snapshot.forEach(doc => {
+                const postulacion = doc.data();
+                if (postulacion.estado !== 'asignado') {
+                    availableHosts.push(postulacion.usuario_id);
+                }
+            });
+            
+            // Actualizar lista de backup
+            await updateDoc(doc(db, 'eventos', eventId), {
+                'contingencia.anfitriones_backup': availableHosts.slice(0, 5),
+                'contingencia.fecha_actualizacion': new Date()
+            });
+            
+        } catch (error) {
+            console.error('Error configurando sistema de backup:', error);
+        }
+    }
+
+    async handleHostCancellation(eventoId, anfitrionId) {
+        try {
+            // Buscar visitantes asignados a este anfitrión
+            const assignmentsRef = collection(db, 'emparejamientos');
+            const q = query(
+                assignmentsRef,
+                where('evento_id', '==', eventoId),
+                where('anfitrion_id', '==', anfitrionId),
+                where('estado', '==', 'confirmado')
+            );
+            
+            const snapshot = await getDocs(q);
+            const affectedVisitors = [];
+            
+            snapshot.forEach(doc => {
+                affectedVisitors.push({
+                    id: doc.id,
+                    visitante_id: doc.data().visitante_id
+                });
+            });
+            
+            // Buscar anfitriones de backup
+            const eventDoc = await getDoc(doc(db, 'eventos', eventoId));
+            const backupHosts = eventDoc.data().contingencia?.anfitriones_backup || [];
+            
+            // Intentar reasignar
+            for (const visitor of affectedVisitors) {
+                if (backupHosts.length > 0) {
+                    const backupHostId = backupHosts.shift();
+                    await this.createBackupAssignment(eventoId, backupHostId, visitor.visitante_id, visitor.id);
+                } else {
+                    // Si no hay backup, derivar a hoteles
+                    await this.assignToEmergencyHotel(eventoId, visitor.visitante_id);
+                }
+            }
+            
+            // Actualizar lista de backup
+            await updateDoc(doc(db, 'eventos', eventoId), {
+                'contingencia.anfitriones_backup': backupHosts
+            });
+            
+        } catch (error) {
+            console.error('Error manejando cancelación:', error);
+        }
+    }
+
+    async createBackupAssignment(eventoId, backupHostId, visitanteId, originalAssignmentId) {
+        try {
+            // Cancelar asignación original
+            await updateDoc(doc(db, 'emparejamientos', originalAssignmentId), {
+                estado: 'cancelado',
+                fecha_cancelacion: new Date()
+            });
+            
+            // Crear nueva asignación de backup
+            const backupAssignment = {
+                evento_id: eventoId,
+                anfitrion_id: backupHostId,
+                visitante_id: visitanteId,
+                es_asignacion_backup: true,
+                emparejamiento_original: originalAssignmentId,
+                confirmado_por_admin: auth.currentUser.uid,
+                fecha_confirmacion: new Date(),
+                estado: 'confirmado',
+                motivo_backup: 'Cancelación de anfitrión original'
+            };
+            
+            await addDoc(collection(db, 'emparejamientos'), backupAssignment);
+            
+            // Notificar a ambos usuarios
+            await this.notifyBackupAssignment(backupHostId, visitanteId, eventoId);
+            
+        } catch (error) {
+            console.error('Error creando asignación de backup:', error);
+        }
+    }
+
+    async notifyBackupAssignment(hostId, visitanteId, eventoId) {
+        try {
+            // Notificar al nuevo anfitrión
+            await this.addAdminMessage(hostId, 
+                'Te hemos asignado un visitante como anfitrión de backup. Revisa tu perfil para más detalles.'
+            );
+            
+            // Notificar al visitante
+            await this.addAdminMessage(visitanteId, 
+                'Tu alojamiento ha sido reasignado por una cancelación. Revisa tu perfil para los nuevos detalles.'
+            );
+            
+        } catch (error) {
+            console.error('Error notificando asignación de backup:', error);
+        }
+    }
+
+    async addAdminMessage(userId, mensaje) {
+        try {
+            const userRef = doc(db, 'usuarios', userId);
+            const userDoc = await getDoc(userRef);
+            
+            if (!userDoc.exists()) return;
+            
+            const userData = userDoc.data();
+            let notifications = userData.notificaciones_internas || {};
+            
+            if (!notifications.mensajes_admin) {
+                notifications.mensajes_admin = [];
+            }
+            
+            notifications.mensajes_admin.push({
+                mensaje: mensaje,
+                fecha: new Date(),
+                leido: false
+            });
+            
+            await updateDoc(userRef, {
+                notificaciones_internas: notifications
+            });
+            
+        } catch (error) {
+            console.error('Error añadiendo mensaje admin:', error);
+        }
+    }
+
+    // SISTEMA DE OBSERVACIONES POR EVENTO
+    async createEventObservation(eventoId, tipo, titulo, descripcion, gravedad = 'media') {
+        try {
+            const observationData = {
+                evento_id: eventoId,
+                admin_id: auth.currentUser.uid,
+                fecha: new Date(),
+                tipo: tipo,
+                gravedad: gravedad,
+                titulo: titulo,
+                descripcion: descripcion,
+                estado: 'abierto',
+                usuarios_involucrados: [],
+                acciones_tomadas: '',
+                responsable_seguimiento: auth.currentUser.uid
+            };
+            
+            await addDoc(collection(db, 'observaciones_eventos'), observationData);
+            
+            // Recargar observaciones
+            this.loadEventObservations(eventoId);
+            
+        } catch (error) {
+            console.error('Error creando observación:', error);
+        }
+    }
+
+    async loadEventObservations(eventoId) {
+        try {
+            const observationsRef = collection(db, 'observaciones_eventos');
+            const q = query(
+                observationsRef,
+                where('evento_id', '==', eventoId),
+                orderBy('fecha', 'desc')
+            );
+            
+            const snapshot = await getDocs(q);
+            const observations = [];
+            
+            snapshot.forEach(doc => {
+                observations.push({
+                    id: doc.id,
+                    ...doc.data()
+                });
+            });
+            
+            this.displayObservations(observations);
+            
+        } catch (error) {
+            console.error('Error cargando observaciones:', error);
+        }
+    }
+
+    displayObservations(observations) {
+        const container = document.getElementById('observationsList');
+        if (!container) return;
+        
+        container.innerHTML = observations.map(obs => `
+            <div class="observation-item ${obs.gravedad}">
+                <div class="observation-header">
+                    <h4>${obs.titulo}</h4>
+                    <span class="gravity-badge ${obs.gravedad}">${obs.gravedad}</span>
+                    <span class="status-badge ${obs.estado}">${obs.estado}</span>
+                </div>
+                <div class="observation-body">
+                    <p><strong>Tipo:</strong> ${obs.tipo}</p>
+                    <p><strong>Descripción:</strong> ${obs.descripcion}</p>
+                    <p><strong>Fecha:</strong> ${obs.fecha.toDate().toLocaleDateString()}</p>
+                    ${obs.acciones_tomadas ? `<p><strong>Acciones:</strong> ${obs.acciones_tomadas}</p>` : ''}
+                </div>
+                <div class="observation-actions">
+                    <button onclick="editObservation('${obs.id}')">Editar</button>
+                    <button onclick="resolveObservation('${obs.id}')">Resolver</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // SISTEMA DE VALORACIÓN BIDIRECCIONAL
+    async enableMutualRating(eventoId) {
+        try {
+            // Buscar todos los emparejamientos confirmados del evento
+            const matchingsRef = collection(db, 'emparejamientos');
+            const q = query(
+                matchingsRef,
+                where('evento_id', '==', eventoId),
+                where('estado', '==', 'confirmado')
+            );
+            
+            const snapshot = await getDocs(q);
+            
+            // Habilitar valoración mutua para cada emparejamiento
+            snapshot.forEach(async (doc) => {
+                const matching = doc.data();
+                await this.createRatingOpportunity(
+                    eventoId,
+                    matching.anfitrion_id,
+                    matching.visitante_id,
+                    doc.id
+                );
+            });
+            
+        } catch (error) {
+            console.error('Error habilitando valoración mutua:', error);
+        }
+    }
+
+    async createRatingOpportunity(eventoId, anfitrionId, visitanteId, emparejamientoId) {
+        try {
+            // Crear oportunidad de valoración para el anfitrión
+            await this.addAdminMessage(anfitrionId, 
+                `Ya puedes valorar a tu visitante del evento. La valoración se basa en comportamiento cristiano.`
+            );
+            
+            // Crear oportunidad de valoración para el visitante
+            await this.addAdminMessage(visitanteId, 
+                `Ya puedes valorar a tu anfitrión del evento. La valoración se basa en comportamiento cristiano.`
+            );
+            
+        } catch (error) {
+            console.error('Error creando oportunidad de valoración:', error);
+        }
+    }
+
+    async submitChristianRating(eventoId, valoradoId, criterios, comentario) {
+        try {
+            const ratingData = {
+                evento_id: eventoId,
+                valorador_id: auth.currentUser.uid,
+                valorado_id: valoradoId,
+                criterios: criterios,
+                comentario_positivo: comentario,
+                fecha_valoracion: new Date(),
+                verificado_por_admin: false,
+                aclaracion: "Esta valoración se basa en el comportamiento cristiano y el trato recibido, NO en la calidad material del alojamiento o lujos ofrecidos"
+            };
+            
+            // Calcular promedio de criterios
+            const criteriosArray = Object.values(criterios);
+            const promedio = criteriosArray.reduce((a, b) => a + b, 0) / criteriosArray.length;
+            ratingData.puntos = promedio;
+            
+            // Determinar tipo de relación
+            const matchingRef = collection(db, 'emparejamientos');
+            const q = query(
+                matchingRef,
+                where('evento_id', '==', eventoId),
+                where('anfitrion_id', '==', valoradoId),
+                where('visitante_id', '==', auth.currentUser.uid)
+            );
+            
+            const snapshot = await getDocs(q);
+            if (!snapshot.empty) {
+                ratingData.tipo_relacion = 'visitante_a_anfitrion';
+            } else {
+                ratingData.tipo_relacion = 'anfitrion_a_visitante';
+            }
+            
+            // Guardar valoración
+            await addDoc(collection(db, 'valoraciones_cristianas'), ratingData);
+            
+            // Actualizar valoración del usuario valorado
+            await this.updateUserRating(valoradoId, ratingData);
+            
+            alert('Valoración enviada exitosamente');
+            
+        } catch (error) {
+            console.error('Error enviando valoración:', error);
+            alert('Error al enviar valoración');
+        }
+    }
+
+    async updateUserRating(userId, newRating) {
+        try {
+            const userRef = doc(db, 'usuarios', userId);
+            const userDoc = await getDoc(userRef);
+            
+            if (!userDoc.exists()) return;
+            
+            const userData = userDoc.data();
+            let valoracion = userData.valoracion || {
+                base_registro: 1,
+                base_verificacion: 0,
+                valoraciones_recibidas: []
+            };
+            
+            // Añadir nueva valoración
+            valoracion.valoraciones_recibidas.push({
+                evento_id: newRating.evento_id,
+                valorador_id: newRating.valorador_id,
+                puntos: newRating.puntos,
+                comentario: newRating.comentario_positivo,
+                criterios: newRating.criterios,
+                fecha_valoracion: newRating.fecha_valoracion
+            });
+            
+            // Recalcular promedio
+            await updateDoc(userRef, { valoracion: valoracion });
+            await this.recalculateUserRating(userId);
+            
+        } catch (error) {
+            console.error('Error actualizando valoración del usuario:', error);
+        }
+    }
+
+    // INICIALIZACIÓN DEL SISTEMA
+    async initialize() {
+        try {
+            // Verificar autenticación
+            auth.onAuthStateChanged(async (user) => {
+                if (user) {
+                    await this.loadUserRole(user.uid);
+                    await this.initializeInterface();
+                } else {
+                    window.location.href = '/auth/login.html';
+                }
+            });
+            
+        } catch (error) {
+            console.error('Error inicializando sistema:', error);
+        }
+    }
+
+    async initializeInterface() {
+        const userRole = this.currentUserRole;
+        
+        if (userRole === 'administrador') {
+            this.loadPendingVerifications();
+            this.loadEventObservations();
+            this.setupBackupSystem();
+        } else if (userRole === 'editor') {
+            this.loadAssignedEvents();
+            this.loadAssignedVerifications();
+        } else {
+            this.loadUserProfile();
+            this.loadUserNotifications();
+        }
+    }
+}
+
+// Inicializar el sistema
+const hospitalitySystem = new HospitalitySystem();
+hospitalitySystem.initialize();
+
+
+
+
