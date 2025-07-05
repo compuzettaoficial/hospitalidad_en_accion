@@ -256,12 +256,31 @@
             color: white;
             font-size: 3rem;
             overflow: hidden;
+            position: relative;
         }
 
-        .event-image img {
+        /* CORRECCIÓN PRINCIPAL: Estilos para las imágenes de eventos */
+        .event-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            object-position: center;
+            border-radius: 10px;
+        }
+
+        .event-image-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #e8e5f0, #6b4b9a);
+            color: white;
+            font-size: 3rem;
+            border-radius: 10px;
         }
 
         .event-title {
@@ -449,4 +468,206 @@
             document.getElementById(sectionId).classList.add('active');
         }
 
-        function show
+        function showLogin() {
+            showSection('login');
+        }
+
+        function showRegister() {
+            showSection('register');
+        }
+
+        // Auth Functions
+        function logout() {
+            auth.signOut().then(() => {
+                updateUIForUser(null);
+                showSection('eventos');
+            });
+        }
+
+        function updateUIForUser(user) {
+            currentUser = user;
+            const loginLink = document.getElementById('loginLink');
+            const logoutLink = document.getElementById('logoutLink');
+            const profileLink = document.getElementById('profileLink');
+
+            if (user) {
+                loginLink.style.display = 'none';
+                logoutLink.style.display = 'block';
+                profileLink.style.display = 'block';
+                loadUserProfile(user);
+            } else {
+                loginLink.style.display = 'block';
+                logoutLink.style.display = 'none';
+                profileLink.style.display = 'none';
+            }
+        }
+
+        // Load user profile
+        function loadUserProfile(user) {
+            db.collection('usuarios').doc(user.uid).get().then((doc) => {
+                if (doc.exists) {
+                    const userData = doc.data();
+                    const profileContent = document.getElementById('profileContent');
+                    profileContent.innerHTML = `
+                        <div class="profile-info">
+                            <h3>Información Personal</h3>
+                            <p><strong>Nombre:</strong> ${userData.nombre} ${userData.apellido}</p>
+                            <p><strong>Email:</strong> ${userData.email}</p>
+                            <p><strong>Rol:</strong> ${userData.rol}</p>
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        // Load events from Firestore
+        function loadEvents() {
+            const eventsGrid = document.getElementById('eventsGrid');
+            
+            if (!eventsGrid) {
+                console.error('Element eventsGrid not found');
+                return;
+            }
+            
+            db.collection('eventos')
+                .orderBy('fecha_inicio', 'asc')
+                .get()
+                .then((querySnapshot) => {
+                    if (querySnapshot.empty) {
+                        eventsGrid.innerHTML = `
+                            <div class="loading">
+                                <p>No hay eventos disponibles.</p>
+                                <p>Los eventos se mostrarán aquí una vez que se agreguen a la base de datos.</p>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    eventsGrid.innerHTML = '';
+                    querySnapshot.forEach((doc) => {
+                        const evento = doc.data();
+                        const eventCard = document.createElement('div');
+                        eventCard.className = 'event-card';
+                        
+                        eventCard.onclick = () => showEventDetail(doc.id);
+                        
+                        // Formatear fecha
+                        const fechaInicio = new Date(evento.fecha_inicio).toLocaleDateString('es-ES');
+                        
+                        eventCard.innerHTML = `
+                            <div class="event-image">
+                                <img src="${evento.imagenURL || ''}" alt="Imagen del evento" class="event-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" style="display: ${evento.imagenURL ? 'block' : 'none'};">
+                                <div class="event-image-placeholder" style="display: ${evento.imagenURL ? 'none' : 'flex'};">📅</div>
+                            </div>
+                            <div class="event-title">${evento.titulo}</div>
+                            <div class="event-description">${evento.descripcion.substring(0, 100)}...</div>
+                            <div class="event-meta">
+                                <span>📍 ${evento.lugar}</span>
+                                <span>📅 ${fechaInicio}</span>
+                            </div>
+                        `;
+                        eventsGrid.appendChild(eventCard);
+                    });
+                })
+                .catch((error) => {
+                    console.error('Error loading events:', error);
+                    
+                    if (error.code === 'failed-precondition') {
+                        console.log('Intentando query simple...');
+                        db.collection('eventos')
+                            .get()
+                            .then((querySnapshot) => {
+                                eventsGrid.innerHTML = '';
+                                querySnapshot.forEach((doc) => {
+                                    const evento = doc.data();
+                                    const eventCard = document.createElement('div');
+                                    eventCard.className = 'event-card';
+                                    
+                                    eventCard.onclick = () => showEventDetail(doc.id);
+                                    
+                                    eventCard.innerHTML = `
+                                        <div class="event-image">
+                                            <img src="${evento.imagenURL || ''}" alt="Imagen del evento" class="event-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" style="display: ${evento.imagenURL ? 'block' : 'none'};">
+                                            <div class="event-image-placeholder" style="display: ${evento.imagenURL ? 'none' : 'flex'};">📅</div>
+                                        </div>
+                                        <div class="event-title">${evento.titulo}</div>
+                                        <div class="event-description">${evento.descripcion.substring(0, 100)}...</div>
+                                        <div class="event-meta">
+                                            <span>📍 ${evento.lugar}</span>
+                                            <span>📅 ${evento.fecha_inicio}</span>
+                                        </div>
+                                    `;
+                                    eventsGrid.appendChild(eventCard);
+                                });
+                            });
+                    } else {
+                        eventsGrid.innerHTML = `
+                            <div class="loading">
+                                <p>Error al cargar eventos: ${error.message}</p>
+                                <button onclick="loadEvents()" class="btn btn-primary">Reintentar</button>
+                            </div>
+                        `;
+                    }
+                });
+        }
+
+        // Redirigir a la página de detalles del evento
+        function showEventDetail(eventId) {
+            const detailUrl = `event-detail.html?id=${eventId}`;
+            window.location.href = detailUrl;
+        }
+
+        // Auth forms
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    showSection('eventos');
+                })
+                .catch((error) => {
+                    alert('Error al iniciar sesión: ' + error.message);
+                });
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const nombre = document.getElementById('registerNombre').value;
+            const apellido = document.getElementById('registerApellido').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const rol = document.getElementById('registerRol').value;
+
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Save user data to Firestore
+                    return db.collection('usuarios').doc(userCredential.user.uid).set({
+                        nombre: nombre,
+                        apellido: apellido,
+                        email: email,
+                        rol: rol,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                })
+                .then(() => {
+                    showSection('eventos');
+                })
+                .catch((error) => {
+                    alert('Error al crear cuenta: ' + error.message);
+                });
+        });
+
+        // Auth state observer
+        auth.onAuthStateChanged((user) => {
+            updateUIForUser(user);
+        });
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', () => {
+            loadEvents();
+        });
+    </script>
+</body>
+</html>
