@@ -1,10 +1,24 @@
+# 🏗️ Estructura Completa - WebApp Hospitalidad Cristiana
 
-🏗️ Estructura de Archivos Actualizada
+## 🌟 Presentación del Sistema (welcome.html)
+**Servicio GRATUITO - Nadie está obligado a pagar nada**
+
+### 📋 Secciones Principales:
+1. **EVENTOS**: Grilla de eventos cristianos (campañas, retiros, confraternidades, convenciones)
+2. **HOTELES Y COCHERAS**: Información de alojamientos cercanos con ubicación en Google Maps
+3. **HOSPITALIDAD**: Sistema de hospedaje entre hermanos de la comunidad
+
+---
+
+## 🏗️ Estructura de Archivos
+
+```
 /
 ├── index.html                     → Página principal (grilla eventos)
-├── welcome.html                   → Presentación inicial
+├── welcome.html                   → Presentación inicial con 3 secciones
 ├── event-detail.html             → Detalle de evento
 ├── profile.html                   → Mi Perfil
+├── verification.html              → Proceso de verificación de identidad
 ├── auth/
 │   ├── login.html                 → Login
 │   ├── register.html              → Registro de usuario
@@ -13,25 +27,25 @@
 │   ├── dashboard.html             → Panel administrador
 │   ├── events-management.html     → Gestión de eventos
 │   ├── users-management.html      → Gestión de usuarios
+│   ├── verification-panel.html    → Panel de verificación de usuarios
+│   ├── payment-methods.html       → Gestión métodos de pago para colaboraciones
 │   ├── editors-assignment.html    → Asignación editores a eventos
 │   ├── matching-system.html       → Sistema de emparejamiento
-│   ├── ratings-management.html    → Gestión de valoraciones
+│   ├── hotels-management.html     → Gestión hoteles y cocheras
 │   └── reports.html               → Reportes y estadísticas
 ├── editor/
 │   ├── dashboard.html             → Panel editor (eventos asignados)
 │   ├── my-events.html             → Mis eventos asignados
-│   ├── matching-assigned.html     → Emparejamiento eventos asignados
-│   └── reports-assigned.html      → Reportes de eventos asignados
-├── event/
-│   ├── create-event.html          → Crear evento (admin)
-│   ├── edit-event.html            → Editar evento (admin/editor asignado)
-│   ├── hotels-management.html     → Gestión hoteles/cocheras
-│   ├── participants.html          → Gestión participantes
-│   └── accommodation-info.html    → Info de alojamientos para asistentes
-├── forms/
+│   ├── hotels-assigned.html       → Hoteles de eventos asignados
+│   └── matching-assigned.html     → Emparejamiento eventos asignados
+├── hospitality/
 │   ├── host-registration.html     → Registro anfitrión
 │   ├── visitor-application.html   → Postulación visitante
+│   ├── my-applications.html       → Mis postulaciones
+│   └── matching-results.html      → Resultados de emparejamiento
+├── forms/
 │   ├── attendee-registration.html → Registro asistente
+│   ├── identity-verification.html → Verificación de identidad
 │   └── application-review.html    → Revisión de postulaciones
 ├── ratings/
 │   ├── rate-host.html             → Valorar anfitrión
@@ -40,291 +54,336 @@
 ├── css/
 │   ├── main.css                   → Estilos principales
 │   ├── admin.css                  → Estilos panel admin
-│   ├── editor.css                 → Estilos panel editor
-│   ├── forms.css                  → Estilos formularios
-│   ├── ratings.css                → Estilos sistema valoración
+│   ├── welcome.css                → Estilos página bienvenida
 │   └── components.css             → Estilos componentes
 ├── js/
 │   ├── main.js                    → Lógica principal
 │   ├── firebase-config.js         → Configuración Firebase
 │   ├── auth.js                    → Autenticación
-│   ├── events.js                  → Gestión eventos
-│   ├── users.js                   → Gestión usuarios
-│   ├── permissions.js             → Control de permisos por evento
-│   ├── matching.js                → Sistema emparejamiento
-│   ├── ratings.js                 → Sistema valoraciones
-│   ├── notifications.js           → Notificaciones
-│   └── utils.js                   → Funciones utilitarias
-├── img/
-│   ├── logos/
-│   ├── banners/
-│   ├── events/
-│   ├── hotels/
-│   └── icons/
-└── components/
-    ├── header.html
-    ├── footer.html
-    ├── event-card.html
-    ├── star-rating.html
-    └── navigation.html
-🎯 Sistema de Roles y Permisos Actualizado
-Roles del Sistema:
-🔑 ADMINISTRADOR (compuzettaoficial@gmail.com)
+│   ├── verification.js            → Sistema de verificación
+│   ├── hospitality.js             → Lógica hospitalidad
+│   └── payments.js                → Gestión colaboraciones
+└── img/
+    ├── welcome/                   → Imágenes página bienvenida
+    ├── events/                    → Imágenes eventos
+    └── hotels/                    → Imágenes hoteles
+```
 
-Acceso total a todos los eventos
-Asignar editores a eventos específicos
-Crear/eliminar eventos en cualquier ciudad
-Gestionar usuarios y cambiar roles
-Acceso completo al sistema de emparejamiento
-Ver reportes globales de toda la plataforma
+---
 
-✏️ EDITOR
+## 📊 Estructura de Base de Datos Actualizada
 
-Acceso limitado solo a eventos asignados por el admin
-No puede crear eventos nuevos
-Editar información solo de sus eventos asignados
-Gestionar hoteles/cocheras solo de sus eventos
-Emparejamiento solo en sus eventos asignados
-Ver reportes solo de sus eventos
-
-👤 USUARIO
-
-Acceso básico a funcionalidades
-Participar en cualquier evento
-Ver información de todos los eventos
-
-📊 Estructura de Base de Datos Actualizada
-Colecciones Principales:
-javascript// usuarios (actualizada con asignaciones)
+### 👤 Usuarios (Actualizada)
+```javascript
 {
   uid: "user_id",
+  // Datos Básicos
   nombre: "string",
   apellido: "string",
   email: "string",
-  rol: "administrador|editor|usuario",
   telefono: "string",
+  
+  // Datos Personales (NUEVO)
+  documento_identidad: "string",        // Tipo: DNI, CI, etc.
+  numero_documento: "string",           // Número del documento
+  direccion_personal: "string",         // Dirección de vivienda
+  
+  // Datos Eclesiásticos (NUEVO)
+  nombre_iglesia: "string",             // Nombre completo de iglesia/asociación
+  direccion_iglesia: "string",          // Dirección de la iglesia
+  nombre_pastor: "string",              // Nombre del pastor
+  celular_pastor: "string",             // Celular del pastor
+  
+  // Sistema
+  rol: "administrador|editor|usuario",
   estado: "activo|inactivo",
+  
+  // Verificación (NUEVO)
+  verificacion: {
+    estado: "pendiente|verificado|rechazado",
+    fecha_verificacion: "timestamp",
+    verificado_por: "admin_user_id",
+    metodo_verificacion: "whatsapp|llamada",
+    observaciones: "string"
+  },
+  
+  // Valoraciones
   rating_promedio: "number",
   total_valoraciones: "number",
-  // NUEVA FUNCIONALIDAD PARA EDITORES
+  
+  // Permisos
   eventos_asignados: ["evento_id1", "evento_id2"], // Solo para editores
-  asignado_por: "admin_user_id", // Quien asignó los eventos
-  fecha_asignacion: "timestamp",
   createdAt: "timestamp"
 }
+```
 
-// eventos (actualizada con información de editores)
+### 🎪 Eventos
+```javascript
 {
   id: "evento_id",
   titulo: "string",
   descripcion: "string",
   lugar: "string",
-  ciudad: "string", // NUEVO: Para filtrar por ubicación
+  ciudad: "string",
+  direccion: "string",
+  gps: "string",
   fecha_inicio: "timestamp",
   fecha_fin: "timestamp",
   imagenURL: "string",
   estado: "activo|inactivo",
   creado_por: "user_id",
-  // NUEVA FUNCIONALIDAD
-  editores_asignados: ["editor_id1", "editor_id2"], // Editores que pueden gestionar este evento
-  region: "string", // Para agrupar eventos por región
+  editores_asignados: ["editor_id1", "editor_id2"],
+  
+  // Estadísticas
   estadisticas: {
     anfitriones: "number",
     visitantes: "number",
     asistentes: "number",
     emparejamientos: "number"
   },
-  hoteles: [...],
-  cocheras: [...]
+  
+  createdAt: "timestamp"
 }
+```
 
-// asignaciones_editores (nueva colección)
+### 🏨 Hoteles (NUEVO)
+```javascript
 {
-  id: "asignacion_id",
-  admin_id: "admin_user_id",
-  editor_id: "editor_user_id",
-  evento_id: "event_id",
-  fecha_asignacion: "timestamp",
-  estado: "activa|revocada",
-  permisos: {
-    gestionar_anfitriones: "boolean",
-    gestionar_visitantes: "boolean",
-    gestionar_hoteles: "boolean",
-    crear_emparejamientos: "boolean",
-    ver_reportes: "boolean"
-  },
-  notas: "string" // Notas del admin sobre la asignación
+  id: "hotel_id",
+  evento_id: "evento_id",
+  nombre: "string",
+  direccion: "string",
+  tarifas: "string",
+  numeros_contacto: ["string"],
+  gps: "string",
+  imagenes: ["url1", "url2"],
+  observaciones: "string",
+  creado_por: "user_id",
+  createdAt: "timestamp"
 }
+```
 
-// logs_permisos (nueva colección para auditoría)
+### 🚗 Cocheras (NUEVO)
+```javascript
 {
-  id: "log_id",
+  id: "cochera_id",
+  evento_id: "evento_id",
+  nombre: "string",
+  direccion: "string",
+  tarifas: "string",
+  numeros_contacto: ["string"],
+  gps: "string",
+  imagenes: ["url1", "url2"],
+  observaciones: "string",
+  creado_por: "user_id",
+  createdAt: "timestamp"
+}
+```
+
+### 🏠 Hospedadores (NUEVO)
+```javascript
+{
+  id: "hospedador_id",
   usuario_id: "user_id",
-  evento_id: "event_id",
-  accion: "string", // "acceso_denegado", "accion_realizada", etc.
-  detalle: "string",
-  ip_address: "string",
-  timestamp: "timestamp"
+  evento_id: "evento_id",
+  
+  // Datos del hospedaje
+  direccion_hospedaje: "string",
+  gps: "string",
+  numero_personas: "number",
+  numero_camas: "number",
+  tiene_cochera: "boolean",
+  
+  // Estado
+  estado: "disponible|ocupado|inactivo",
+  
+  createdAt: "timestamp"
 }
-🔐 Sistema de Control de Permisos
-Función de Verificación de Permisos:
-javascript// Verificar si un editor puede acceder a un evento específico
-function verificarPermisoEditor(editorId, eventoId) {
-  return db.collection('asignaciones_editores')
-    .where('editor_id', '==', editorId)
-    .where('evento_id', '==', eventoId)
-    .where('estado', '==', 'activa')
-    .get()
-    .then(querySnapshot => !querySnapshot.empty);
-}
+```
 
-// Verificar permisos específicos dentro de un evento
-function verificarPermisoEspecifico(editorId, eventoId, tipoPermiso) {
-  return db.collection('asignaciones_editores')
-    .where('editor_id', '==', editorId)
-    .where('evento_id', '==', eventoId)
-    .where('estado', '==', 'activa')
-    .get()
-    .then(querySnapshot => {
-      if (querySnapshot.empty) return false;
-      const permisos = querySnapshot.docs[0].data().permisos;
-      return permisos[tipoPermiso] === true;
-    });
-}
-🎛️ Panel de Asignación de Editores (Solo Admin)
-Funcionalidades del Panel:
-1. Asignar Editor a Evento
-html<!-- Formulario de asignación -->
-<div class="assignment-form">
-  <h3>Asignar Editor a Evento</h3>
-  <select id="editorSelect">
-    <option value="">Seleccionar Editor</option>
-    <!-- Cargar editores disponibles -->
-  </select>
-  <select id="eventoSelect">
-    <option value="">Seleccionar Evento</option>
-    <!-- Cargar eventos disponibles -->
-  </select>
-  <div class="permissions-checkboxes">
-    <label><input type="checkbox" name="gestionar_anfitriones"> Gestionar Anfitriones</label>
-    <label><input type="checkbox" name="gestionar_visitantes"> Gestionar Visitantes</label>
-    <label><input type="checkbox" name="gestionar_hoteles"> Gestionar Hoteles</label>
-    <label><input type="checkbox" name="crear_emparejamientos"> Crear Emparejamientos</label>
-    <label><input type="checkbox" name="ver_reportes"> Ver Reportes</label>
-  </div>
-  <button onclick="asignarEditor()">Asignar</button>
-</div>
-2. Ver Asignaciones Activas
-html<!-- Tabla de asignaciones -->
-<div class="assignments-table">
-  <h3>Asignaciones Activas</h3>
-  <table>
-    <thead>
-      <tr>
-        <th>Editor</th>
-        <th>Evento</th>
-        <th>Ciudad</th>
-        <th>Fecha Asignación</th>
-        <th>Permisos</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody id="assignmentsTableBody">
-      <!-- Cargar asignaciones dinámicamente -->
-    </tbody>
-  </table>
-</div>
-3. Revocar Asignaciones
-html<!-- Botón para revocar con confirmación -->
-<button onclick="revocarAsignacion(asignacionId)" class="btn-danger">
-  Revocar Acceso
-</button>
-🔄 Flujos de Trabajo Actualizados
-1. Flujo de Asignación de Editor:
-Admin → Panel Asignaciones → Seleccionar Editor → Seleccionar Evento(s)
-→ Configurar Permisos → Asignar → Notificar al Editor
-2. Flujo de Acceso del Editor:
-Editor Login → Verificar Eventos Asignados → Acceder Solo a Sus Eventos
-→ Intentar Acción → Verificar Permisos → Permitir/Denegar → Log de Auditoría
-3. Flujo de Revocación:
-Admin → Ver Asignaciones → Seleccionar Asignación → Revocar
-→ Actualizar Permisos → Notificar al Editor → Log de Cambios
-🛡️ Medidas de Seguridad
-1. Middleware de Permisos
-javascript// Middleware para verificar permisos antes de cada acción
-function checkEventPermission(req, res, next) {
-  const userId = req.user.uid;
-  const eventoId = req.params.eventoId;
+### 🎒 Visitantes (NUEVO)
+```javascript
+{
+  id: "visitante_id",
+  usuario_id: "user_id",
+  evento_id: "evento_id",
   
-  if (req.user.rol === 'administrador') {
-    next(); // Admin tiene acceso total
-  } else if (req.user.rol === 'editor') {
-    verificarPermisoEditor(userId, eventoId)
-      .then(hasPermission => {
-        if (hasPermission) {
-          next();
-        } else {
-          res.status(403).json({ error: 'Acceso denegado a este evento' });
-        }
-      });
-  } else {
-    res.status(403).json({ error: 'Rol insuficiente' });
-  }
-}
-2. Reglas de Firestore
-javascript// Reglas para limitar acceso de editores
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    // Solo admin puede crear eventos
-    match /eventos/{eventoId} {
-      allow create: if request.auth != null && 
-        get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data.rol == 'administrador';
-      
-      // Editor solo puede editar eventos asignados
-      allow update: if request.auth != null && (
-        get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data.rol == 'administrador' ||
-        (get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data.rol == 'editor' &&
-         eventoId in get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data.eventos_asignados)
-      );
+  // Datos de la visita
+  numero_personas: "number",
+  numero_camas: "number",
+  necesita_cochera: "boolean",
+  
+  // Acompañantes
+  acompanantes: [
+    {
+      nombre: "string",
+      parentesco: "string"
     }
-  }
-}
-3. Logging y Auditoría
-javascript// Registrar todas las acciones de editores
-function logAction(userId, eventoId, accion, detalle) {
-  db.collection('logs_permisos').add({
-    usuario_id: userId,
-    evento_id: eventoId,
-    accion: accion,
-    detalle: detalle,
-    ip_address: getClientIP(),
-    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-  });
-}
-🎨 Interfaz de Usuario Mejorada
-Dashboard del Editor:
-html<!-- Solo muestra eventos asignados -->
-<div class="editor-dashboard">
-  <h2>Mis Eventos Asignados</h2>
-  <div class="assigned-events-grid">
-    <!-- Solo eventos donde el editor tiene permisos -->
-  </div>
+  ],
   
-  <div class="permissions-summary">
-    <h3>Mis Permisos</h3>
-    <ul>
-      <li>✅ Gestionar Anfitriones</li>
-      <li>✅ Gestionar Visitantes</li>
-      <li>❌ Gestionar Hoteles</li>
-      <li>✅ Crear Emparejamientos</li>
-      <li>✅ Ver Reportes</li>
-    </ul>
-  </div>
-</div>
-Notificaciones de Permisos:
-html<!-- Alertas cuando no tiene permisos -->
-<div class="permission-alert">
-  <p>⚠️ No tienes permisos para acceder a este evento</p>
-  <p>Contacta al administrador si necesitas acceso</p>
-</div>
+  // Estado
+  estado: "pendiente|aprobado|rechazado|emparejado",
+  emparejado_con: "hospedador_id",
+  
+  createdAt: "timestamp"
+}
+```
+
+### 💳 Métodos de Pago (NUEVO - Solo Admin)
+```javascript
+{
+  id: "metodo_id",
+  tipo: "banco|paypal|otro",
+  nombre: "string",
+  numero_cuenta: "string",
+  codigo: "string",
+  descripcion: "string",
+  activo: "boolean",
+  creado_por: "admin_user_id",
+  createdAt: "timestamp"
+}
+```
+
+### 🔄 Emparejamientos
+```javascript
+{
+  id: "emparejamiento_id",
+  evento_id: "evento_id",
+  hospedador_id: "hospedador_id",
+  visitante_id: "visitante_id",
+  
+  // Estado
+  estado: "pendiente|confirmado|cancelado",
+  fecha_confirmacion: "timestamp",
+  
+  // Valoraciones
+  valoracion_hospedador: "number",
+  valoracion_visitante: "number",
+  comentarios: "string",
+  
+  createdAt: "timestamp"
+}
+```
+
+### ✅ Verificaciones (NUEVO)
+```javascript
+{
+  id: "verificacion_id",
+  usuario_id: "user_id",
+  
+  // Datos verificados
+  documento_verificado: "boolean",
+  iglesia_verificada: "boolean",
+  pastor_contactado: "boolean",
+  
+  // Proceso
+  fecha_inicio: "timestamp",
+  fecha_completado: "timestamp",
+  verificado_por: "admin_user_id",
+  metodo_verificacion: "whatsapp|llamada",
+  
+  // Observaciones
+  observaciones: "string",
+  estado_final: "aprobado|rechazado|pendiente",
+  
+  createdAt: "timestamp"
+}
+```
+
+---
+
+## 🔐 Sistema de Permisos y Roles
+
+### 👑 Administrador (Solo tú)
+- ✅ Acceso total al sistema
+- ✅ Gestión de métodos de pago
+- ✅ Verificación de usuarios
+- ✅ Asignación de editores
+- ✅ Gestión de hoteles y cocheras
+- ✅ Creación de eventos
+
+### ✏️ Editor
+- ✅ Acceso solo a eventos asignados
+- ✅ Gestión de hoteles/cocheras de sus eventos
+- ✅ Sistema de emparejamiento de sus eventos
+- ❌ No puede crear eventos
+- ❌ No puede verificar usuarios
+
+### 👤 Usuario Registrado
+- ✅ Ver todos los eventos
+- ✅ Registro como asistente
+- ⚠️ **Hospitalidad requiere verificación**
+
+### 🔒 Usuario Verificado
+- ✅ Todas las funciones de usuario registrado
+- ✅ Postular como visitante
+- ✅ Registrarse como hospedador
+- ✅ Sistema de valoraciones
+
+---
+
+## 🔍 Proceso de Verificación
+
+### Datos Requeridos:
+1. **Documento de Identidad**: Tipo y número
+2. **Dirección Personal**: Domicilio actual
+3. **Datos Eclesiásticos**:
+   - Nombre completo de iglesia/asociación
+   - Dirección de la iglesia
+   - Nombre del pastor
+   - Celular del pastor
+
+### Proceso:
+1. Usuario completa datos
+2. Admin/Editor revisa información
+3. Verificación vía WhatsApp o llamada
+4. Aprobación o rechazo
+5. Notificación al usuario
+
+---
+
+## 🎨 Funcionalidades Clave
+
+### 📱 welcome.html
+- Presentación de las 3 secciones
+- Mensaje claro: **SERVICIO GRATUITO**
+- Botón "Comenzar" que lleva a registro/login
+- Sección "Cómo funciona"
+
+### 🔐 Sistema de Verificación
+- Panel de verificación para admin
+- Estados: Pendiente, Verificado, Rechazado
+- Método de contacto registrado
+- Observaciones del proceso
+
+### 🏨 Gestión de Hoteles y Cocheras
+- Solo admin y editores asignados
+- Información completa con GPS
+- Imágenes y observaciones
+- Vinculación a eventos específicos
+
+### 🏠 Sistema de Hospitalidad
+- Solo usuarios verificados
+- Información detallada de acompañantes
+- Preferencias de cochera
+- Sistema de emparejamiento automático
+
+### 💰 Colaboraciones
+- Panel admin para métodos de pago
+- Información clara: servicio gratuito
+- Métodos de colaboración opcionales
+
+---
+
+## 🚀 Próximos Pasos
+
+1. **Revisar y aprobar estructura**
+2. **Crear welcome.html con presentación**
+3. **Implementar sistema de verificación**
+4. **Desarrollar gestión de hoteles/cocheras**
+5. **Crear sistema de hospitalidad**
+6. **Integrar métodos de pago para colaboraciones**
+
+---
+
+**¿Esta estructura cubre todos los puntos que mencionaste? ¿Hay algo que debamos ajustar antes de continuar con la creación de las páginas?**
