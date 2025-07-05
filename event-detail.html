@@ -4,560 +4,315 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalle del Evento - Hospitalidad en Acción</title>
-    <!-- Firebase v8 -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f5f5f5;
-            color: #333;
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .back-button {
-            background-color: #6b4b9a;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-bottom: 20px;
-            text-decoration: none;
-            display: inline-block;
-            transition: background-color 0.3s;
-        }
-
-        .back-button:hover {
-            background-color: #5a3d85;
-        }
-
-        .event-detail-card {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            overflow: hidden;
-            margin-bottom: 30px;
-        }
-
-        .event-image {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-            background: linear-gradient(135deg, #e8e5f0, #6b4b9a);
-        }
-
-        .event-image-placeholder {
-            width: 100%;
-            height: 300px;
-            background: linear-gradient(135deg, #e8e5f0, #6b4b9a);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 4rem;
-        }
-
-        .event-content {
-            padding: 30px;
-        }
-
-        .event-title {
-            font-size: 2.5em;
-            color: #6b4b9a;
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
-
-        .event-description {
-            font-size: 1.1em;
-            color: #666;
-            margin-bottom: 25px;
-            line-height: 1.7;
-        }
-
-        .event-info {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .info-item {
-            background-color: #e8e5f0;
-            padding: 20px;
-            border-radius: 10px;
-            border-left: 4px solid #6b4b9a;
-        }
-
-        .info-item h3 {
-            color: #6b4b9a;
-            margin-bottom: 10px;
-            font-size: 1.2em;
-        }
-
-        .info-item p {
-            color: #555;
-            font-size: 1em;
-        }
-
-        .map-container {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            padding: 20px;
-            margin-bottom: 30px;
-        }
-
-        .map-container h3 {
-            color: #6b4b9a;
-            margin-bottom: 15px;
-            font-size: 1.5em;
-        }
-
-        #map {
-            height: 300px;
-            border-radius: 10px;
-            background-color: #e8e5f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #6b4b9a;
-            font-size: 1.1em;
-        }
-
-        .action-buttons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
-
-        .btn {
-            padding: 15px 30px;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.1em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            text-align: center;
-            display: inline-block;
-        }
-
-        .btn-primary {
-            background-color: #6b4b9a;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: #5a3d85;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background-color: #e8e5f0;
-            color: #6b4b9a;
-            border: 2px solid #6b4b9a;
-        }
-
-        .btn-secondary:hover {
-            background-color: #6b4b9a;
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        .btn-tertiary {
-            background-color: #f8f9fa;
-            color: #6b4b9a;
-            border: 2px solid #e8e5f0;
-        }
-
-        .btn-tertiary:hover {
-            background-color: #e8e5f0;
-            transform: translateY(-2px);
-        }
-
-        .loading {
-            text-align: center;
-            padding: 50px;
-            color: #6b4b9a;
-            font-size: 1.2em;
-        }
-
-        .error {
-            text-align: center;
-            padding: 50px;
-            color: #e74c3c;
-            font-size: 1.2em;
-        }
-
-        .schedule-section {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            padding: 30px;
-            margin-bottom: 30px;
-        }
-
-        .schedule-section h3 {
-            color: #6b4b9a;
-            margin-bottom: 20px;
-            font-size: 1.5em;
-        }
-
-        .schedule-item {
-            background-color: #f8f9fa;
-            padding: 15px;
+        /* Estilos adicionales para hoteles y cocheras */
+        .hotels-section, .parking-section {
+            margin: 2rem 0;
+            padding: 2rem;
+            background: #f8f9fa;
             border-radius: 8px;
-            margin-bottom: 10px;
-            border-left: 4px solid #6b4b9a;
+            display: none; /* Oculto por defecto */
         }
 
-        .schedule-day {
-            font-weight: bold;
+        .hotels-section h2, .parking-section h2 {
             color: #6b4b9a;
-            margin-bottom: 5px;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
         }
 
-        .schedule-time {
+        .hotels-grid, .parking-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .hotel-card, .parking-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .hotel-card:hover, .parking-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+
+        .hotel-card h3, .parking-card h3 {
+            color: #6b4b9a;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .hotel-address, .hotel-phone, .hotel-price,
+        .parking-address, .parking-capacity, .parking-price {
+            margin: 0.5rem 0;
             color: #666;
-            font-size: 0.9em;
+            font-size: 0.9rem;
         }
 
+        .hotel-address i, .hotel-phone i, .hotel-price i,
+        .parking-address i, .parking-capacity i, .parking-price i {
+            margin-right: 0.5rem;
+            color: #6b4b9a;
+        }
+
+        .hotel-description, .parking-description {
+            margin: 1rem 0;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .hotel-actions, .parking-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        .no-results {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            padding: 2rem;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
-            
-            .event-title {
-                font-size: 2em;
-            }
-            
-            .event-content {
-                padding: 20px;
-            }
-            
-            .action-buttons {
+            .hotels-grid, .parking-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .hotel-actions, .parking-actions {
+                flex-direction: column;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <a href="index.html" class="back-button">← Volver a Eventos</a>
-        
-        <div id="loading" class="loading">
-            Cargando detalle del evento...
-        </div>
-        
-        <div id="error" class="error" style="display: none;">
-            Error al cargar el evento. Por favor, intenta nuevamente.
-        </div>
-        
-        <div id="event-detail" style="display: none;">
-            <!-- Tarjeta principal del evento -->
-            <div class="event-detail-card">
-                <div id="event-image-container">
-                    <img id="event-image" class="event-image" alt="Imagen del evento" style="display: none;">
-                    <div id="event-image-placeholder" class="event-image-placeholder">📅</div>
-                </div>
-                <div class="event-content">
-                    <h1 id="event-title" class="event-title"></h1>
-                    <p id="event-description" class="event-description"></p>
-                    
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <i class="fas fa-home"></i> Hospitalidad en Acción
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="index.html#eventos">Eventos</a></li>
+                <li><a href="profile.html" id="profileLink" style="display: none;">Mi Perfil</a></li>
+                <li><a href="login.html" id="loginLink">Iniciar Sesión</a></li>
+                <li><a href="#" id="logoutLink" style="display: none;">Cerrar Sesión</a></li>
+            </ul>
+            <div class="mobile-menu" id="mobileMenu">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Event Detail Content -->
+    <main class="event-detail-main">
+        <div class="event-detail-container">
+            <!-- Loading State -->
+            <div class="loading-spinner" id="loadingSpinner">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Cargando evento...</p>
+            </div>
+
+            <!-- Event Detail Content -->
+            <div class="event-detail-content" id="eventDetailContent" style="display: none;">
+                <!-- Event Header -->
+                <div class="event-header">
+                    <div class="event-image">
+                        <img id="eventImage" src="" alt="Imagen del evento">
+                        <div class="event-date-badge">
+                            <span id="eventDateBadge"></span>
+                        </div>
+                    </div>
                     <div class="event-info">
-                        <div class="info-item">
-                            <h3>📅 Fecha de Inicio</h3>
-                            <p id="event-start-date"></p>
-                        </div>
-                        <div class="info-item">
-                            <h3>📅 Fecha de Fin</h3>
-                            <p id="event-end-date"></p>
-                        </div>
-                        <div class="info-item">
-                            <h3>📍 Lugar</h3>
-                            <p id="event-location"></p>
-                        </div>
-                        <div class="info-item">
-                            <h3>🏢 Organizador</h3>
-                            <p id="event-organizer"></p>
-                        </div>
-                        <div class="info-item">
-                            <h3>💰 Costo</h3>
-                            <p id="event-cost"></p>
-                        </div>
-                        <div class="info-item">
-                            <h3>👥 Cupos Disponibles</h3>
-                            <p id="event-capacity"></p>
-                        </div>
-                        <div class="info-item">
-                            <h3>📝 Categoría</h3>
-                            <p id="event-category"></p>
-                        </div>
-                        <div class="info-item">
-                            <h3>🏙️ Ciudad</h3>
-                            <p id="event-city"></p>
+                        <h1 id="eventTitle"></h1>
+                        <div class="event-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span id="eventDates"></span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span id="eventLocation"></span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-clock"></i>
+                                <span id="eventTime"></span>
+                            </div>
                         </div>
                     </div>
-                    
-                    <div class="info-item" style="margin-bottom: 20px;">
-                        <h3>✅ Incluye</h3>
-                        <p id="event-includes"></p>
+                </div>
+
+                <!-- Event Description -->
+                <div class="event-description">
+                    <h2><i class="fas fa-info-circle"></i> Descripción del Evento</h2>
+                    <div id="eventDescription"></div>
+                </div>
+
+                <!-- Event Schedule -->
+                <div class="event-schedule" id="eventSchedule">
+                    <h2><i class="fas fa-calendar-check"></i> Programa del Evento</h2>
+                    <div class="schedule-grid" id="scheduleGrid">
+                        <!-- Schedule items will be loaded here -->
                     </div>
-                    
-                    <div class="info-item">
-                        <h3>📋 Requisitos</h3>
-                        <p id="event-requirements"></p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="event-actions">
+                    <button class="btn btn-primary" id="registerBtn" onclick="openModal('registrationModal')">
+                        <i class="fas fa-user-plus"></i> Registrarse al Evento
+                    </button>
+                    <button class="btn btn-secondary" id="hospitalityBtn" onclick="openModal('hospitalityModal')">
+                        <i class="fas fa-home"></i> Solicitar Hospitalidad
+                    </button>
+                    <button class="btn btn-outline" id="hotelsBtn" style="display: none;">
+                        <i class="fas fa-hotel"></i> Ver Hoteles Cercanos
+                    </button>
+                    <button class="btn btn-outline" id="parkingBtn" style="display: none;">
+                        <i class="fas fa-car"></i> Ver Cocheras Cercanas
+                    </button>
+                    <button class="btn btn-outline" id="mapBtn">
+                        <i class="fas fa-map"></i> Ver en Mapa
+                    </button>
+                </div>
+
+                <!-- Hotels Section (Solo visible para usuarios logueados) -->
+                <div class="hotels-section" id="hotelsSection">
+                    <h2><i class="fas fa-hotel"></i> Hoteles Cercanos</h2>
+                    <div class="hotels-grid" id="hotelsGrid">
+                        <!-- Hotels will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Parking Section (Solo visible para usuarios logueados) -->
+                <div class="parking-section" id="parkingSection">
+                    <h2><i class="fas fa-car"></i> Cocheras Cercanas</h2>
+                    <div class="parking-grid" id="parkingGrid">
+                        <!-- Parking will be loaded here -->
                     </div>
                 </div>
             </div>
+        </div>
+    </main>
 
-            <!-- Sección de Horarios -->
-            <div id="schedule-section" class="schedule-section">
-                <h3>📅 Horarios del Evento</h3>
-                <div id="schedule-content">
-                    <!-- Los horarios se cargarán aquí -->
+    <!-- Registration Modal -->
+    <div id="registrationModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('registrationModal')">&times;</span>
+            <h2><i class="fas fa-user-plus"></i> Registrarse al Evento</h2>
+            <form id="registrationForm">
+                <div class="form-group">
+                    <label>Nombre completo:</label>
+                    <input type="text" id="regFullName" required>
                 </div>
-            </div>
-
-            <!-- Mapa -->
-            <div class="map-container">
-                <h3>📍 Ubicación</h3>
-                <div id="map">
-                    <p>Mapa de ubicación (GPS: <span id="gps-coordinates"></span>)</p>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="regEmail" required>
                 </div>
-            </div>
-
-            <!-- Botones de acción -->
-            <div class="action-buttons">
-                <button class="btn btn-primary" onclick="registerForEvent()">
-                    Inscribirse al Evento
+                <div class="form-group">
+                    <label>WhatsApp:</label>
+                    <input type="tel" id="regWhatsapp" required>
+                </div>
+                <div class="form-group">
+                    <label>Iglesia de procedencia:</label>
+                    <input type="text" id="regChurch" required>
+                </div>
+                <div class="form-group">
+                    <label>Número de acompañantes:</label>
+                    <select id="regCompanions" required>
+                        <option value="">Seleccionar</option>
+                        <option value="0">Solo yo</option>
+                        <option value="1">1 acompañante</option>
+                        <option value="2">2 acompañantes</option>
+                        <option value="3">3 acompañantes</option>
+                        <option value="4+">4 o más acompañantes</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Comentarios:</label>
+                    <textarea id="regComments" rows="3" placeholder="Comentarios adicionales (opcional)"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i> Confirmar Registro
                 </button>
-                <button class="btn btn-secondary" onclick="shareEvent()">
-                    Compartir Evento
-                </button>
-                <button class="btn btn-tertiary" onclick="contactOrganizer()">
-                    Contactar Organizador
-                </button>
-            </div>
+            </form>
         </div>
     </div>
 
-    <script>
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyBFaCbNqpd93Eirj7NDnkKtOS6Ym0rMoiA",
-            authDomain: "hospitalidad-29c5c.firebaseapp.com",
-            projectId: "hospitalidad-29c5c",
-            storageBucket: "hospitalidad-29c5c.appspot.com",
-            messagingSenderId: "1061561367897",
-            appId: "1:1061561367897:web:57921b5aa3eb7bc3132048"
-        };
+    <!-- Hospitality Modal -->
+    <div id="hospitalityModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('hospitalityModal')">&times;</span>
+            <h2><i class="fas fa-home"></i> Solicitar Hospitalidad Cristiana</h2>
+            <p class="modal-subtitle">
+                "Compartiendo el amor de Cristo a través de la hospitalidad"
+            </p>
+            <form id="hospitalityForm">
+                <div class="form-group">
+                    <label>Nombre completo:</label>
+                    <input type="text" id="hospFullName" required>
+                </div>
+                <div class="form-group">
+                    <label>WhatsApp:</label>
+                    <input type="tel" id="hospWhatsapp" required>
+                </div>
+                <div class="form-group">
+                    <label>Iglesia de procedencia:</label>
+                    <input type="text" id="hospChurch" required>
+                </div>
+                <div class="form-group">
+                    <label>Número de personas:</label>
+                    <select id="hospPeopleCount" required>
+                        <option value="">Seleccionar</option>
+                        <option value="1">1 persona</option>
+                        <option value="2">2 personas</option>
+                        <option value="3">3 personas</option>
+                        <option value="4">4 personas</option>
+                        <option value="5+">5 o más personas</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Fechas de hospedaje:</label>
+                    <input type="text" id="hospDates" placeholder="Ej: 15-17 Julio" required>
+                </div>
+                <div class="form-group">
+                    <label>Comentarios adicionales:</label>
+                    <textarea id="hospComments" rows="4" placeholder="Menciona si viajas con niños, necesidades especiales, etc."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i> Enviar Solicitud
+                </button>
+            </form>
+        </div>
+    </div>
 
-        // Initialize Firebase
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        
-        const db = firebase.firestore();
-        const auth = firebase.auth();
+    <!-- Back to Top Button -->
+    <button class="back-to-top" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 
-        // Get event ID from URL parameters
-        function getEventIdFromUrl() {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('id');
-        }
-
-        // Load event details
-        function loadEventDetails() {
-            const eventId = getEventIdFromUrl();
-            
-            if (!eventId) {
-                showError('ID de evento no encontrado');
-                return;
-            }
-
-            console.log('Loading event with ID:', eventId);
-
-            db.collection('eventos').doc(eventId).get()
-                .then((doc) => {
-                    if (doc.exists) {
-                        const evento = doc.data();
-                        console.log('Event data:', evento);
-                        displayEventDetails(evento);
-                        hideLoading();
-                    } else {
-                        showError('Evento no encontrado');
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error loading event:', error);
-                    showError('Error al cargar el evento: ' + error.message);
-                });
-        }
-
-        // Display event details
-        function displayEventDetails(evento) {
-            // Basic info
-            document.getElementById('event-title').textContent = evento.titulo || 'Sin título';
-            document.getElementById('event-description').textContent = evento.descripcion || 'Sin descripción';
-            document.getElementById('event-location').textContent = evento.lugar || 'Sin ubicación';
-            document.getElementById('event-organizer').textContent = evento.organizador || 'Sin organizador';
-            document.getElementById('event-cost').textContent = evento.costo || 'No especificado';
-            document.getElementById('event-category').textContent = evento.categoria || 'Sin categoría';
-            document.getElementById('event-city').textContent = evento.ciudad || 'Sin ciudad';
-            document.getElementById('event-includes').textContent = evento.incluye || 'No especificado';
-            document.getElementById('event-requirements').textContent = evento.requisitos || 'Sin requisitos';
-
-            // Image
-            if (evento.imagenURL) {
-                const img = document.getElementById('event-image');
-                const placeholder = document.getElementById('event-image-placeholder');
-                
-                img.onload = function() {
-                    placeholder.style.display = 'none';
-                    img.style.display = 'block';
-                };
-                
-                img.onerror = function() {
-                    console.log('Error loading image:', evento.imagenURL);
-                    placeholder.style.display = 'flex';
-                    img.style.display = 'none';
-                };
-                
-                img.src = evento.imagenURL;
-            } else {
-                document.getElementById('event-image-placeholder').style.display = 'flex';
-                document.getElementById('event-image').style.display = 'none';
-            }
-
-            // Dates
-            if (evento.fecha_inicio) {
-                const fechaInicio = evento.fecha_inicio.toDate ? evento.fecha_inicio.toDate() : new Date(evento.fecha_inicio);
-                document.getElementById('event-start-date').textContent = fechaInicio.toLocaleDateString('es-ES', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
-            }
-
-            if (evento.fecha_fin) {
-                const fechaFin = evento.fecha_fin.toDate ? evento.fecha_fin.toDate() : new Date(evento.fecha_fin);
-                document.getElementById('event-end-date').textContent = fechaFin.toLocaleDateString('es-ES', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
-            }
-
-            // Capacity
-            const cuposDisponibles = evento.cupos - (evento.inscritos || 0);
-            document.getElementById('event-capacity').textContent = `${cuposDisponibles} de ${evento.cupos} disponibles`;
-
-            // GPS coordinates
-            if (evento.gps) {
-                const gpsText = `${evento.gps.latitude}°, ${evento.gps.longitude}°`;
-                document.getElementById('gps-coordinates').textContent = gpsText;
-            }
-
-            // Schedule
-            if (evento.horario && Array.isArray(evento.horario)) {
-                displaySchedule(evento.horario);
-            }
-
-            // Show the event detail section
-            document.getElementById('event-detail').style.display = 'block';
-        }
-
-        // Display schedule
-        function displaySchedule(horarios) {
-            const scheduleContent = document.getElementById('schedule-content');
-            scheduleContent.innerHTML = '';
-
-            horarios.forEach(horario => {
-                if (horario.horarios) {
-                    const scheduleItem = document.createElement('div');
-                    scheduleItem.className = 'schedule-item';
-                    scheduleItem.innerHTML = `
-                        <div class="schedule-day">${horario.horarios.dia || 'Sin día'}</div>
-                        <div class="schedule-time">${horario.horarios.hora || 'Sin hora'} - ${horario.horarios.actividad || 'Sin actividad'}</div>
-                    `;
-                    scheduleContent.appendChild(scheduleItem);
-                }
-            });
-
-            if (scheduleContent.children.length === 0) {
-                scheduleContent.innerHTML = '<p>No hay horarios disponibles</p>';
-            }
-        }
-
-        // Show error
-        function showError(message) {
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('error').style.display = 'block';
-            document.getElementById('error').textContent = message;
-        }
-
-        // Hide loading
-        function hideLoading() {
-            document.getElementById('loading').style.display = 'none';
-        }
-
-        // Event actions
-        function registerForEvent() {
-            // Check if user is logged in
-            if (!auth.currentUser) {
-                alert('Debes iniciar sesión para inscribirte al evento');
-                window.location.href = 'index.html';
-                return;
-            }
-            
-            alert('Funcionalidad de inscripción en desarrollo');
-        }
-
-        function shareEvent() {
-            if (navigator.share) {
-                navigator.share({
-                    title: document.getElementById('event-title').textContent,
-                    text: document.getElementById('event-description').textContent,
-                    url: window.location.href
-                });
-            } else {
-                // Fallback for browsers that don't support Web Share API
-                const url = window.location.href;
-                navigator.clipboard.writeText(url).then(() => {
-                    alert('Enlace copiado al portapapeles');
-                });
-            }
-        }
-
-        function contactOrganizer() {
-            alert('Funcionalidad de contacto en desarrollo');
-        }
-
-        // Initialize when page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            loadEventDetails();
-        });
-    </script>
-</body>
-</html>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3><i class="fas fa-home"></i> Hospitalidad en Acción</h3>
+                <p>Conectando hermanos en la fe a través de la hospitalidad cristiana</p>
+            </div>
+            <div class="footer-section">
+                <h4>Contacto</h4>
+                <p><i class="fas fa-envelope"></i> info@hospitalidadenaccion.com</p>
+                <p><i class="fas fa-phone"></i> +51 999 999 999</p>
+            </div>
+            <div class="footer
