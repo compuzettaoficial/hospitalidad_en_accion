@@ -785,8 +785,743 @@ service cloud.firestore {
   </div>
   
   <!-- Confirmación de Emparejamiento -->
-  <div class="pairing-confirmation">
-    <h3>Confirmar Emparejamiento</h3>
-    <div class="pairing-details">
-      <div class="host-details">
-        <h4>
+<div class="pairing-confirmation">
+  <h3>Confirmar Emparejamiento</h3>
+  <div class="pairing-details">
+    <div class="host-details">
+      <h4>Anfitrión Seleccionado:</h4>
+      <div class="host-info" id="selectedHost">
+        <img src="avatar.jpg" alt="Anfitrión">
+        <div>
+          <h5>María González</h5>
+          <p>⭐⭐⭐⭐⭐ (4.8/5.0)</p>
+          <p>🏠 Puede hospedar: 4 personas</p>
+          <p>🛏️ Habitaciones: 2</p>
+          <p>🚗 Cochera: Disponible</p>
+          <p>📍 Av. Principal 123, Miraflores</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="visitor-details">
+      <h4>Visitante Seleccionado:</h4>
+      <div class="visitor-info" id="selectedVisitor">
+        <img src="avatar.jpg" alt="Visitante">
+        <div>
+          <h5>Carlos Rodríguez</h5>
+          <p>⭐⭐⭐⭐⭐ (4.6/5.0)</p>
+          <p>👥 Personas: 3</p>
+          <p>🛏️ Habitaciones solicitadas: 1</p>
+          <p>🚗 Vehículo: Sí</p>
+          <p>📝 Verificado: ✅</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="compatibility-score">
+    <h4>Puntuación de Compatibilidad: <span id="compatibilityScore">92%</span></h4>
+    <div class="compatibility-factors">
+      <div class="factor">
+        <span>Capacidad:</span>
+        <div class="progress-bar">
+          <div class="progress" style="width: 100%"></div>
+        </div>
+        <span>100%</span>
+      </div>
+      <div class="factor">
+        <span>Ubicación:</span>
+        <div class="progress-bar">
+          <div class="progress" style="width: 90%"></div>
+        </div>
+        <span>90%</span>
+      </div>
+      <div class="factor">
+        <span>Vehículo:</span>
+        <div class="progress-bar">
+          <div class="progress" style="width: 100%"></div>
+        </div>
+        <span>100%</span>
+      </div>
+    </div>
+  </div>
+  
+  <div class="pairing-notes">
+    <label>Notas del Emparejamiento:</label>
+    <textarea id="pairingNotes" placeholder="Observaciones especiales sobre este emparejamiento..."></textarea>
+  </div>
+  
+  <div class="pairing-actions">
+    <button onclick="confirmarEmparejamiento()">
+      ✅ Confirmar Emparejamiento
+    </button>
+    <button onclick="buscarAlternativas()">
+      🔍 Buscar Alternativas
+    </button>
+    <button onclick="cancelarEmparejamiento()">
+      ❌ Cancelar
+    </button>
+  </div>
+</div>
+```
+
+### 4. ⭐ Sistema de Valoración Cristiana
+```html
+<!-- rate-host.html -->
+<div class="christian-rating">
+  <h2>Valoración Cristiana - Anfitrión</h2>
+  
+  <div class="rating-notice">
+    <h3>📖 Recordatorio Importante</h3>
+    <p>Esta valoración se basa en el <strong>comportamiento cristiano</strong> y el trato recibido, 
+    <strong>NO</strong> en la calidad material del alojamiento o lujos ofrecidos.</p>
+    <p>Valoramos el <strong>carácter de Cristo</strong> reflejado en nuestros hermanos.</p>
+  </div>
+  
+  <div class="host-info">
+    <img src="avatar.jpg" alt="Anfitrión">
+    <div>
+      <h3>María González</h3>
+      <p>📍 Evento: Convención Lima 2025</p>
+      <p>📅 Fecha: 15-17 Marzo 2025</p>
+    </div>
+  </div>
+  
+  <div class="christian-criteria">
+    <h3>Criterios de Valoración Cristiana</h3>
+    
+    <div class="criteria-item">
+      <label>Amabilidad y Gentileza:</label>
+      <div class="star-rating">
+        <span onclick="rate('amabilidad', 1)">⭐</span>
+        <span onclick="rate('amabilidad', 2)">⭐</span>
+        <span onclick="rate('amabilidad', 3)">⭐</span>
+        <span onclick="rate('amabilidad', 4)">⭐</span>
+        <span onclick="rate('amabilidad', 5)">⭐</span>
+      </div>
+      <p class="criteria-description">¿Fue amable y gentil en su trato?</p>
+    </div>
+    
+    <div class="criteria-item">
+      <label>Hospitalidad Cristiana:</label>
+      <div class="star-rating">
+        <span onclick="rate('hospitalidad', 1)">⭐</span>
+        <span onclick="rate('hospitalidad', 2)">⭐</span>
+        <span onclick="rate('hospitalidad', 3)">⭐</span>
+        <span onclick="rate('hospitalidad', 4)">⭐</span>
+        <span onclick="rate('hospitalidad', 5)">⭐</span>
+      </div>
+      <p class="criteria-description">¿Demostró hospitalidad siguiendo el ejemplo bíblico?</p>
+    </div>
+    
+    <div class="criteria-item">
+      <label>Respeto y Consideración:</label>
+      <div class="star-rating">
+        <span onclick="rate('respeto', 1)">⭐</span>
+        <span onclick="rate('respeto', 2)">⭐</span>
+        <span onclick="rate('respeto', 3)">⭐</span>
+        <span onclick="rate('respeto', 4)">⭐</span>
+        <span onclick="rate('respeto', 5)">⭐</span>
+      </div>
+      <p class="criteria-description">¿Fue respetuoso con sus necesidades y privacidad?</p>
+    </div>
+    
+    <div class="criteria-item">
+      <label>Carácter Cristiano:</label>
+      <div class="star-rating">
+        <span onclick="rate('caracter_cristiano', 1)">⭐</span>
+        <span onclick="rate('caracter_cristiano', 2)">⭐</span>
+        <span onclick="rate('caracter_cristiano', 3)">⭐</span>
+        <span onclick="rate('caracter_cristiano', 4)">⭐</span>
+        <span onclick="rate('caracter_cristiano', 5)">⭐</span>
+      </div>
+      <p class="criteria-description">¿Su comportamiento reflejó el carácter de Cristo?</p>
+    </div>
+    
+    <div class="criteria-item">
+      <label>Servicio Desinteresado:</label>
+      <div class="star-rating">
+        <span onclick="rate('servicio_desinteresado', 1)">⭐</span>
+        <span onclick="rate('servicio_desinteresado', 2)">⭐</span>
+        <span onclick="rate('servicio_desinteresado', 3)">⭐</span>
+        <span onclick="rate('servicio_desinteresado', 4)">⭐</span>
+        <span onclick="rate('servicio_desinteresado', 5)">⭐</span>
+      </div>
+      <p class="criteria-description">¿Sirvió con un corazón desinteresado?</p>
+    </div>
+    
+    <div class="criteria-item">
+      <label>Paciencia y Comprensión:</label>
+      <div class="star-rating">
+        <span onclick="rate('paciencia', 1)">⭐</span>
+        <span onclick="rate('paciencia', 2)">⭐</span>
+        <span onclick="rate('paciencia', 3)">⭐</span>
+        <span onclick="rate('paciencia', 4)">⭐</span>
+        <span onclick="rate('paciencia', 5)">⭐</span>
+      </div>
+      <p class="criteria-description">¿Mostró paciencia ante cualquier inconveniente?</p>
+    </div>
+    
+    <div class="criteria-item">
+      <label>Generosidad de Corazón:</label>
+      <div class="star-rating">
+        <span onclick="rate('generosidad', 1)">⭐</span>
+        <span onclick="rate('generosidad', 2)">⭐</span>
+        <span onclick="rate('generosidad', 3)">⭐</span>
+        <span onclick="rate('generosidad', 4)">⭐</span>
+        <span onclick="rate('generosidad', 5)">⭐</span>
+      </div>
+      <p class="criteria-description">¿Fue generoso más allá de lo necesario?</p>
+    </div>
+  </div>
+  
+  <div class="rating-comments">
+    <h3>Comentarios</h3>
+    <div class="comment-section">
+      <label>Aspectos Positivos:</label>
+      <textarea id="comentario_positivo" placeholder="Comparte lo que más valoraste de tu hermano/a en Cristo..."></textarea>
+    </div>
+    
+    <div class="comment-section">
+      <label>Áreas de Crecimiento (Opcional):</label>
+      <textarea id="areas_mejora" placeholder="Si hay algo que podría mejorar, compártelo con amor cristiano..."></textarea>
+    </div>
+  </div>
+  
+  <div class="recommendation">
+    <label>¿Recomendarías este anfitrión a otros hermanos?</label>
+    <div class="recommendation-options">
+      <label><input type="radio" name="recomendaria" value="true"> Sí, definitivamente</label>
+      <label><input type="radio" name="recomendaria" value="false"> No recomendaría</label>
+    </div>
+  </div>
+  
+  <div class="rating-actions">
+    <button onclick="enviarValoracion()">
+      ✅ Enviar Valoración
+    </button>
+    <button onclick="cancelarValoracion()">
+      ❌ Cancelar
+    </button>
+  </div>
+</div>
+```
+
+### 5. 🗂️ Sistema de Observaciones por Evento
+```html
+<!-- event-observations.html -->
+<div class="event-observations">
+  <h2>Observaciones por Evento</h2>
+  
+  <!-- Selector de Evento -->
+  <div class="event-selector">
+    <label>Seleccionar Evento:</label>
+    <select id="eventSelect" onchange="loadEventObservations()">
+      <option value="">Seleccionar evento...</option>
+    </select>
+  </div>
+  
+  <!-- Nueva Observación -->
+  <div class="new-observation">
+    <h3>Nueva Observación</h3>
+    <form id="observationForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Tipo de Observación:</label>
+          <select id="observationType">
+            <option value="incidente">Incidente</option>
+            <option value="mejora">Mejora</option>
+            <option value="observacion_general">Observación General</option>
+            <option value="problema_tecnico">Problema Técnico</option>
+            <option value="sugerencia">Sugerencia</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>Gravedad:</label>
+          <select id="severity">
+            <option value="baja">Baja</option>
+            <option value="media">Media</option>
+            <option value="alta">Alta</option>
+            <option value="critica">Crítica</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Título:</label>
+        <input type="text" id="observationTitle" placeholder="Título breve de la observación...">
+      </div>
+      
+      <div class="form-group">
+        <label>Descripción Detallada:</label>
+        <textarea id="observationDescription" placeholder="Describe la observación, problema o sugerencia..."></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label>Usuarios Involucrados (Opcional):</label>
+        <input type="text" id="usersInvolved" placeholder="Buscar usuarios involucrados...">
+        <div class="selected-users" id="selectedUsers"></div>
+      </div>
+      
+      <div class="form-group">
+        <label>Acciones Tomadas:</label>
+        <textarea id="actionsTaken" placeholder="¿Qué acciones se tomaron inmediatamente?"></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label>Impacto para Futuras Mejoras:</label>
+        <textarea id="futureImpact" placeholder="¿Cómo puede esto mejorar la app o los procesos?"></textarea>
+      </div>
+      
+      <div class="form-actions">
+        <button type="button" onclick="guardarObservacion()">
+          💾 Guardar Observación
+        </button>
+        <button type="button" onclick="limpiarFormulario()">
+          🗑️ Limpiar Formulario
+        </button>
+      </div>
+    </form>
+  </div>
+  
+  <!-- Lista de Observaciones -->
+  <div class="observations-list">
+    <h3>Observaciones del Evento</h3>
+    <div class="observations-container" id="observationsContainer">
+      <!-- Observaciones dinámicas -->
+    </div>
+  </div>
+</div>
+```
+
+### 6. 🆘 Sistema de Backup y Contingencia
+```html
+<!-- backup-management.html -->
+<div class="backup-management">
+  <h2>Sistema de Backup y Contingencia</h2>
+  
+  <!-- Selector de Evento -->
+  <div class="event-selector">
+    <label>Seleccionar Evento:</label>
+    <select id="eventSelect" onchange="loadEventBackup()">
+      <option value="">Seleccionar evento...</option>
+    </select>
+  </div>
+  
+  <!-- Anfitriones de Backup -->
+  <div class="backup-hosts">
+    <h3>Anfitriones de Backup</h3>
+    <div class="backup-list">
+      <div class="backup-item">
+        <div class="host-info">
+          <img src="avatar.jpg" alt="Anfitrión">
+          <div>
+            <h4>Pedro Martínez</h4>
+            <p>⭐⭐⭐⭐⭐ (4.9/5.0)</p>
+            <p>🏠 Capacidad: 6 personas</p>
+            <p>📞 +51 999 777 888</p>
+          </div>
+        </div>
+        <div class="backup-status">
+          <span class="status-badge disponible">Disponible</span>
+          <button onclick="contactarBackup('user123')">
+            📞 Contactar
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="add-backup">
+      <button onclick="agregarBackup()">
+        ➕ Agregar Anfitrión de Backup
+      </button>
+    </div>
+  </div>
+  
+  <!-- Contactos de Emergencia -->
+  <div class="emergency-contacts">
+    <h3>Contactos de Emergencia</h3>
+    <div class="contacts-list">
+      <div class="contact-item">
+        <div class="contact-info">
+          <h4>Pastor Juan Carlos</h4>
+          <p>📞 +51 999 111 222</p>
+          <p>🏢 Iglesia Central Lima</p>
+          <p>⏰ Disponible: 24/7</p>
+        </div>
+        <div class="contact-actions">
+          <button onclick="llamarEmergencia('contact1')">
+            📞 Llamar
+          </button>
+          <button onclick="editarContacto('contact1')">
+            ✏️ Editar
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="add-contact">
+      <button onclick="agregarContactoEmergencia()">
+        ➕ Agregar Contacto de Emergencia
+      </button>
+    </div>
+  </div>
+  
+  <!-- Hoteles de Emergencia -->
+  <div class="emergency-hotels">
+    <h3>Hoteles de Emergencia</h3>
+    <div class="hotels-list">
+      <div class="hotel-item">
+        <div class="hotel-info">
+          <h4>Hotel Central</h4>
+          <p>📍 Av. Principal 456</p>
+          <p>💰 S/. 80 por noche</p>
+          <p>📞 +51 999 333 444</p>
+          <p>🚶 5 min del evento</p>
+        </div>
+        <div class="hotel-actions">
+          <button onclick="reservarHotel('hotel1')">
+            📞 Reservar
+          </button>
+          <button onclick="verDetalles('hotel1')">
+            👁️ Ver Detalles
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Protocolo de Cancelación -->
+  <div class="cancellation-protocol">
+    <h3>Protocolo de Cancelación</h3>
+    <div class="protocol-steps">
+      <div class="step">
+        <h4>Paso 1: Contactar Anfitrión de Backup</h4>
+        <p>Contactar inmediatamente a los anfitriones de backup en orden de prioridad</p>
+      </div>
+      <div class="step">
+        <h4>Paso 2: Notificar al Visitante</h4>
+        <p>Informar al visitante sobre el cambio y proporcionar nueva información de contacto</p>
+      </div>
+      <div class="step">
+        <h4>Paso 3: Actualizar Sistema</h4>
+        <p>Actualizar el estado en el sistema y registrar el incidente</p>
+      </div>
+      <div class="step">
+        <h4>Paso 4: Seguimiento</h4>
+        <p>Hacer seguimiento para confirmar que el nuevo arreglo funciona correctamente</p>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+## 🔧 LÓGICA JAVASCRIPT ACTUALIZADA
+
+### 1. 📱 Sistema de Notificaciones Internas
+```javascript
+// notifications.js
+class NotificationSystem {
+  constructor() {
+    this.userId = firebase.auth().currentUser.uid;
+  }
+  
+  async updateProfileNotifications() {
+    try {
+      const userDoc = await firebase.firestore()
+        .collection('usuarios')
+        .doc(this.userId)
+        .get();
+      
+      const userData = userDoc.data();
+      const notifications = userData.notificaciones_internas || {};
+      
+      // Actualizar estado de verificación
+      this.updateVerificationStatus(notifications.verificacion_estado);
+      
+      // Actualizar postulaciones
+      this.updateApplications(notifications.postulaciones || []);
+      
+      // Actualizar asignaciones
+      this.updateAssignments(notifications.asignaciones_actuales || []);
+      
+      // Actualizar mensajes del admin
+      this.updateAdminMessages(notifications.mensajes_admin || []);
+      
+    } catch (error) {
+      console.error('Error updating notifications:', error);
+    }
+  }
+  
+  updateVerificationStatus(status) {
+    const badge = document.getElementById('verificationBadge');
+    if (!badge) return;
+    
+    badge.className = `status-badge ${status}`;
+    
+    switch (status) {
+      case 'pendiente':
+        badge.innerHTML = '⏳ Verificación Pendiente';
+        badge.classList.add('pending');
+        break;
+      case 'completada':
+        badge.innerHTML = '✅ Verificado';
+        badge.classList.add('verified');
+        break;
+      case 'rechazada':
+        badge.innerHTML = '❌ Verificación Rechazada';
+        badge.classList.add('rejected');
+        break;
+    }
+  }
+  
+  updateApplications(applications) {
+    const container = document.querySelector('.applications-list');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    applications.forEach(app => {
+      const appDiv = document.createElement('div');
+      appDiv.className = 'application-item';
+      
+      const statusClass = this.getStatusClass(app.estado);
+      const statusText = this.getStatusText(app.estado);
+      
+      appDiv.innerHTML = `
+        <div class="application-info">
+          <h4>${app.evento_nombre}</h4>
+          <p>Tipo: ${app.tipo === 'hospedador' ? 'Anfitrión' : 'Visitante'}</p>
+          <p>Fecha: ${new Date(app.fecha_postulacion).toLocaleDateString()}</p>
+        </div>
+        <div class="application-status">
+          <span class="status-badge ${statusClass}">${statusText}</span>
+        </div>
+      `;
+      
+      container.appendChild(appDiv);
+    });
+  }
+  
+  getStatusClass(estado) {
+    const classes = {
+      'postulado': 'pending',
+      'verificado': 'verified',
+      'asignado': 'assigned',
+      'rechazado': 'rejected'
+    };
+    return classes[estado] || 'unknown';
+  }
+  
+  getStatusText(estado) {
+    const texts = {
+      'postulado': '📋 Postulado',
+      'verificado': '✅ Verificado',
+      'asignado': '🤝 Asignado',
+      'rechazado': '❌ Rechazado'
+    };
+    return texts[estado] || 'Estado desconocido';
+  }
+}
+
+// Inicializar sistema de notificaciones
+document.addEventListener('DOMContentLoaded', () => {
+  const notificationSystem = new NotificationSystem();
+  
+  // Actualizar notificaciones cada 30 segundos
+  setInterval(() => {
+    notificationSystem.updateProfileNotifications();
+  }, 30000);
+  
+  // Actualizar inmediatamente
+  notificationSystem.updateProfileNotifications();
+});
+```
+
+### 2. 🔍 Sistema de Verificación Manual
+```javascript
+// verification.js
+class VerificationSystem {
+  constructor() {
+    this.db = firebase.firestore();
+    this.currentUser = firebase.auth().currentUser;
+  }
+  
+  async iniciarVerificacion(userId, method = 'whatsapp') {
+    try {
+      const verificationData = {
+        usuario_id: userId,
+        admin_verificador: this.currentUser.uid,
+        fecha_inicio: firebase.firestore.FieldValue.serverTimestamp(),
+        metodo: method,
+        estado: 'en_proceso',
+        verificaciones: {
+          identidad: false,
+          telefono: false,
+          direccion: false,
+          referencias_cristianas: false,
+          antecedentes: false
+        }
+      };
+      
+      const docRef = await this.db.collection('verificaciones_manuales').add(verificationData);
+      
+      // Mostrar formulario de verificación
+      this.showVerificationForm(userId, docRef.id);
+      
+    } catch (error) {
+      console.error('Error iniciando verificación:', error);
+      alert('Error al iniciar verificación');
+    }
+  }
+  
+  showVerificationForm(userId, verificationId) {
+    const form = document.getElementById('verificationForm');
+    const userIdInput = document.getElementById('userId');
+    
+    form.style.display = 'block';
+    userIdInput.value = userId;
+    form.setAttribute('data-verification-id', verificationId);
+  }
+  
+  async aprobarVerificacion() {
+    const form = document.getElementById('verificationForm');
+    const verificationId = form.getAttribute('data-verification-id');
+    const userId = document.getElementById('userId').value;
+    const notes = document.getElementById('verificationNotes').value;
+    
+    // Recopilar verificaciones realizadas
+    const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+    const verificaciones = {};
+    
+    checkboxes.forEach(checkbox => {
+      verificaciones[checkbox.name] = checkbox.checked;
+    });
+    
+    try {
+      // Actualizar documento de verificación
+      await this.db.collection('verificaciones_manuales').doc(verificationId).update({
+        fecha_completada: firebase.firestore.FieldValue.serverTimestamp(),
+        resultado: 'aprobado',
+        notas_verificador: notes,
+        verificaciones: verificaciones
+      });
+      
+      // Actualizar estado del usuario
+      await this.db.collection('usuarios').doc(userId).update({
+        'verificacion.estado': 'verificado',
+        'verificacion.fecha_verificacion': firebase.firestore.FieldValue.serverTimestamp(),
+        'verificacion.verificado_por': this.currentUser.uid,
+        'verificacion.notas_verificador': notes,
+        'valoracion.base_verificacion': 1 // +1 estrella por verificación
+      });
+      
+      alert('Verificación aprobada exitosamente');
+      this.hideVerificationForm();
+      this.loadPendingVerifications();
+      
+    } catch (error) {
+      console.error('Error aprobando verificación:', error);
+      alert('Error al aprobar verificación');
+    }
+  }
+  
+  async rechazarVerificacion() {
+    const form = document.getElementById('verificationForm');
+    const verificationId = form.getAttribute('data-verification-id');
+    const userId = document.getElementById('userId').value;
+    const notes = document.getElementById('verificationNotes').value;
+    
+    try {
+      // Actualizar documento de verificación
+      await this.db.collection('verificaciones_manuales').doc(verificationId).update({
+        fecha_completada: firebase.firestore.FieldValue.serverTimestamp(),
+        resultado: 'rechazado',
+        notas_verificador: notes
+      });
+      
+      // Actualizar estado del usuario
+      await this.db.collection('usuarios').doc(userId).update({
+        'verificacion.estado': 'rechazado',
+        'verificacion.fecha_verificacion': firebase.firestore.FieldValue.serverTimestamp(),
+        'verificacion.verificado_por': this.currentUser.uid,
+        'verificacion.notas_verificador': notes
+      });
+      
+      alert('Verificación rechazada');
+      this.hideVerificationForm();
+      this.loadPendingVerifications();
+      
+    } catch (error) {
+      console.error('Error rechazando verificación:', error);
+      alert('Error al rechazar verificación');
+    }
+  }
+}
+```
+
+### 3. 🤝 Sistema de Emparejamiento Manual
+```javascript
+// matching-manual.js
+class ManualMatchingSystem {
+  constructor() {
+    this.db = firebase.firestore();
+    this.currentUser = firebase.auth().currentUser;
+  }
+  
+  async loadEventParticipants() {
+    const eventId = document.getElementById('eventSelect').value;
+    if (!eventId) return;
+    
+    try {
+      // Cargar anfitriones
+      const hosts = await this.loadHosts(eventId);
+      this.displayHosts(hosts);
+      
+      // Cargar visitantes
+      const visitors = await this.loadVisitors(eventId);
+      this.displayVisitors(visitors);
+      
+      // Generar sugerencias
+      const suggestions = this.generateSuggestions(hosts, visitors);
+      this.displaySuggestions(suggestions);
+      
+    } catch (error) {
+      console.error('Error loading participants:', error);
+    }
+  }
+  
+  async loadHosts(eventId) {
+    const snapshot = await this.db.collection('postulaciones')
+      .where('evento_id', '==', eventId)
+      .where('tipo', '==', 'hospedador')
+      .where('estado', '==', 'verificado')
+      .get();
+    
+    const hosts = [];
+    for (const doc of snapshot.docs) {
+      const postulacion = doc.data();
+      const userDoc = await this.db.collection('usuarios').doc(postulacion.usuario_id).get();
+      const userData = userDoc.data();
+      
+      hosts.push({
+        id: doc.id,
+        userId: postulacion.usuario_id,
+        userData: userData,
+        datos: postulacion.datos_hospedador,
+        valoracion: userData.valoracion?.promedio_total || 0
+      });
+    }
+    
+    return hosts;
+  }
+  
+  async loadVisitors(eventId) {
+    const snapshot = await this.db.collection('postulaciones')
+      .where('evento_id', '==', eventId)
+      .where('tipo', '==', 'visitante')
+      .where('estado', '==', 'verificado')
+      .get();
+    
+    const
