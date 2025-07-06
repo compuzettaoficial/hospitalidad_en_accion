@@ -1,0 +1,795 @@
+# 🏠 ESTRUCTURA COMPLETA - WEBAPP HOSPITALIDAD CRISTIANA
+
+## 🎯 PROPÓSITO Y VALORES FUNDAMENTALES
+
+**Misión**: Webapp que conecta cristianos para ofrecer hospitalidad gratuita durante eventos religiosos. Los hermanos sin recursos pueden encontrar hospedaje gratuito en casas de otros cristianos.
+
+**Valores Cristianos Fundamentales**:
+- ⭐ **LA VALORACIÓN ES POR COMPORTAMIENTO CRISTIANO, NO POR LUJOS**
+- 🏠 Pueden participar personas humildes con casas humildes
+- ❤️ El trato y semejanza al carácter de Cristo es lo que se valora
+- 🆓 Servicio completamente gratuito
+- 🤝 Fomentar la hospitalidad bíblica entre hermanos
+
+---
+
+## 🏗️ ESTRUCTURA DE ARCHIVOS ACTUALIZADA
+
+```
+/
+├── index.html                     → Página principal (grilla eventos)
+├── welcome.html                   → Presentación inicial
+├── event-detail.html             → Detalle de evento
+├── profile.html                   → Mi Perfil (centro de notificaciones)
+├── auth/
+│   ├── login.html                 → Login
+│   ├── register.html              → Registro de usuario
+│   └── forgot-password.html       → Recuperar contraseña
+├── admin/
+│   ├── dashboard.html             → Panel administrador
+│   ├── events-management.html     → Gestión de eventos
+│   ├── users-management.html      → Gestión de usuarios
+│   ├── editors-assignment.html    → Asignación editores a eventos
+│   ├── verification-center.html   → Centro de verificación manual
+│   ├── matching-manual.html       → Sistema de emparejamiento manual
+│   ├── ratings-management.html    → Gestión de valoraciones
+│   ├── event-observations.html    → Observaciones por evento
+│   ├── backup-management.html     → Gestión de contingencias
+│   └── reports.html               → Reportes y estadísticas
+├── editor/
+│   ├── dashboard.html             → Panel editor (eventos asignados)
+│   ├── my-events.html             → Mis eventos asignados
+│   ├── verification-assigned.html → Verificación eventos asignados
+│   ├── matching-assigned.html     → Emparejamiento eventos asignados
+│   ├── observations-assigned.html → Observaciones eventos asignados
+│   └── reports-assigned.html      → Reportes de eventos asignados
+├── event/
+│   ├── create-event.html          → Crear evento (admin)
+│   ├── edit-event.html            → Editar evento (admin/editor asignado)
+│   ├── hotels-management.html     → Gestión hoteles/cocheras
+│   ├── participants.html          → Gestión participantes
+│   ├── accommodation-info.html    → Info de alojamientos para asistentes
+│   └── contingency-plan.html      → Plan de contingencia
+├── forms/
+│   ├── host-registration.html     → Registro anfitrión
+│   ├── visitor-application.html   → Postulación visitante
+│   ├── attendee-registration.html → Registro asistente
+│   ├── verification-form.html     → Formulario verificación
+│   └── application-review.html    → Revisión de postulaciones
+├── ratings/
+│   ├── rate-host.html             → Valorar anfitrión (comportamiento cristiano)
+│   ├── rate-visitor.html          → Valorar visitante (comportamiento cristiano)
+│   ├── ratings-display.html       → Mostrar valoraciones
+│   └── christian-criteria.html    → Criterios de valoración cristiana
+├── verification/
+│   ├── pending-verification.html  → Verificaciones pendientes
+│   ├── verification-process.html  → Proceso de verificación
+│   └── verification-history.html  → Historial de verificaciones
+├── notifications/
+│   ├── profile-notifications.html → Notificaciones en perfil
+│   └── status-updates.html        → Actualizaciones de estado
+├── css/
+│   ├── main.css                   → Estilos principales
+│   ├── admin.css                  → Estilos panel admin
+│   ├── editor.css                 → Estilos panel editor
+│   ├── forms.css                  → Estilos formularios
+│   ├── ratings.css                → Estilos sistema valoración
+│   ├── verification.css           → Estilos verificación
+│   ├── notifications.css          → Estilos notificaciones
+│   └── components.css             → Estilos componentes
+├── js/
+│   ├── main.js                    → Lógica principal
+│   ├── firebase-config.js         → Configuración Firebase + Notificaciones internas
+│   ├── auth.js                    → Autenticación
+│   ├── events.js                  → Gestión eventos + Penalización cancelación
+│   ├── users.js                   → Gestión usuarios
+│   ├── permissions.js             → Control de permisos por evento
+│   ├── verification.js            → Sistema verificación manual
+│   ├── matching-manual.js         → Sistema emparejamiento manual
+│   ├── ratings-christian.js       → Sistema valoraciones cristianas
+│   ├── notifications.js           → Sistema notificaciones internas + Recordatorios
+│   ├── backup-system.js           → Sistema de contingencia
+│   ├── observations.js            → Sistema de observaciones
+│   └── utils.js                   → Funciones utilitarias
+├── img/
+│   ├── logos/
+│   ├── banners/
+│   ├── events/
+│   ├── hotels/
+│   ├── christian-values/
+│   └── icons/
+└── components/
+    ├── header.html
+    ├── footer.html
+    ├── event-card.html
+    ├── star-rating-christian.html
+    ├── verification-badge.html
+    ├── notification-center.html
+    └── navigation.html
+```
+
+---
+
+## 🎭 SISTEMA DE ROLES Y PERMISOS ACTUALIZADO
+
+### 🔑 ADMINISTRADOR (compuzettaoficial@gmail.com)
+- ✅ Acceso total a todos los eventos
+- ✅ Asignar editores a eventos específicos
+- ✅ Crear/eliminar eventos en cualquier ciudad
+- ✅ Gestionar usuarios y cambiar roles
+- ✅ **Sistema de verificación manual completo**
+- ✅ **Sistema de emparejamiento manual**
+- ✅ **Gestión de observaciones por evento**
+- ✅ **Sistema de backup y contingencias**
+- ✅ **Sistema de recordatorios automáticos**
+- ✅ **Aplicar penalizaciones por cancelación**
+- ✅ Acceso completo al sistema de valoraciones cristianas
+- ✅ Ver reportes globales de toda la plataforma
+
+### ✏️ EDITOR
+- ✅ Acceso limitado solo a eventos asignados por el admin
+- ✅ Verificación manual solo de sus eventos asignados
+- ✅ Emparejamiento manual solo en sus eventos asignados
+- ✅ Editar información solo de sus eventos asignados
+- ✅ Gestionar hoteles/cocheras solo de sus eventos
+- ✅ **Ver recordatorios de verificación de sus eventos**
+- ✅ **Aplicar penalizaciones solo en sus eventos asignados**
+- ✅ Crear observaciones solo de sus eventos asignados
+- ✅ Ver reportes solo de sus eventos
+- ❌ No puede crear eventos nuevos
+- ❌ No puede acceder a eventos no asignados
+
+### 👤 USUARIO
+- ✅ Acceso básico a funcionalidades
+- ✅ Participar en cualquier evento
+- ✅ Ver información de todos los eventos
+- ✅ **Centro de notificaciones en Mi Perfil**
+- ✅ **Recibir recordatorios de verificación**
+- ✅ **Sistema de valoración bidireccional**
+- ✅ **Proceso de verificación personal**
+- ✅ **Recibir penalizaciones por cancelación tardía**
+
+---
+
+## 📊 ESTRUCTURA DE BASE DE DATOS ACTUALIZADA
+
+### 🗂️ Colección: usuarios (ACTUALIZADA CON RECORDATORIOS Y PENALIZACIONES)
+```javascript
+{
+  uid: "user_id",
+  nombre: "string",
+  apellido: "string",
+  email: "string",
+  rol: "administrador|editor|usuario",
+  telefono: "string",
+  estado: "activo|inactivo",
+  
+  // SISTEMA DE VERIFICACIÓN MANUAL
+  verificacion: {
+    estado: "pendiente_verificacion|verificado|rechazado",
+    fecha_solicitud: "timestamp",
+    fecha_verificacion: "timestamp",
+    verificado_por: "admin_user_id",
+    notas_verificador: "string",
+    metodo_verificacion: "whatsapp|llamada|presencial",
+    contacto_verificacion: "string",
+    documentos_verificados: ["cedula", "referencias", "etc"]
+  },
+  
+  // SISTEMA DE RECORDATORIOS AUTOMÁTICOS
+  recordatorios_verificacion: {
+    ultimo_recordatorio: "timestamp",
+    intentos_contacto: "number",
+    siguiente_recordatorio: "timestamp",
+    frecuencia_recordatorios: "24h|48h|72h",
+    notificaciones_enviadas: "number"
+  },
+  
+  // SISTEMA DE VALORACIÓN CRISTIANA CON PENALIZACIONES
+  valoracion: {
+    base_registro: 1, // +1 estrella por registrarse
+    base_verificacion: 1, // +1 estrella por verificación
+    valoraciones_recibidas: [{
+      evento_id: "string",
+      valorador_id: "string",
+      puntos: "number (1-5)",
+      comentario: "string",
+      criterios_cristianos: {
+        amabilidad: "number (1-5)",
+        hospitalidad: "number (1-5)", 
+        respeto: "number (1-5)",
+        caracter_cristiano: "number (1-5)",
+        servicio_desinteresado: "number (1-5)"
+      },
+      fecha_valoracion: "timestamp"
+    }],
+    // NUEVO: SISTEMA DE PENALIZACIONES
+    penalizaciones: [{
+      tipo: "cancelacion_ultimo_momento|no_presentacion|comportamiento_inadecuado",
+      evento_id: "string",
+      puntos_restados: "number (-1 a -5)",
+      fecha: "timestamp",
+      motivo: "string",
+      aplicado_por: "admin_user_id",
+      apelacion: {
+        presentada: "boolean",
+        fecha_apelacion: "timestamp",
+        motivo_apelacion: "string",
+        resuelta: "boolean",
+        decision_final: "string"
+      }
+    }],
+    promedio_total: "number",
+    total_valoraciones: "number",
+    total_penalizaciones: "number"
+  },
+  
+  // NOTIFICACIONES INTERNAS MEJORADAS
+  notificaciones_internas: {
+    verificacion_estado: "pendiente|completada|rechazada",
+    recordatorios_pendientes: "number",
+    ultimo_recordatorio_enviado: "timestamp",
+    postulaciones: [{
+      evento_id: "string",
+      tipo: "hospedador|visitante",
+      estado: "postulado|verificado|asignado|rechazado",
+      fecha_postulacion: "timestamp",
+      fecha_actualizacion: "timestamp"
+    }],
+    asignaciones_actuales: [{
+      evento_id: "string",
+      tipo: "hospedador|visitante",
+      asignado_con: "user_id",
+      fecha_asignacion: "timestamp"
+    }],
+    penalizaciones_recientes: [{
+      tipo: "string",
+      puntos_restados: "number",
+      fecha: "timestamp",
+      evento_id: "string"
+    }],
+    mensajes_admin: [{
+      mensaje: "string",
+      fecha: "timestamp",
+      leido: "boolean",
+      tipo: "info|advertencia|penalizacion|recordatorio"
+    }]
+  },
+  
+  // SISTEMA DE EDITORES
+  eventos_asignados: ["evento_id1", "evento_id2"], // Solo para editores
+  asignado_por: "admin_user_id",
+  fecha_asignacion: "timestamp",
+  createdAt: "timestamp"
+}
+```
+
+### 🗂️ Colección: eventos (ACTUALIZADA)
+```javascript
+{
+  id: "evento_id",
+  titulo: "string",
+  descripcion: "string",
+  lugar: "string",
+  ciudad: "string",
+  direccion_completa: "string",
+  coordenadas_gps: "string",
+  fecha_inicio: "timestamp",
+  fecha_fin: "timestamp",
+  imagenURL: "string",
+  estado: "activo|inactivo",
+  creado_por: "user_id",
+  
+  // SISTEMA DE EDITORES
+  editores_asignados: ["editor_id1", "editor_id2"],
+  region: "string",
+  
+  // ESTADÍSTICAS CON PENALIZACIONES
+  estadisticas: {
+    anfitriones: "number",
+    visitantes: "number",
+    asistentes: "number",
+    emparejamientos: "number",
+    verificaciones_completadas: "number",
+    cancelaciones_ultimo_momento: "number",
+    penalizaciones_aplicadas: "number"
+  },
+  
+  // CONFIGURACIÓN DE RECORDATORIOS
+  configuracion_recordatorios: {
+    dias_limite_verificacion: "number (default: 3)",
+    frecuencia_recordatorios: "24h|48h|72h",
+    maximo_intentos_contacto: "number (default: 5)",
+    recordatorios_automaticos: "boolean (default: true)"
+  },
+  
+  // ALOJAMIENTOS CERCANOS
+  hoteles: [{
+    nombre: "string",
+    direccion: "string",
+    telefono: "string",
+    precio_aproximado: "string",
+    distancia_evento: "string",
+    notas: "string"
+  }],
+  
+  cocheras: [{
+    nombre: "string",
+    direccion: "string",
+    telefono: "string",
+    precio_por_dia: "string",
+    capacidad: "number",
+    distancia_evento: "string",
+    notas: "string"
+  }],
+  
+  // SISTEMA DE CONTINGENCIA
+  contingencia: {
+    anfitriones_backup: ["user_id1", "user_id2"],
+    contactos_emergencia: [{
+      nombre: "string",
+      telefono: "string",
+      relacion: "string",
+      disponibilidad: "string"
+    }],
+    protocolo_cancelacion: "string",
+    hoteles_emergencia: ["hotel_id1", "hotel_id2"],
+    penalizacion_cancelacion_activa: "boolean (default: true)",
+    horas_limite_cancelacion: "number (default: 48)"
+  }
+}
+```
+
+### 🗂️ Colección: postulaciones (ACTUALIZADA CON CANCELACIONES)
+```javascript
+{
+  id: "postulacion_id",
+  evento_id: "string",
+  usuario_id: "string",
+  tipo: "hospedador|visitante",
+  
+  // ESTADOS DETALLADOS
+  estado: "postulado|verificado|asignado|rechazado|cancelado",
+  fecha_postulacion: "timestamp",
+  fecha_verificacion: "timestamp",
+  fecha_asignacion: "timestamp",
+  
+  // VERIFICACIÓN MANUAL
+  verificacion_admin: {
+    verificado_por: "admin_user_id",
+    fecha_verificacion: "timestamp",
+    metodo_verificacion: "whatsapp|llamada|presencial",
+    notas_verificacion: "string",
+    documentos_revisados: ["string"],
+    aprobado: "boolean",
+    recordatorios_enviados: "number"
+  },
+  
+  // DATOS HOSPEDADOR
+  datos_hospedador: {
+    numero_habitaciones: "number",
+    numero_camas: "number",
+    personas_puede_hospedar: "number",
+    tiene_cochera: "boolean",
+    servicios_adicionales: ["desayuno", "transporte", "etc"],
+    reglas_casa: "string",
+    ubicacion_detalle: "string"
+  },
+  
+  // DATOS VISITANTE
+  datos_visitante: {
+    numero_personas: "number",
+    habitaciones_solicitadas: "number",
+    tiene_vehiculo: "boolean",
+    necesidades_especiales: "string",
+    preferencias: "string",
+    referencias: "string"
+  },
+  
+  // ASIGNACIÓN MANUAL
+  asignacion: {
+    asignado_con: "user_id",
+    asignado_por: "admin_user_id",
+    fecha_asignacion: "timestamp",
+    notas_asignacion: "string",
+    es_asignacion_backup: "boolean"
+  },
+  
+  // NUEVO: SISTEMA DE CANCELACIONES CON PENALIZACIONES
+  cancelacion: {
+    cancelado: "boolean",
+    fecha_cancelacion: "timestamp",
+    motivo: "string",
+    cancelado_por: "user_id",
+    horas_antes_evento: "number",
+    penalizacion_aplicada: "boolean",
+    puntos_penalizacion: "number",
+    backup_asignado: "user_id",
+    observaciones_admin: "string"
+  }
+}
+```
+
+### 🗂️ Colección: emparejamientos (ACTUALIZADA)
+```javascript
+{
+  id: "emparejamiento_id",
+  evento_id: "string",
+  anfitrion_id: "string",
+  visitante_id: "string",
+  
+  // PROCESO MANUAL
+  sugerido_por_algoritmo: "boolean",
+  confirmado_por_admin: "admin_user_id",
+  fecha_sugerencia: "timestamp",
+  fecha_confirmacion: "timestamp",
+  estado: "sugerido|confirmado|cancelado|penalizado",
+  
+  // COMPATIBILIDAD
+  compatibilidad_score: "number",
+  criterios_compatibilidad: {
+    ubicacion: "number",
+    capacidad: "number",
+    vehiculo: "boolean",
+    necesidades_especiales: "boolean"
+  },
+  
+  // INFORMACIÓN DEL EMPAREJAMIENTO
+  detalles: {
+    habitaciones_asignadas: "number",
+    camas_asignadas: "number",
+    cochera_asignada: "boolean",
+    servicios_incluidos: ["string"],
+    reglas_especiales: "string"
+  },
+  
+  // BACKUP Y CANCELACIONES
+  es_asignacion_backup: "boolean",
+  emparejamiento_original: "emparejamiento_id",
+  cancelaciones_historicas: [{
+    fecha: "timestamp",
+    motivo: "string",
+    usuario_cancelador: "user_id",
+    penalizacion_aplicada: "boolean"
+  }]
+}
+```
+
+### 🗂️ Colección: valoraciones_cristianas (ACTUALIZADA)
+```javascript
+{
+  id: "valoracion_id",
+  evento_id: "string",
+  valorador_id: "string",
+  valorado_id: "string",
+  tipo_relacion: "anfitrion_a_visitante|visitante_a_anfitrion",
+  
+  // CRITERIOS CRISTIANOS ESPECÍFICOS
+  criterios: {
+    amabilidad: "number (1-5)",
+    hospitalidad: "number (1-5)",
+    respeto: "number (1-5)",
+    caracter_cristiano: "number (1-5)",
+    servicio_desinteresado: "number (1-5)",
+    paciencia: "number (1-5)",
+    generosidad: "number (1-5)"
+  },
+  
+  // COMENTARIOS
+  comentario_positivo: "string",
+  areas_mejora: "string",
+  recomendaria: "boolean",
+  
+  // ACLARACIÓN IMPORTANTE
+  aclaracion: "Esta valoración se basa en el comportamiento cristiano y el trato recibido, NO en la calidad material del alojamiento o lujos ofrecidos",
+  
+  // NUEVA: VERIFICACIÓN DE PENALIZACIONES
+  usuario_penalizado: "boolean",
+  penalizaciones_durante_evento: [{
+    tipo: "string",
+    puntos_restados: "number",
+    fecha: "timestamp"
+  }],
+  
+  fecha_valoracion: "timestamp",
+  verificado_por_admin: "boolean"
+}
+```
+
+### 🗂️ Colección: recordatorios_sistema (NUEVA)
+```javascript
+{
+  id: "recordatorio_id",
+  usuario_id: "string",
+  evento_id: "string",
+  tipo: "verificacion_pendiente|cancelacion_proximidad|emparejamiento_confirmado",
+  
+  // CONFIGURACIÓN DEL RECORDATORIO
+  frecuencia: "24h|48h|72h",
+  maximo_intentos: "number",
+  intentos_realizados: "number",
+  
+  // FECHAS
+  fecha_creacion: "timestamp",
+  proxima_ejecucion: "timestamp",
+  fecha_ultimo_envio: "timestamp",
+  fecha_completado: "timestamp",
+  
+  // CONTENIDO
+  mensaje: "string",
+  prioridad: "baja|media|alta",
+  
+  // ESTADO
+  estado: "activo|completado|cancelado|pausado",
+  completado: "boolean",
+  
+  // METADATA
+  creado_por: "sistema|admin_user_id",
+  observaciones: "string"
+}
+```
+
+### 🗂️ Colección: observaciones_eventos (ACTUALIZADA)
+```javascript
+{
+  id: "observacion_id",
+  evento_id: "string",
+  admin_id: "string",
+  fecha: "timestamp",
+  
+  // TIPOS DE OBSERVACIÓN
+  tipo: "incidente|mejora|observacion_general|problema_tecnico|sugerencia|penalizacion|cancelacion",
+  gravedad: "baja|media|alta|critica",
+  
+  // CONTENIDO
+  titulo: "string",
+  descripcion: "string",
+  usuarios_involucrados: ["user_id"],
+  
+  // NUEVA: INFORMACIÓN DE PENALIZACIONES
+  penalizaciones_relacionadas: [{
+    usuario_id: "string",
+    tipo_penalizacion: "string",
+    puntos_restados: "number",
+    fecha_aplicacion: "timestamp"
+  }],
+  
+  // SEGUIMIENTO
+  estado: "abierto|en_revision|resuelto|cerrado",
+  acciones_tomadas: "string",
+  responsable_seguimiento: "admin_user_id",
+  fecha_resolucion: "timestamp",
+  
+  // MEJORAS PARA LA APP
+  impacto_futuro: "string",
+  cambios_sugeridos: "string"
+}
+```
+
+### 🗂️ Colección: verificaciones_manuales (ACTUALIZADA)
+```javascript
+{
+  id: "verificacion_id",
+  usuario_id: "string",
+  admin_verificador: "string",
+  fecha_inicio: "timestamp",
+  fecha_completada: "timestamp",
+  
+  // PROCESO DE VERIFICACIÓN
+  metodo: "whatsapp|llamada|presencial|combinado",
+  contacto_usado: "string",
+  documentos_solicitados: ["cedula", "referencias", "carta_pastor"],
+  documentos_recibidos: ["string"],
+  
+  // NUEVA: SISTEMA DE RECORDATORIOS
+  recordatorios: {
+    total_enviados: "number",
+    fechas_recordatorios: ["timestamp"],
+    respuesta_usuario: "boolean",
+    fecha_respuesta: "timestamp",
+    metodo_respuesta: "whatsapp|llamada|presencial"
+  },
+  
+  // VERIFICACIÓN DETALLADA
+  verificaciones: {
+    identidad: "boolean",
+    telefono: "boolean",
+    direccion: "boolean",
+    referencias_cristianas: "boolean",
+    antecedentes: "boolean"
+  },
+  
+  // RESULTADO
+  resultado: "aprobado|rechazado|pendiente_documentos",
+  notas_verificador: "string",
+  observaciones: "string",
+  
+  // SEGUIMIENTO
+  requiere_seguimiento: "boolean",
+  fecha_siguiente_revision: "timestamp",
+  recordatorio_automatico: "boolean"
+}
+```
+
+---
+
+## 🔄 FLUJOS DE TRABAJO ACTUALIZADOS
+
+### 1. 📋 FLUJO DE VERIFICACIÓN MANUAL CON RECORDATORIOS
+```
+Usuario se registra → Estado: "pendiente_verificacion"
+     ↓
+Sistema crea recordatorio automático (cada 24h después de 3 días)
+     ↓
+Admin/Editor revisa solicitud → Contacta por WhatsApp/llamada
+     ↓
+Si no responde → Sistema envía recordatorio → Aumenta contador intentos
+     ↓
+Verificación exitosa → Estado: "verificado" + 1 estrella
+     ↓
+Usuario habilitado para postular a eventos
+```
+
+### 2. 🤝 FLUJO DE EMPAREJAMIENTO MANUAL
+```
+Múltiples usuarios postulan (anfitriones + visitantes)
+     ↓
+Algoritmo genera vista previa con compatibilidad
+     ↓
+Admin revisa sugerencias → Decide manualmente
+     ↓
+Admin confirma emparejamiento → Notifica a usuarios
+     ↓
+Sistema actualiza estados → Visible en "Mi Perfil"
+```
+
+### 3. 🚫 FLUJO DE CANCELACIÓN CON PENALIZACIONES
+```
+Usuario cancela postulación → Sistema calcula horas restantes
+     ↓
+Si < 48h antes del evento → Aplica penalización -2 estrellas
+     ↓
+Sistema busca backup → Reasigna si existe
+     ↓
+Notifica cambios → Actualiza valoraciones
+     ↓
+Admin revisa → Puede apelar penalización si hay justificación
+```
+
+### 4. 🔄 FLUJO DE CONTINGENCIA
+```
+Anfitrión cancela → Sistema detecta
+     ↓
+Verifica tiempo restante → Aplica penalización si corresponde
+     ↓
+Admin busca en lista de backup
+     ↓
+Reasigna visitante → Notifica cambio
+     ↓
+Si no hay backup → Deriva a hoteles de emergencia
+```
+
+### 5. ⭐ FLUJO DE VALORACIÓN CRISTIANA
+```
+Evento termina → Habilita valoración mutua
+     ↓
+Anfitrión valora visitante + Visitante valora anfitrión
+     ↓
+Sistema calcula promedio → Considera penalizaciones
+     ↓
+Admin revisa valoraciones → Modera si es necesario
+```
+
+### 6. 🔔 FLUJO DE RECORDATORIOS AUTOMÁTICOS
+```
+Sistema ejecuta cada 24h → Busca verificaciones pendientes > 3 días
+     ↓
+Verifica último recordatorio → Si > 24h envía nuevo recordatorio
+     ↓
+Actualiza contador intentos → Notifica en perfil usuario
+     ↓
+Si > 5 intentos → Marca como "requiere_seguimiento_manual"
+```
+
+---
+
+## 🛡️ SISTEMA DE SEGURIDAD ACTUALIZADO
+
+### 1. 🔐 Middleware de Verificación
+```javascript
+// Verificar estado de verificación antes de postular
+function checkVerificationStatus(req, res, next) {
+  const userId = req.user.uid;
+  
+  getUserVerificationStatus(userId)
+    .then(status => {
+      if (status === 'verificado') {
+        next();
+      } else {
+        res.status(403).json({ 
+          error: 'Debe completar la verificación antes de postular',
+          redirect: '/verification/verification-process.html'
+        });
+      }
+    });
+}
+```
+
+### 2. 🚫 Middleware de Penalizaciones
+```javascript
+// Verificar penalizaciones antes de aplicar cancelación
+function checkCancellationPenalty(req, res, next) {
+  const userId = req.user.uid;
+  const eventoId = req.params.eventoId;
+  
+  calculateCancellationPenalty(userId, eventoId)
+    .then(penalty => {
+      if (penalty.shouldApply) {
+        applyPenalty(userId, penalty.points, penalty.reason);
+        logPenaltyAction(userId, eventoId, penalty);
+      }
+      next();
+    });
+}
+```
+
+### 3. 🔒 Control de Emparejamiento Manual
+```javascript
+// Solo admin puede confirmar emparejamientos
+function checkMatchingPermission(req, res, next) {
+  const userId = req.user.uid;
+  const eventoId = req.params.eventoId;
+  
+  if (req.user.rol === 'administrador') {
+    next();
+  } else if (req.user.rol === 'editor') {
+    verificarEventoAsignado(userId, eventoId)
+      .then(hasPermission => {
+        if (hasPermission) {
+          next();
+        } else {
+          res.status(403).json({ error: 'No tienes permisos para este evento' });
+        }
+      });
+  } else {
+    res.status(403).json({ error: 'Solo admin/editor pueden confirmar emparejamientos' });
+  }
+}
+```
+
+### 4. 🔔 Control de Recordatorios
+```javascript
+// Solo admin/editor pueden gestionar recordatorios
+function checkReminderPermission(req, res, next) {
+  const userId = req.user.uid;
+  const userRole = req.user.rol;
+  
+  if (userRole === 'administrador') {
+    next();
+  } else if (userRole === 'editor') {
+    // Editor solo puede ver recordatorios de sus eventos asignados
+    checkAssignedEvents(userId, req.params.eventoId)
+      .then(hasAccess => {
+        if (hasAccess) {
+          next();
+        } else {
+          res.status(403).json({ error: 'No tienes acceso a este evento' });
+        }
+      });
+  } else {
+    res.status(403).json({ error: 'Sin permisos para gestionar recordatorios' });
+  }
+}
+```
+
+### 5. 🔍 Reglas de Firestore Actualizadas
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Valoraciones: solo participantes del evento pueden valorar
+    match /valoraciones_cristianas/{valoracionId} {
+      allow create: if request.auth != null && 
+        exists(/databases/$(database)/documents/emparejamientos/$(getEmparejamientoId())) &&
+        (request.resource.data.valorador_id == request.auth.uid);
