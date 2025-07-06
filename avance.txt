@@ -191,7 +191,28 @@
     promedio_total: "number",
     total_valoraciones: "number"
   },
-  
+  valoracion: {
+  base_registro: 1,
+  base_verificacion: 1,
+  valoraciones_recibidas: [{
+    // ... campos existentes
+  }],
+  promedio_total: "number",
+  total_valoraciones: "number",
+  penalizaciones: [{
+    tipo: "cancelacion_ultimo_momento",
+    evento_id: "string",
+    puntos_restados: -2,
+    fecha: "timestamp",
+    motivo: "string"
+  }]
+},
+
+recordatorios_verificacion: {
+  ultimo_recordatorio: "timestamp",
+  intentos_contacto: "number",
+  siguiente_recordatorio: "timestamp"
+},
   // NOTIFICACIONES INTERNAS (SIN COSTO)
   notificaciones_internas: {
     verificacion_estado: "pendiente|completada|rechazada",
@@ -340,6 +361,20 @@
     notas_asignacion: "string",
     es_asignacion_backup: "boolean"
   }
+asignacion: {
+  asignado_con: "user_id",
+  asignado_por: "admin_user_id",
+  fecha_asignacion: "timestamp",
+  notas_asignacion: "string",
+  es_asignacion_backup: "boolean"
+},
+
+cancelacion: {
+  cancelado: "boolean",
+  fecha_cancelacion: "timestamp",
+  motivo: "string",
+  penalizacion_aplicada: "boolean"
+}
 }
 ```
 
