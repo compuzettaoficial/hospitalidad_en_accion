@@ -35,6 +35,7 @@
 │   ├── ratings-management.html    → Gestión de valoraciones
 │   ├── event-observations.html    → Observaciones por evento
 │   ├── backup-management.html     → Gestión de contingencias
+│   ├── penalties-management.html  → Gestión de penalizaciones
 │   └── reports.html               → Reportes y estadísticas
 ├── editor/
 │   ├── dashboard.html             → Panel editor (eventos asignados)
@@ -67,7 +68,8 @@
 │   └── verification-history.html  → Historial de verificaciones
 ├── notifications/
 │   ├── profile-notifications.html → Notificaciones en perfil
-│   └── status-updates.html        → Actualizaciones de estado
+│   ├── status-updates.html        → Actualizaciones de estado
+│   └── reminders.html             → Sistema de recordatorios
 ├── css/
 │   ├── main.css                   → Estilos principales
 │   ├── admin.css                  → Estilos panel admin
@@ -76,18 +78,21 @@
 │   ├── ratings.css                → Estilos sistema valoración
 │   ├── verification.css           → Estilos verificación
 │   ├── notifications.css          → Estilos notificaciones
+│   ├── penalties.css              → Estilos sistema penalizaciones
 │   └── components.css             → Estilos componentes
 ├── js/
 │   ├── main.js                    → Lógica principal
-│   ├── firebase-config.js         → Configuración Firebase + Notificaciones internas
+│   ├── firebase-config.js         → Configuración Firebase (ACTUALIZADO)
 │   ├── auth.js                    → Autenticación
-│   ├── events.js                  → Gestión eventos + Penalización cancelación
+│   ├── events.js                  → Gestión eventos (ACTUALIZADO)
 │   ├── users.js                   → Gestión usuarios
 │   ├── permissions.js             → Control de permisos por evento
 │   ├── verification.js            → Sistema verificación manual
 │   ├── matching-manual.js         → Sistema emparejamiento manual
 │   ├── ratings-christian.js       → Sistema valoraciones cristianas
-│   ├── notifications.js           → Sistema notificaciones internas + Recordatorios
+│   ├── notifications.js           → Sistema notificaciones internas (ACTUALIZADO)
+│   ├── reminders.js               → Sistema de recordatorios automáticos
+│   ├── penalties.js               → Sistema de penalizaciones
 │   ├── backup-system.js           → Sistema de contingencia
 │   ├── observations.js            → Sistema de observaciones
 │   └── utils.js                   → Funciones utilitarias
@@ -105,6 +110,7 @@
     ├── star-rating-christian.html
     ├── verification-badge.html
     ├── notification-center.html
+    ├── reminder-card.html
     └── navigation.html
 ```
 
@@ -121,8 +127,8 @@
 - ✅ **Sistema de emparejamiento manual**
 - ✅ **Gestión de observaciones por evento**
 - ✅ **Sistema de backup y contingencias**
-- ✅ **Sistema de recordatorios automáticos**
-- ✅ **Aplicar penalizaciones por cancelación**
+- ✅ **Gestión de penalizaciones y suspensiones**
+- ✅ **Control total del sistema de recordatorios**
 - ✅ Acceso completo al sistema de valoraciones cristianas
 - ✅ Ver reportes globales de toda la plataforma
 
@@ -132,9 +138,9 @@
 - ✅ Emparejamiento manual solo en sus eventos asignados
 - ✅ Editar información solo de sus eventos asignados
 - ✅ Gestionar hoteles/cocheras solo de sus eventos
-- ✅ **Ver recordatorios de verificación de sus eventos**
-- ✅ **Aplicar penalizaciones solo en sus eventos asignados**
 - ✅ Crear observaciones solo de sus eventos asignados
+- ✅ **Aplicar penalizaciones menores en sus eventos**
+- ✅ **Gestionar recordatorios de verificación**
 - ✅ Ver reportes solo de sus eventos
 - ❌ No puede crear eventos nuevos
 - ❌ No puede acceder a eventos no asignados
@@ -145,15 +151,15 @@
 - ✅ Ver información de todos los eventos
 - ✅ **Centro de notificaciones en Mi Perfil**
 - ✅ **Recibir recordatorios de verificación**
+- ✅ **Ver historial de penalizaciones**
 - ✅ **Sistema de valoración bidireccional**
 - ✅ **Proceso de verificación personal**
-- ✅ **Recibir penalizaciones por cancelación tardía**
 
 ---
 
 ## 📊 ESTRUCTURA DE BASE DE DATOS ACTUALIZADA
 
-### 🗂️ Colección: usuarios (ACTUALIZADA CON RECORDATORIOS Y PENALIZACIONES)
+### 🗂️ Colección: usuarios (ACTUALIZADA CON PENALIZACIONES Y RECORDATORIOS)
 ```javascript
 {
   uid: "user_id",
@@ -162,7 +168,44 @@
   email: "string",
   rol: "administrador|editor|usuario",
   telefono: "string",
-  estado: "activo|inactivo",
+  estado: "activo|suspendido|penalizado",
+  
+  // SISTEMA DE PENALIZACIONES (NUEVO)
+  penalizaciones: {
+    activa: "boolean",
+    tipo: "advertencia|suspension_temporal|suspension_permanente",
+    fecha_inicio: "timestamp",
+    fecha_fin: "timestamp", // null si es permanente
+    motivo: "string",
+    descripcion: "string",
+    aplicada_por: "admin_user_id",
+    eventos_afectados: ["evento_id1", "evento_id2"],
+    historial: [{
+      fecha: "timestamp",
+      tipo: "advertencia|suspension_temporal|suspension_permanente",
+      motivo: "string",
+      aplicada_por: "admin_user_id",
+      resuelto: "boolean",
+      fecha_resolucion: "timestamp"
+    }]
+  },
+  
+  // SISTEMA DE RECORDATORIOS DE VERIFICACIÓN (NUEVO)
+  recordatorios_verificacion: {
+    activos: "boolean",
+    ultimo_recordatorio: "timestamp",
+    recordatorios_enviados: "number",
+    metodo_preferido: "notificacion_interna|whatsapp|email",
+    frecuencia: "diaria|cada_3_dias|semanal",
+    eventos_pendientes: ["evento_id1", "evento_id2"],
+    historial_recordatorios: [{
+      fecha_enviado: "timestamp",
+      tipo: "verificacion_pendiente|documento_faltante|cancelacion_evento",
+      evento_id: "string",
+      metodo: "notificacion_interna|whatsapp|email",
+      estado: "enviado|entregado|leido|respondido"
+    }]
+  },
   
   // SISTEMA DE VERIFICACIÓN MANUAL
   verificacion: {
@@ -173,22 +216,16 @@
     notas_verificador: "string",
     metodo_verificacion: "whatsapp|llamada|presencial",
     contacto_verificacion: "string",
-    documentos_verificados: ["cedula", "referencias", "etc"]
+    documentos_verificados: ["cedula", "referencias", "etc"],
+    intentos_verificacion: "number",
+    recordatorios_enviados: "number"
   },
   
-  // SISTEMA DE RECORDATORIOS AUTOMÁTICOS
-  recordatorios_verificacion: {
-    ultimo_recordatorio: "timestamp",
-    intentos_contacto: "number",
-    siguiente_recordatorio: "timestamp",
-    frecuencia_recordatorios: "24h|48h|72h",
-    notificaciones_enviadas: "number"
-  },
-  
-  // SISTEMA DE VALORACIÓN CRISTIANA CON PENALIZACIONES
+  // SISTEMA DE VALORACIÓN CRISTIANA
   valoracion: {
     base_registro: 1, // +1 estrella por registrarse
     base_verificacion: 1, // +1 estrella por verificación
+    penalizacion_activa: -1, // -1 estrella si tiene penalización activa
     valoraciones_recibidas: [{
       evento_id: "string",
       valorador_id: "string",
@@ -203,32 +240,13 @@
       },
       fecha_valoracion: "timestamp"
     }],
-    // NUEVO: SISTEMA DE PENALIZACIONES
-    penalizaciones: [{
-      tipo: "cancelacion_ultimo_momento|no_presentacion|comportamiento_inadecuado",
-      evento_id: "string",
-      puntos_restados: "number (-1 a -5)",
-      fecha: "timestamp",
-      motivo: "string",
-      aplicado_por: "admin_user_id",
-      apelacion: {
-        presentada: "boolean",
-        fecha_apelacion: "timestamp",
-        motivo_apelacion: "string",
-        resuelta: "boolean",
-        decision_final: "string"
-      }
-    }],
     promedio_total: "number",
-    total_valoraciones: "number",
-    total_penalizaciones: "number"
+    total_valoraciones: "number"
   },
   
-  // NOTIFICACIONES INTERNAS MEJORADAS
+  // NOTIFICACIONES INTERNAS (SIN COSTO)
   notificaciones_internas: {
     verificacion_estado: "pendiente|completada|rechazada",
-    recordatorios_pendientes: "number",
-    ultimo_recordatorio_enviado: "timestamp",
     postulaciones: [{
       evento_id: "string",
       tipo: "hospedador|visitante",
@@ -242,17 +260,16 @@
       asignado_con: "user_id",
       fecha_asignacion: "timestamp"
     }],
-    penalizaciones_recientes: [{
-      tipo: "string",
-      puntos_restados: "number",
-      fecha: "timestamp",
-      evento_id: "string"
-    }],
     mensajes_admin: [{
       mensaje: "string",
       fecha: "timestamp",
-      leido: "boolean",
-      tipo: "info|advertencia|penalizacion|recordatorio"
+      leido: "boolean"
+    }],
+    recordatorios_pendientes: [{
+      tipo: "verificacion|documentos|cancelacion",
+      evento_id: "string",
+      fecha_programada: "timestamp",
+      procesado: "boolean"
     }]
   },
   
@@ -261,82 +278,6 @@
   asignado_por: "admin_user_id",
   fecha_asignacion: "timestamp",
   createdAt: "timestamp"
-}
-```
-
-### 🗂️ Colección: eventos (ACTUALIZADA)
-```javascript
-{
-  id: "evento_id",
-  titulo: "string",
-  descripcion: "string",
-  lugar: "string",
-  ciudad: "string",
-  direccion_completa: "string",
-  coordenadas_gps: "string",
-  fecha_inicio: "timestamp",
-  fecha_fin: "timestamp",
-  imagenURL: "string",
-  estado: "activo|inactivo",
-  creado_por: "user_id",
-  
-  // SISTEMA DE EDITORES
-  editores_asignados: ["editor_id1", "editor_id2"],
-  region: "string",
-  
-  // ESTADÍSTICAS CON PENALIZACIONES
-  estadisticas: {
-    anfitriones: "number",
-    visitantes: "number",
-    asistentes: "number",
-    emparejamientos: "number",
-    verificaciones_completadas: "number",
-    cancelaciones_ultimo_momento: "number",
-    penalizaciones_aplicadas: "number"
-  },
-  
-  // CONFIGURACIÓN DE RECORDATORIOS
-  configuracion_recordatorios: {
-    dias_limite_verificacion: "number (default: 3)",
-    frecuencia_recordatorios: "24h|48h|72h",
-    maximo_intentos_contacto: "number (default: 5)",
-    recordatorios_automaticos: "boolean (default: true)"
-  },
-  
-  // ALOJAMIENTOS CERCANOS
-  hoteles: [{
-    nombre: "string",
-    direccion: "string",
-    telefono: "string",
-    precio_aproximado: "string",
-    distancia_evento: "string",
-    notas: "string"
-  }],
-  
-  cocheras: [{
-    nombre: "string",
-    direccion: "string",
-    telefono: "string",
-    precio_por_dia: "string",
-    capacidad: "number",
-    distancia_evento: "string",
-    notas: "string"
-  }],
-  
-  // SISTEMA DE CONTINGENCIA
-  contingencia: {
-    anfitriones_backup: ["user_id1", "user_id2"],
-    contactos_emergencia: [{
-      nombre: "string",
-      telefono: "string",
-      relacion: "string",
-      disponibilidad: "string"
-    }],
-    protocolo_cancelacion: "string",
-    hoteles_emergencia: ["hotel_id1", "hotel_id2"],
-    penalizacion_cancelacion_activa: "boolean (default: true)",
-    horas_limite_cancelacion: "number (default: 48)"
-  }
 }
 ```
 
@@ -353,6 +294,21 @@
   fecha_postulacion: "timestamp",
   fecha_verificacion: "timestamp",
   fecha_asignacion: "timestamp",
+  fecha_cancelacion: "timestamp",
+  
+  // SISTEMA DE CANCELACIÓN (NUEVO)
+  cancelacion: {
+    cancelado_por: "usuario|admin|sistema",
+    fecha_cancelacion: "timestamp",
+    motivo: "string",
+    motivo_categoria: "personal|enfermedad|emergencia|penalizacion|no_verificado",
+    afecta_valoracion: "boolean",
+    penalizacion_aplicada: "boolean",
+    usuario_cancelador: "user_id",
+    admin_cancelador: "admin_user_id",
+    notificaciones_enviadas: "boolean",
+    backup_activado: "boolean"
+  },
   
   // VERIFICACIÓN MANUAL
   verificacion_admin: {
@@ -393,106 +349,7 @@
     fecha_asignacion: "timestamp",
     notas_asignacion: "string",
     es_asignacion_backup: "boolean"
-  },
-  
-  // NUEVO: SISTEMA DE CANCELACIONES CON PENALIZACIONES
-  cancelacion: {
-    cancelado: "boolean",
-    fecha_cancelacion: "timestamp",
-    motivo: "string",
-    cancelado_por: "user_id",
-    horas_antes_evento: "number",
-    penalizacion_aplicada: "boolean",
-    puntos_penalizacion: "number",
-    backup_asignado: "user_id",
-    observaciones_admin: "string"
   }
-}
-```
-
-### 🗂️ Colección: emparejamientos (ACTUALIZADA)
-```javascript
-{
-  id: "emparejamiento_id",
-  evento_id: "string",
-  anfitrion_id: "string",
-  visitante_id: "string",
-  
-  // PROCESO MANUAL
-  sugerido_por_algoritmo: "boolean",
-  confirmado_por_admin: "admin_user_id",
-  fecha_sugerencia: "timestamp",
-  fecha_confirmacion: "timestamp",
-  estado: "sugerido|confirmado|cancelado|penalizado",
-  
-  // COMPATIBILIDAD
-  compatibilidad_score: "number",
-  criterios_compatibilidad: {
-    ubicacion: "number",
-    capacidad: "number",
-    vehiculo: "boolean",
-    necesidades_especiales: "boolean"
-  },
-  
-  // INFORMACIÓN DEL EMPAREJAMIENTO
-  detalles: {
-    habitaciones_asignadas: "number",
-    camas_asignadas: "number",
-    cochera_asignada: "boolean",
-    servicios_incluidos: ["string"],
-    reglas_especiales: "string"
-  },
-  
-  // BACKUP Y CANCELACIONES
-  es_asignacion_backup: "boolean",
-  emparejamiento_original: "emparejamiento_id",
-  cancelaciones_historicas: [{
-    fecha: "timestamp",
-    motivo: "string",
-    usuario_cancelador: "user_id",
-    penalizacion_aplicada: "boolean"
-  }]
-}
-```
-
-### 🗂️ Colección: valoraciones_cristianas (ACTUALIZADA)
-```javascript
-{
-  id: "valoracion_id",
-  evento_id: "string",
-  valorador_id: "string",
-  valorado_id: "string",
-  tipo_relacion: "anfitrion_a_visitante|visitante_a_anfitrion",
-  
-  // CRITERIOS CRISTIANOS ESPECÍFICOS
-  criterios: {
-    amabilidad: "number (1-5)",
-    hospitalidad: "number (1-5)",
-    respeto: "number (1-5)",
-    caracter_cristiano: "number (1-5)",
-    servicio_desinteresado: "number (1-5)",
-    paciencia: "number (1-5)",
-    generosidad: "number (1-5)"
-  },
-  
-  // COMENTARIOS
-  comentario_positivo: "string",
-  areas_mejora: "string",
-  recomendaria: "boolean",
-  
-  // ACLARACIÓN IMPORTANTE
-  aclaracion: "Esta valoración se basa en el comportamiento cristiano y el trato recibido, NO en la calidad material del alojamiento o lujos ofrecidos",
-  
-  // NUEVA: VERIFICACIÓN DE PENALIZACIONES
-  usuario_penalizado: "boolean",
-  penalizaciones_durante_evento: [{
-    tipo: "string",
-    puntos_restados: "number",
-    fecha: "timestamp"
-  }],
-  
-  fecha_valoracion: "timestamp",
-  verificado_por_admin: "boolean"
 }
 ```
 
@@ -502,112 +359,92 @@
   id: "recordatorio_id",
   usuario_id: "string",
   evento_id: "string",
-  tipo: "verificacion_pendiente|cancelacion_proximidad|emparejamiento_confirmado",
+  tipo: "verificacion_pendiente|documento_faltante|cancelacion_evento|evento_proximo",
   
   // CONFIGURACIÓN DEL RECORDATORIO
-  frecuencia: "24h|48h|72h",
-  maximo_intentos: "number",
-  intentos_realizados: "number",
+  activo: "boolean",
+  fecha_programada: "timestamp",
+  fecha_enviado: "timestamp",
+  procesado: "boolean",
+  metodo_envio: "notificacion_interna|whatsapp|email",
   
-  // FECHAS
-  fecha_creacion: "timestamp",
-  proxima_ejecucion: "timestamp",
-  fecha_ultimo_envio: "timestamp",
-  fecha_completado: "timestamp",
-  
-  // CONTENIDO
+  // CONTENIDO DEL RECORDATORIO
+  titulo: "string",
   mensaje: "string",
-  prioridad: "baja|media|alta",
+  accion_requerida: "string",
+  enlace_accion: "string",
   
-  // ESTADO
-  estado: "activo|completado|cancelado|pausado",
-  completado: "boolean",
+  // REPETICIÓN
+  es_recurrente: "boolean",
+  frecuencia: "diaria|cada_3_dias|semanal",
+  max_recordatorios: "number",
+  recordatorios_enviados: "number",
+  
+  // SEGUIMIENTO
+  estado_respuesta: "pendiente|respondido|ignorado|completado",
+  fecha_respuesta: "timestamp",
+  respuesta_usuario: "string",
   
   // METADATA
   creado_por: "sistema|admin_user_id",
-  observaciones: "string"
+  fecha_creacion: "timestamp",
+  prioridad: "baja|media|alta|urgente"
 }
 ```
 
-### 🗂️ Colección: observaciones_eventos (ACTUALIZADA)
+### 🗂️ Colección: penalizaciones (NUEVA)
 ```javascript
 {
-  id: "observacion_id",
-  evento_id: "string",
-  admin_id: "string",
-  fecha: "timestamp",
-  
-  // TIPOS DE OBSERVACIÓN
-  tipo: "incidente|mejora|observacion_general|problema_tecnico|sugerencia|penalizacion|cancelacion",
-  gravedad: "baja|media|alta|critica",
-  
-  // CONTENIDO
-  titulo: "string",
-  descripcion: "string",
-  usuarios_involucrados: ["user_id"],
-  
-  // NUEVA: INFORMACIÓN DE PENALIZACIONES
-  penalizaciones_relacionadas: [{
-    usuario_id: "string",
-    tipo_penalizacion: "string",
-    puntos_restados: "number",
-    fecha_aplicacion: "timestamp"
-  }],
-  
-  // SEGUIMIENTO
-  estado: "abierto|en_revision|resuelto|cerrado",
-  acciones_tomadas: "string",
-  responsable_seguimiento: "admin_user_id",
-  fecha_resolucion: "timestamp",
-  
-  // MEJORAS PARA LA APP
-  impacto_futuro: "string",
-  cambios_sugeridos: "string"
-}
-```
-
-### 🗂️ Colección: verificaciones_manuales (ACTUALIZADA)
-```javascript
-{
-  id: "verificacion_id",
+  id: "penalizacion_id",
   usuario_id: "string",
-  admin_verificador: "string",
+  evento_id: "string",
+  
+  // TIPO DE PENALIZACIÓN
+  tipo: "advertencia|suspension_temporal|suspension_permanente",
+  gravedad: "leve|moderada|grave|muy_grave",
+  
+  // MOTIVO Y DESCRIPCIÓN
+  motivo_categoria: "cancelacion_tardía|no_verificacion|comportamiento_inadecuado|valoracion_negativa|incumplimiento_reglas",
+  motivo_detalle: "string",
+  descripcion_completa: "string",
+  evidencia: ["string"], // URLs de capturas, documentos, etc.
+  
+  // APLICACIÓN
+  aplicada_por: "admin_user_id",
+  fecha_aplicacion: "timestamp",
   fecha_inicio: "timestamp",
-  fecha_completada: "timestamp",
+  fecha_fin: "timestamp", // null si es permanente
   
-  // PROCESO DE VERIFICACIÓN
-  metodo: "whatsapp|llamada|presencial|combinado",
-  contacto_usado: "string",
-  documentos_solicitados: ["cedula", "referencias", "carta_pastor"],
-  documentos_recibidos: ["string"],
+  // ESTADO
+  estado: "activa|cumplida|revocada|apelada",
+  fecha_cumplimiento: "timestamp",
+  fecha_revocacion: "timestamp",
   
-  // NUEVA: SISTEMA DE RECORDATORIOS
-  recordatorios: {
-    total_enviados: "number",
-    fechas_recordatorios: ["timestamp"],
-    respuesta_usuario: "boolean",
-    fecha_respuesta: "timestamp",
-    metodo_respuesta: "whatsapp|llamada|presencial"
+  // RESTRICCIONES
+  restricciones: {
+    postular_eventos: "boolean",
+    ser_anfitrion: "boolean",
+    ser_visitante: "boolean",
+    eventos_específicos: ["evento_id1", "evento_id2"],
+    todas_las_ciudades: "boolean"
   },
   
-  // VERIFICACIÓN DETALLADA
-  verificaciones: {
-    identidad: "boolean",
-    telefono: "boolean",
-    direccion: "boolean",
-    referencias_cristianas: "boolean",
-    antecedentes: "boolean"
+  // APELACIÓN
+  apelacion: {
+    presentada: "boolean",
+    fecha_apelacion: "timestamp",
+    motivo_apelacion: "string",
+    documentos_apelacion: ["string"],
+    revisada_por: "admin_user_id",
+    fecha_revision: "timestamp",
+    resultado: "aprobada|rechazada|pendiente",
+    comentarios_revision: "string"
   },
-  
-  // RESULTADO
-  resultado: "aprobado|rechazado|pendiente_documentos",
-  notas_verificador: "string",
-  observaciones: "string",
   
   // SEGUIMIENTO
-  requiere_seguimiento: "boolean",
-  fecha_siguiente_revision: "timestamp",
-  recordatorio_automatico: "boolean"
+  notificaciones_enviadas: "boolean",
+  usuario_notificado: "timestamp",
+  impacto_valoracion: "boolean"
 }
 ```
 
@@ -615,181 +452,280 @@
 
 ## 🔄 FLUJOS DE TRABAJO ACTUALIZADOS
 
-### 1. 📋 FLUJO DE VERIFICACIÓN MANUAL CON RECORDATORIOS
+### 1. 📋 FLUJO DE RECORDATORIOS DE VERIFICACIÓN
 ```
 Usuario se registra → Estado: "pendiente_verificacion"
      ↓
-Sistema crea recordatorio automático (cada 24h después de 3 días)
+Sistema programa recordatorio automático (+24h)
      ↓
-Admin/Editor revisa solicitud → Contacta por WhatsApp/llamada
+Si no se verifica → Recordatorio cada 3 días (máximo 3)
      ↓
-Si no responde → Sistema envía recordatorio → Aumenta contador intentos
+Si no responde → Admin recibe notificación para intervención manual
      ↓
-Verificación exitosa → Estado: "verificado" + 1 estrella
-     ↓
-Usuario habilitado para postular a eventos
+Admin decide: verificar manualmente o penalizar
 ```
 
-### 2. 🤝 FLUJO DE EMPAREJAMIENTO MANUAL
+### 2. ⚠️ FLUJO DE PENALIZACIONES
 ```
-Múltiples usuarios postulan (anfitriones + visitantes)
+Incidente ocurre (cancelación tardía, mal comportamiento, etc.)
      ↓
-Algoritmo genera vista previa con compatibilidad
+Admin/Editor evalúa gravedad
      ↓
-Admin revisa sugerencias → Decide manualmente
+Aplica penalización correspondiente
      ↓
-Admin confirma emparejamiento → Notifica a usuarios
+Usuario recibe notificación con detalles
      ↓
-Sistema actualiza estados → Visible en "Mi Perfil"
-```
-
-### 3. 🚫 FLUJO DE CANCELACIÓN CON PENALIZACIONES
-```
-Usuario cancela postulación → Sistema calcula horas restantes
+Usuario puede apelar (7 días)
      ↓
-Si < 48h antes del evento → Aplica penalización -2 estrellas
-     ↓
-Sistema busca backup → Reasigna si existe
-     ↓
-Notifica cambios → Actualiza valoraciones
-     ↓
-Admin revisa → Puede apelar penalización si hay justificación
+Admin revisa apelación → Mantiene o revoca penalización
 ```
 
-### 4. 🔄 FLUJO DE CONTINGENCIA
+### 3. 🔄 FLUJO DE CANCELACIONES CON BACKUP
 ```
-Anfitrión cancela → Sistema detecta
+Usuario cancela postulación
      ↓
-Verifica tiempo restante → Aplica penalización si corresponde
+Sistema evalúa: ¿Cancelación tardía? ¿Afecta a otros?
      ↓
-Admin busca en lista de backup
+Si es tardía → Aplica penalización automática
      ↓
-Reasigna visitante → Notifica cambio
+Busca en lista de backup del evento
      ↓
-Si no hay backup → Deriva a hoteles de emergencia
-```
-
-### 5. ⭐ FLUJO DE VALORACIÓN CRISTIANA
-```
-Evento termina → Habilita valoración mutua
+Reasigna automáticamente o notifica a admin
      ↓
-Anfitrión valora visitante + Visitante valora anfitrión
-     ↓
-Sistema calcula promedio → Considera penalizaciones
-     ↓
-Admin revisa valoraciones → Modera si es necesario
+Envía notificaciones a afectados
 ```
 
-### 6. 🔔 FLUJO DE RECORDATORIOS AUTOMÁTICOS
+### 4. 📱 FLUJO DE NOTIFICACIONES INTERNAS
 ```
-Sistema ejecuta cada 24h → Busca verificaciones pendientes > 3 días
+Evento ocurre (verificación, asignación, cancelación, etc.)
      ↓
-Verifica último recordatorio → Si > 24h envía nuevo recordatorio
+Sistema genera notificación interna
      ↓
-Actualiza contador intentos → Notifica en perfil usuario
+Se almacena en perfil del usuario
      ↓
-Si > 5 intentos → Marca como "requiere_seguimiento_manual"
+Usuario ve notificación en "Mi Perfil"
+     ↓
+Puede marcar como leída o tomar acción
 ```
 
 ---
 
-## 🛡️ SISTEMA DE SEGURIDAD ACTUALIZADO
+## 🛠️ FUNCIONES JAVASCRIPT ACTUALIZADAS
 
-### 1. 🔐 Middleware de Verificación
+### 1. 📱 notifications.js (ACTUALIZADO)
 ```javascript
-// Verificar estado de verificación antes de postular
-function checkVerificationStatus(req, res, next) {
-  const userId = req.user.uid;
-  
-  getUserVerificationStatus(userId)
-    .then(status => {
-      if (status === 'verificado') {
-        next();
-      } else {
-        res.status(403).json({ 
-          error: 'Debe completar la verificación antes de postular',
-          redirect: '/verification/verification-process.html'
-        });
-      }
-    });
-}
-```
-
-### 2. 🚫 Middleware de Penalizaciones
-```javascript
-// Verificar penalizaciones antes de aplicar cancelación
-function checkCancellationPenalty(req, res, next) {
-  const userId = req.user.uid;
-  const eventoId = req.params.eventoId;
-  
-  calculateCancellationPenalty(userId, eventoId)
-    .then(penalty => {
-      if (penalty.shouldApply) {
-        applyPenalty(userId, penalty.points, penalty.reason);
-        logPenaltyAction(userId, eventoId, penalty);
-      }
-      next();
-    });
-}
-```
-
-### 3. 🔒 Control de Emparejamiento Manual
-```javascript
-// Solo admin puede confirmar emparejamientos
-function checkMatchingPermission(req, res, next) {
-  const userId = req.user.uid;
-  const eventoId = req.params.eventoId;
-  
-  if (req.user.rol === 'administrador') {
-    next();
-  } else if (req.user.rol === 'editor') {
-    verificarEventoAsignado(userId, eventoId)
-      .then(hasPermission => {
-        if (hasPermission) {
-          next();
-        } else {
-          res.status(403).json({ error: 'No tienes permisos para este evento' });
-        }
-      });
-  } else {
-    res.status(403).json({ error: 'Solo admin/editor pueden confirmar emparejamientos' });
+// Sistema de notificaciones internas sin costo
+class NotificationSystem {
+  constructor() {
+    this.notifications = [];
+    this.initializeNotifications();
   }
-}
-```
-
-### 4. 🔔 Control de Recordatorios
-```javascript
-// Solo admin/editor pueden gestionar recordatorios
-function checkReminderPermission(req, res, next) {
-  const userId = req.user.uid;
-  const userRole = req.user.rol;
   
-  if (userRole === 'administrador') {
-    next();
-  } else if (userRole === 'editor') {
-    // Editor solo puede ver recordatorios de sus eventos asignados
-    checkAssignedEvents(userId, req.params.eventoId)
-      .then(hasAccess => {
-        if (hasAccess) {
-          next();
-        } else {
-          res.status(403).json({ error: 'No tienes acceso a este evento' });
-        }
-      });
-  } else {
-    res.status(403).json({ error: 'Sin permisos para gestionar recordatorios' });
+  // Inicializar sistema de notificaciones
+  initializeNotifications() {
+    this.loadUserNotifications();
+    this.setupNotificationListener();
   }
-}
-```
-
-### 5. 🔍 Reglas de Firestore Actualizadas
-```javascript
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
+  
+  // Cargar notificaciones del usuario
+  async loadUserNotifications() {
+    const user = auth.currentUser;
+    if (!user) return;
     
-    // Valoraciones: solo participantes del evento pueden valorar
-    match /valoraciones_cristianas/{valoracionId} {
-      allow create: if request.auth != null && 
-        exists(/databases/$(database)/documents/emparejamientos/$(getEmparejamientoId())) &&
-        (request.resource.data.valorador_id == request.auth.uid);
+    const userDoc = await db.collection('usuarios').doc(user.uid).get();
+    const userData = userDoc.data();
+    
+    this.notifications = userData.notificaciones_internas || {};
+    this.displayNotifications();
+  }
+  
+  // Agregar nueva notificación
+  async addNotification(userId, type, data) {
+    const notification = {
+      id: this.generateNotificationId(),
+      tipo: type,
+      fecha: new Date(),
+      leido: false,
+      ...data
+    };
+    
+    await db.collection('usuarios').doc(userId).update({
+      [`notificaciones_internas.${type}`]: firebase.firestore.FieldValue.arrayUnion(notification)
+    });
+    
+    this.updateNotificationBadge(userId);
+  }
+  
+  // Notificación de verificación
+  async notifyVerificationStatus(userId, status, eventId = null) {
+    const messages = {
+      'pendiente': 'Tu verificación está pendiente. Te contactaremos pronto.',
+      'verificado': '¡Verificación completada! Ya puedes postular a eventos.',
+      'rechazado': 'Tu verificación fue rechazada. Revisa los motivos.'
+    };
+    
+    await this.addNotification(userId, 'verificacion_estado', {
+      mensaje: messages[status],
+      estado: status,
+      evento_id: eventId,
+      requiere_accion: status === 'rechazado'
+    });
+  }
+  
+  // Notificación de postulación
+  async notifyApplicationStatus(userId, eventId, status, hostId = null) {
+    const messages = {
+      'postulado': 'Tu postulación ha sido recibida y está en revisión.',
+      'verificado': 'Tu postulación ha sido verificada exitosamente.',
+      'asignado': 'Te hemos asignado hospedaje. Revisa los detalles.',
+      'rechazado': 'Tu postulación no fue aceptada esta vez.',
+      'cancelado': 'Tu postulación ha sido cancelada.'
+    };
+    
+    await this.addNotification(userId, 'postulaciones', {
+      evento_id: eventId,
+      mensaje: messages[status],
+      estado: status,
+      asignado_con: hostId,
+      requiere_accion: status === 'asignado'
+    });
+  }
+  
+  // Notificación de penalización
+  async notifyPenalty(userId, penaltyType, reason, eventId = null) {
+    const messages = {
+      'advertencia': 'Has recibido una advertencia. Revisa los detalles.',
+      'suspension_temporal': 'Tu cuenta ha sido suspendida temporalmente.',
+      'suspension_permanente': 'Tu cuenta ha sido suspendida permanentemente.'
+    };
+    
+    await this.addNotification(userId, 'mensajes_admin', {
+      mensaje: messages[penaltyType],
+      tipo: 'penalizacion',
+      motivo: reason,
+      evento_id: eventId,
+      requiere_accion: true,
+      puede_apelar: penaltyType !== 'advertencia'
+    });
+  }
+  
+  // Notificación de recordatorio
+  async notifyReminder(userId, reminderType, eventId, message) {
+    await this.addNotification(userId, 'recordatorios_pendientes', {
+      tipo: reminderType,
+      evento_id: eventId,
+      mensaje: message,
+      fecha_programada: new Date(),
+      procesado: false
+    });
+  }
+  
+  // Mostrar notificaciones en el perfil
+  displayNotifications() {
+    const container = document.getElementById('notificationsContainer');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    // Verificación
+    if (this.notifications.verificacion_estado) {
+      this.renderVerificationNotification();
+    }
+    
+    // Postulaciones
+    if (this.notifications.postulaciones) {
+      this.renderApplicationNotifications();
+    }
+    
+    // Asignaciones
+    if (this.notifications.asignaciones_actuales) {
+      this.renderAssignmentNotifications();
+    }
+    
+    // Mensajes admin
+    if (this.notifications.mensajes_admin) {
+      this.renderAdminMessages();
+    }
+    
+    // Recordatorios
+    if (this.notifications.recordatorios_pendientes) {
+      this.renderReminders();
+    }
+  }
+  
+  // Renderizar notificación de verificación
+  renderVerificationNotification() {
+    const container = document.getElementById('verificationNotifications');
+    const status = this.notifications.verificacion_estado;
+    
+    const statusConfig = {
+      'pendiente': { color: 'warning', icon: '⏳', action: 'Esperando verificación' },
+      'completada': { color: 'success', icon: '✅', action: 'Verificación completada' },
+      'rechazada': { color: 'danger', icon: '❌', action: 'Verificación rechazada' }
+    };
+    
+    const config = statusConfig[status] || statusConfig['pendiente'];
+    
+    container.innerHTML = `
+      <div class="notification-card ${config.color}">
+        <div class="notification-header">
+          <span class="notification-icon">${config.icon}</span>
+          <h4>Estado de Verificación</h4>
+        </div>
+        <p>${config.action}</p>
+        ${status === 'rechazada' ? '<button class="btn btn-outline" onclick="retryVerification()">Volver a intentar</button>' : ''}
+      </div>
+    `;
+  }
+  
+  // Renderizar notificaciones de postulaciones
+  renderApplicationNotifications() {
+    const container = document.getElementById('applicationNotifications');
+    const applications = this.notifications.postulaciones || [];
+    
+    container.innerHTML = applications.map(app => `
+      <div class="notification-card">
+        <div class="notification-header">
+          <span class="notification-icon">${this.getApplicationIcon(app.estado)}</span>
+          <h4>Postulación - ${app.evento_id}</h4>
+        </div>
+        <p>Estado: ${app.estado}</p>
+        <small>Última actualización: ${new Date(app.fecha_actualizacion).toLocaleDateString()}</small>
+        ${app.requiere_accion ? '<button class="btn btn-primary" onclick="viewApplicationDetails(\'' + app.evento_id + '\')">Ver detalles</button>' : ''}
+      </div>
+    `).join('');
+  }
+  
+  // Renderizar asignaciones actuales
+  renderAssignmentNotifications() {
+    const container = document.getElementById('assignmentNotifications');
+    const assignments = this.notifications.asignaciones_actuales || [];
+    
+    container.innerHTML = assignments.map(assignment => `
+      <div class="notification-card success">
+        <div class="notification-header">
+          <span class="notification-icon">🏠</span>
+          <h4>Asignación Activa</h4>
+        </div>
+        <p>Evento: ${assignment.evento_id}</p>
+        <p>Tipo: ${assignment.tipo}</p>
+        <p>Asignado con: ${assignment.asignado_con}</p>
+        <small>Fecha: ${new Date(assignment.fecha_asignacion).toLocaleDateString()}</small>
+        <button class="btn btn-outline" onclick="viewAssignmentDetails('${assignment.evento_id}')">Ver detalles</button>
+      </div>
+    `).join('');
+  }
+  
+  // Renderizar mensajes administrativos
+  renderAdminMessages() {
+    const container = document.getElementById('adminMessages');
+    const messages = this.notifications.mensajes_admin || [];
+    
+    container.innerHTML = messages.map(msg => `
+      <div class="notification-card ${msg.tipo === 'penalizacion' ? 'danger' : 'info'}">
+        <div class="notification-header">
+          <span class="notification-icon">${msg.tipo === 'penalizacion' ? '⚠️' : '📢'}</span>
+          <h4>Mensaje Administrativo</h4>
+        </div>
+        <p>${msg.mensaje}</p>
+        ${msg.motivo ? `<p>
