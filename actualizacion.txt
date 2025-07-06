@@ -729,3 +729,842 @@ class NotificationSystem {
         </div>
         <p>${msg.mensaje}</p>
         ${msg.motivo ? `<p>
+++++++++++++++++++++++++++++++++++++++++++++
+# 🏠 CONTINUACIÓN DEL AVANCE - WEBAPP HOSPITALIDAD CRISTIANA
+
+## 📱 SISTEMA DE NOTIFICACIONES INTERNAS - CONTINUACIÓN
+
+### 3. 💬 Renderizar mensajes administrativos
+```javascript
+// notifications.js - Continuación
+function renderAdminMessages(messages) {
+  const container = document.getElementById('adminMessages');
+  
+  if (!messages || messages.length === 0) {
+    container.innerHTML = '<p class="no-messages">No hay mensajes administrativos</p>';
+    return;
+  }
+  
+  container.innerHTML = messages.map(msg => `
+    <div class="admin-message ${msg.leido ? 'read' : 'unread'}">
+      <div class="message-header">
+        <span class="message-date">${formatDate(msg.fecha)}</span>
+        <span class="message-status">${msg.leido ? '✅' : '🔔'}</span>
+      </div>
+      <div class="message-content">
+        ${msg.mensaje}
+      </div>
+      ${!msg.leido ? `<button onclick="markAsRead('${msg.id}')">Marcar como leído</button>` : ''}
+    </div>
+  `).join('');
+}
+
+// Marcar mensaje como leído
+async function markAsRead(messageId) {
+  try {
+    const currentUser = getCurrentUser();
+    const userRef = doc(db, 'usuarios', currentUser.uid);
+    
+    await updateDoc(userRef, {
+      [`notificaciones_internas.mensajes_admin.${messageId}.leido`]: true
+    });
+    
+    // Recargar mensajes
+    loadUserNotifications();
+    
+  } catch (error) {
+    console.error('Error marcando mensaje como leído:', error);
+  }
+}
+```
+
+### 4. 🔔 Sistema de badges de notificaciones
+```javascript
+// notifications.js - Badges
+function updateNotificationBadges() {
+  const currentUser = getCurrentUser();
+  if (!currentUser) return;
+  
+  // Contar notificaciones no leídas
+  getUserDoc(currentUser.uid).then(userData => {
+    if (!userData) return;
+    
+    const notifications = userData.notificaciones_internas || {};
+    let unreadCount = 0;
+    
+    // Contar mensajes admin no leídos
+    if (notifications.mensajes_admin) {
+      unreadCount += notifications.mensajes_admin.filter(msg => !msg.leido).length;
+    }
+    
+    // Contar postulaciones con actualizaciones
+    if (notifications.postulaciones) {
+      const recentUpdates = notifications.postulaciones.filter(post => 
+        isRecentUpdate(post.fecha_actualizacion)
+      );
+      unreadCount += recentUpdates.length;
+    }
+    
+    // Actualizar badges en UI
+    updateBadgeDisplay(unreadCount);
+  });
+}
+
+function updateBadgeDisplay(count) {
+  const badges = document.querySelectorAll('.notification-badge');
+  badges.forEach(badge => {
+    if (count > 0) {
+      badge.textContent = count;
+      badge.style.display = 'block';
+    } else {
+      badge.style.display = 'none';
+    }
+  });
+}
+
+function isRecentUpdate(timestamp) {
+  const now = new Date();
+  const updateTime = new Date(timestamp);
+  const diffHours = (now - updateTime) / (1000 * 60 * 60);
+  return diffHours <= 24; // Considerar reciente si fue en las últimas 24 horas
+}
+```
+
+---
+
+## 🎯 SISTEMA DE EVENTOS ACTUALIZADO - CONTINUACIÓN
+
+### 5. 📊 Gestión de estadísticas en tiempo real
+```javascript
+// events.js - Continuación
+async function updateEventStats(eventId) {
+  try {
+    const postulacionesRef = collection(db, 'postulaciones');
+    const q = query(postulacionesRef, where('evento_id', '==', eventId));
+    const snapshot = await getDocs(q);
+    
+    const stats = {
+      anfitriones: 0,
+      visitantes: 0,
+      asistentes: 0,
+      emparejamientos: 0,
+      verificaciones_completadas: 0
+    };
+    
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      
+      if (data.tipo === 'hospedador') {
+        stats.anfitriones++;
+      } else if (data.tipo === 'visitante') {
+        stats.visitantes++;
+      }
+      
+      if (data.estado === 'verificado') {
+        stats.verificaciones_completadas++;
+      }
+      
+      if (data.estado === 'asignado') {
+        stats.emparejamientos++;
+      }
+    });
+    
+    // Contar asistentes (usuarios que solo van al evento, no necesitan hospedaje)
+    const asistentesRef = collection(db, 'asistentes');
+    const qAsistentes = query(asistentesRef, where('evento_id', '==', eventId));
+    const asistentesSnapshot = await getDocs(qAsistentes);
+    stats.asistentes = asistentesSnapshot.size;
+    
+    // Actualizar estadísticas en el evento
+    const eventoRef = doc(db, 'eventos', eventId);
+    await updateDoc(eventoRef, {
+      estadisticas: stats
+    });
+    
+    return stats;
+    
+  } catch (error) {
+    console.error('Error actualizando estadísticas:', error);
+    throw error;
+  }
+}
+
+// Función para obtener eventos con filtros mejorados
+async function getEventsWithFilters(filters = {}) {
+  try {
+    let q = collection(db, 'eventos');
+    
+    // Aplicar filtros
+    if (filters.ciudad) {
+      q = query(q, where('ciudad', '==', filters.ciudad));
+    }
+    
+    if (filters.fechaDesde) {
+      q = query(q, where('fecha_inicio', '>=', filters.fechaDesde));
+    }
+    
+    if (filters.fechaHasta) {
+      q = query(q, where('fecha_fin', '<=', filters.fechaHasta));
+    }
+    
+    if (filters.estado) {
+      q = query(q, where('estado', '==', filters.estado));
+    }
+    
+    // Ordenar por fecha
+    q = query(q, orderBy('fecha_inicio', 'desc'));
+    
+    const snapshot = await getDocs(q);
+    const events = [];
+    
+    snapshot.forEach(doc => {
+      events.push({ id: doc.id, ...doc.data() });
+    });
+    
+    return events;
+    
+  } catch (error) {
+    console.error('Error obteniendo eventos filtrados:', error);
+    throw error;
+  }
+}
+```
+
+### 6. 🏨 Gestión de alojamientos alternativos
+```javascript
+// events.js - Hoteles y cocheras
+async function addHotelToEvent(eventId, hotelData) {
+  try {
+    const eventoRef = doc(db, 'eventos', eventId);
+    const eventoDoc = await getDoc(eventoRef);
+    
+    if (!eventoDoc.exists()) {
+      throw new Error('Evento no encontrado');
+    }
+    
+    const currentData = eventoDoc.data();
+    const hoteles = currentData.hoteles || [];
+    
+    // Agregar nuevo hotel
+    const nuevoHotel = {
+      id: generateId(),
+      nombre: hotelData.nombre,
+      direccion: hotelData.direccion,
+      telefono: hotelData.telefono,
+      precio_aproximado: hotelData.precio_aproximado,
+      distancia_evento: hotelData.distancia_evento,
+      notas: hotelData.notas || '',
+      fecha_agregado: new Date().toISOString()
+    };
+    
+    hoteles.push(nuevoHotel);
+    
+    await updateDoc(eventoRef, {
+      hoteles: hoteles
+    });
+    
+    return nuevoHotel;
+    
+  } catch (error) {
+    console.error('Error agregando hotel:', error);
+    throw error;
+  }
+}
+
+async function addCocheraToEvent(eventId, cocheraData) {
+  try {
+    const eventoRef = doc(db, 'eventos', eventId);
+    const eventoDoc = await getDoc(eventoRef);
+    
+    if (!eventoDoc.exists()) {
+      throw new Error('Evento no encontrado');
+    }
+    
+    const currentData = eventoDoc.data();
+    const cocheras = currentData.cocheras || [];
+    
+    // Agregar nueva cochera
+    const nuevaCochera = {
+      id: generateId(),
+      nombre: cocheraData.nombre,
+      direccion: cocheraData.direccion,
+      telefono: cocheraData.telefono,
+      precio_por_dia: cocheraData.precio_por_dia,
+      capacidad: cocheraData.capacidad,
+      distancia_evento: cocheraData.distancia_evento,
+      notas: cocheraData.notas || '',
+      fecha_agregado: new Date().toISOString()
+    };
+    
+    cocheras.push(nuevaCochera);
+    
+    await updateDoc(eventoRef, {
+      cocheras: cocheras
+    });
+    
+    return nuevaCochera;
+    
+  } catch (error) {
+    console.error('Error agregando cochera:', error);
+    throw error;
+  }
+}
+
+// Función para mostrar alojamientos en la UI
+function renderAccommodations(hoteles, cocheras) {
+  const hotelesContainer = document.getElementById('hotelesList');
+  const cocherasContainer = document.getElementById('cocherasList');
+  
+  // Renderizar hoteles
+  if (hoteles && hoteles.length > 0) {
+    hotelesContainer.innerHTML = hoteles.map(hotel => `
+      <div class="accommodation-card">
+        <div class="accommodation-header">
+          <h4>${hotel.nombre}</h4>
+          <span class="price">${hotel.precio_aproximado}</span>
+        </div>
+        <div class="accommodation-details">
+          <p><strong>📍 Dirección:</strong> ${hotel.direccion}</p>
+          <p><strong>📞 Teléfono:</strong> ${hotel.telefono}</p>
+          <p><strong>🚗 Distancia:</strong> ${hotel.distancia_evento}</p>
+          ${hotel.notas ? `<p><strong>📝 Notas:</strong> ${hotel.notas}</p>` : ''}
+        </div>
+        <div class="accommodation-actions">
+          <button onclick="callHotel('${hotel.telefono}')">📞 Llamar</button>
+          <button onclick="getDirections('${hotel.direccion}')">🗺️ Cómo llegar</button>
+        </div>
+      </div>
+    `).join('');
+  } else {
+    hotelesContainer.innerHTML = '<p class="no-data">No hay hoteles registrados para este evento</p>';
+  }
+  
+  // Renderizar cocheras
+  if (cocheras && cocheras.length > 0) {
+    cocherasContainer.innerHTML = cocheras.map(cochera => `
+      <div class="accommodation-card">
+        <div class="accommodation-header">
+          <h4>${cochera.nombre}</h4>
+          <span class="price">${cochera.precio_por_dia}/día</span>
+        </div>
+        <div class="accommodation-details">
+          <p><strong>📍 Dirección:</strong> ${cochera.direccion}</p>
+          <p><strong>📞 Teléfono:</strong> ${cochera.telefono}</p>
+          <p><strong>🚗 Capacidad:</strong> ${cochera.capacidad} vehículos</p>
+          <p><strong>🚗 Distancia:</strong> ${cochera.distancia_evento}</p>
+          ${cochera.notas ? `<p><strong>📝 Notas:</strong> ${cochera.notas}</p>` : ''}
+        </div>
+        <div class="accommodation-actions">
+          <button onclick="callCochera('${cochera.telefono}')">📞 Llamar</button>
+          <button onclick="getDirections('${cochera.direccion}')">🗺️ Cómo llegar</button>
+        </div>
+      </div>
+    `).join('');
+  } else {
+    cocherasContainer.innerHTML = '<p class="no-data">No hay cocheras registradas para este evento</p>';
+  }
+}
+```
+
+---
+
+## 🔧 CONFIGURACIÓN FIREBASE ACTUALIZADA
+
+### 7. 🔥 firebase-config.js - Configuración completa
+```javascript
+// firebase-config.js - Configuración actualizada
+import { initializeApp } from 'firebase/app';
+import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
+import { getAuth, connectAuthEmulator } from 'firebase/auth';
+import { getStorage, connectStorageEmulator } from 'firebase/storage';
+import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
+
+// Configuración Firebase
+const firebaseConfig = {
+  apiKey: "tu-api-key",
+  authDomain: "tu-proyecto.firebaseapp.com",
+  projectId: "tu-proyecto-id",
+  storageBucket: "tu-proyecto.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "tu-app-id"
+};
+
+// Inicializar Firebase
+const app = initializeApp(firebaseConfig);
+
+// Inicializar servicios
+export const db = getFirestore(app);
+export const auth = getAuth(app);
+export const storage = getStorage(app);
+export const functions = getFunctions(app);
+
+// Configurar emuladores en desarrollo
+if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+  console.log('🔧 Conectando a emuladores Firebase...');
+  
+  connectFirestoreEmulator(db, 'localhost', 8080);
+  connectAuthEmulator(auth, 'http://localhost:9099');
+  connectStorageEmulator(storage, 'localhost', 9199);
+  connectFunctionsEmulator(functions, 'localhost', 5001);
+}
+
+// Funciones de utilidad para la base de datos
+export const collections = {
+  usuarios: 'usuarios',
+  eventos: 'eventos',
+  postulaciones: 'postulaciones',
+  emparejamientos: 'emparejamientos',
+  valoraciones_cristianas: 'valoraciones_cristianas',
+  observaciones_eventos: 'observaciones_eventos',
+  verificaciones_manuales: 'verificaciones_manuales',
+  asistentes: 'asistentes'
+};
+
+// Configuraciones de la aplicación
+export const appConfig = {
+  // Límites de la aplicación
+  maxPostulacionesPorEvento: 1, // Un usuario solo puede postular una vez por evento
+  maxEmparejamientosPorUsuario: 3, // Máximo 3 emparejamientos simultáneos
+  diasLimiteValoracion: 7, // 7 días después del evento para valorar
+  
+  // Configuración de verificación
+  verificacionRequerida: true,
+  metodosVerificacion: ['whatsapp', 'llamada', 'presencial'],
+  
+  // Configuración de notificaciones
+  notificacionesHabilitadas: true,
+  
+  // Configuración de roles
+  rolesPermitidos: ['administrador', 'editor', 'usuario'],
+  
+  // Estados de postulación
+  estadosPostulacion: ['postulado', 'verificado', 'asignado', 'rechazado', 'cancelado'],
+  
+  // Criterios de valoración cristiana
+  criteriosValoracion: [
+    'amabilidad',
+    'hospitalidad', 
+    'respeto',
+    'caracter_cristiano',
+    'servicio_desinteresado',
+    'paciencia',
+    'generosidad'
+  ]
+};
+
+// Función para obtener configuración por usuario
+export function getUserConfig(userRole) {
+  const baseConfig = {
+    canCreateEvents: false,
+    canEditEvents: false,
+    canVerifyUsers: false,
+    canManageUsers: false,
+    canViewReports: false,
+    canAssignEditors: false,
+    canAccessAllEvents: false
+  };
+  
+  switch (userRole) {
+    case 'administrador':
+      return {
+        ...baseConfig,
+        canCreateEvents: true,
+        canEditEvents: true,
+        canVerifyUsers: true,
+        canManageUsers: true,
+        canViewReports: true,
+        canAssignEditors: true,
+        canAccessAllEvents: true
+      };
+      
+    case 'editor':
+      return {
+        ...baseConfig,
+        canEditEvents: true, // Solo eventos asignados
+        canVerifyUsers: true, // Solo para eventos asignados
+        canViewReports: true // Solo reportes de eventos asignados
+      };
+      
+    case 'usuario':
+    default:
+      return baseConfig;
+  }
+}
+
+// Función para inicializar la aplicación
+export async function initializeApp() {
+  try {
+    console.log('🚀 Inicializando aplicación...');
+    
+    // Verificar conexión a Firebase
+    await testFirebaseConnection();
+    
+    // Configurar listeners de autenticación
+    setupAuthListeners();
+    
+    // Configurar listeners de conectividad
+    setupConnectivityListeners();
+    
+    console.log('✅ Aplicación inicializada correctamente');
+    
+  } catch (error) {
+    console.error('❌ Error inicializando aplicación:', error);
+    throw error;
+  }
+}
+
+// Función para probar conexión a Firebase
+async function testFirebaseConnection() {
+  try {
+    // Intentar hacer una consulta simple
+    const testDoc = doc(db, 'test', 'connection');
+    await getDoc(testDoc);
+    console.log('✅ Conexión a Firebase establecida');
+  } catch (error) {
+    console.error('❌ Error de conexión a Firebase:', error);
+    throw error;
+  }
+}
+
+// Configurar listeners de autenticación
+function setupAuthListeners() {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      console.log('👤 Usuario autenticado:', user.email);
+      // Actualizar UI para usuario autenticado
+      updateUIForAuthenticatedUser(user);
+    } else {
+      console.log('👤 Usuario no autenticado');
+      // Actualizar UI para usuario no autenticado
+      updateUIForUnauthenticatedUser();
+    }
+  });
+}
+
+// Configurar listeners de conectividad
+function setupConnectivityListeners() {
+  window.addEventListener('online', () => {
+    console.log('🌐 Conexión restaurada');
+    showNotification('Conexión restaurada', 'success');
+  });
+  
+  window.addEventListener('offline', () => {
+    console.log('🌐 Conexión perdida');
+    showNotification('Conexión perdida. Trabajando en modo offline.', 'warning');
+  });
+}
+
+// Función para mostrar notificaciones
+function showNotification(message, type = 'info') {
+  // Implementar sistema de notificaciones visual
+  const notification = document.createElement('div');
+  notification.className = `notification ${type}`;
+  notification.textContent = message;
+  
+  document.body.appendChild(notification);
+  
+  // Remover después de 5 segundos
+  setTimeout(() => {
+    notification.remove();
+  }, 5000);
+}
+
+// Exportar configuración para uso en otros módulos
+export default {
+  app,
+  db,
+  auth,
+  storage,
+  functions,
+  collections,
+  appConfig,
+  getUserConfig,
+  initializeApp
+};
+```
+
+---
+
+## 🛠️ FUNCIONES UTILITARIAS ACTUALIZADAS
+
+### 8. 🔧 utils.js - Funciones de apoyo
+```javascript
+// utils.js - Funciones utilitarias actualizadas
+import { collections } from './firebase-config.js';
+
+// Función para generar IDs únicos
+export function generateId() {
+  return Date.now().toString(36) + Math.random().toString(36).substr(2);
+}
+
+// Función para formatear fechas
+export function formatDate(timestamp, format = 'short') {
+  const date = new Date(timestamp);
+  
+  const options = {
+    short: { 
+      day: '2-digit', 
+      month: '2-digit', 
+      year: 'numeric' 
+    },
+    long: { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    },
+    datetime: { 
+      year: 'numeric', 
+      month: '2-digit', 
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'
+    }
+  };
+  
+  return new Intl.DateTimeFormat('es-ES', options[format]).format(date);
+}
+
+// Función para validar datos de usuario
+export function validateUserData(userData) {
+  const errors = [];
+  
+  if (!userData.nombre || userData.nombre.trim().length < 2) {
+    errors.push('El nombre debe tener al menos 2 caracteres');
+  }
+  
+  if (!userData.apellido || userData.apellido.trim().length < 2) {
+    errors.push('El apellido debe tener al menos 2 caracteres');
+  }
+  
+  if (!userData.email || !isValidEmail(userData.email)) {
+    errors.push('Email inválido');
+  }
+  
+  if (!userData.telefono || !isValidPhone(userData.telefono)) {
+    errors.push('Teléfono inválido');
+  }
+  
+  return {
+    isValid: errors.length === 0,
+    errors: errors
+  };
+}
+
+// Función para validar email
+export function isValidEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+// Función para validar teléfono
+export function isValidPhone(phone) {
+  const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+  return phoneRegex.test(phone.replace(/\s/g, ''));
+}
+
+// Función para limpiar texto
+export function sanitizeText(text) {
+  if (!text) return '';
+  return text.toString().trim().replace(/[<>]/g, '');
+}
+
+// Función para calcular compatibilidad entre anfitrión y visitante
+export function calculateCompatibility(host, visitor) {
+  let score = 0;
+  let maxScore = 0;
+  
+  // Verificar capacidad (peso: 40%)
+  maxScore += 40;
+  if (host.datos_hospedador?.personas_puede_hospedar >= visitor.datos_visitante?.numero_personas) {
+    score += 40;
+  } else {
+    score += 20; // Puntuación parcial si está cerca
+  }
+  
+  // Verificar cochera (peso: 20%)
+  maxScore += 20;
+  if (visitor.datos_visitante?.tiene_vehiculo) {
+    if (host.datos_hospedador?.tiene_cochera) {
+      score += 20;
+    }
+  } else {
+    score += 20; // Si no tiene vehículo, no importa la cochera
+  }
+  
+  // Verificar habitaciones (peso: 30%)
+  maxScore += 30;
+  if (host.datos_hospedador?.numero_habitaciones >= visitor.datos_visitante?.habitaciones_solicitadas) {
+    score += 30;
+  } else if (host.datos_hospedador?.numero_habitaciones > 0) {
+    score += 15; // Puntuación parcial
+  }
+  
+  // Verificar servicios adicionales (peso: 10%)
+  maxScore += 10;
+  if (host.datos_hospedador?.servicios_adicionales?.length > 0) {
+    score += 10;
+  }
+  
+  return Math.round((score / maxScore) * 100);
+}
+
+// Función para obtener color de compatibilidad
+export function getCompatibilityColor(score) {
+  if (score >= 80) return '#4CAF50'; // Verde
+  if (score >= 60) return '#FF9800'; // Naranja
+  if (score >= 40) return '#FFC107'; // Amarillo
+  return '#F44336'; // Rojo
+}
+
+// Función para obtener el estado de verificación del usuario
+export function getUserVerificationStatus(userData) {
+  if (!userData?.verificacion) {
+    return 'sin_verificar';
+  }
+  
+  return userData.verificacion.estado || 'pendiente_verificacion';
+}
+
+// Función para obtener el badge de verificación
+export function getVerificationBadge(status) {
+  const badges = {
+    'sin_verificar': { text: 'Sin verificar', class: 'badge-danger', icon: '❌' },
+    'pendiente_verificacion': { text: 'Pendiente', class: 'badge-warning', icon: '⏳' },
+    'verificado': { text: 'Verificado', class: 'badge-success', icon: '✅' },
+    'rechazado': { text: 'Rechazado', class: 'badge-danger', icon: '❌' }
+  };
+  
+  return badges[status] || badges['sin_verificar'];
+}
+
+// Función para calcular valoración cristiana
+export function calculateChristianRating(valoraciones) {
+  if (!valoraciones || valoraciones.length === 0) {
+    return { promedio: 2, total: 0 }; // Base: 2 estrellas (registro + verificación)
+  }
+  
+  const totalPuntos = valoraciones.reduce((sum, val) => sum + val.puntos, 0);
+  const promedio = Math.round((totalPuntos / valoraciones.length) * 10) / 10;
+  
+  return {
+    promedio: promedio + 2, // Sumar las 2 estrellas base
+    total: valoraciones.length
+  };
+}
+
+// Función para generar estrellas visuales
+export function generateStars(rating, maxStars = 5) {
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 >= 0.5;
+  const emptyStars = maxStars - fullStars - (hasHalfStar ? 1 : 0);
+  
+  return '⭐'.repeat(fullStars) + 
+         (hasHalfStar ? '⭐' : '') + 
+         '☆'.repeat(emptyStars);
+}
+
+// Función para obtener el estado de una postulación
+export function getPostulationStatus(postulacion) {
+  const estados = {
+    'postulado': { text: 'Postulado', class: 'status-pending', icon: '📝' },
+    'verificado': { text: 'Verificado', class: 'status-verified', icon: '✅' },
+    'asignado': { text: 'Asignado', class: 'status-assigned', icon: '🤝' },
+    'rechazado': { text: 'Rechazado', class: 'status-rejected', icon: '❌' },
+    'cancelado': { text: 'Cancelado', class: 'status-cancelled', icon: '🚫' }
+  };
+  
+  return estados[postulacion.estado] || estados['postulado'];
+}
+
+// Función para manejar errores de Firebase
+export function handleFirebaseError(error) {
+  console.error('Firebase Error:', error);
+  
+  const errorMessages = {
+    'permission-denied': 'No tienes permisos para realizar esta acción',
+    'not-found': 'El documento solicitado no existe',
+    'already-exists': 'El documento ya existe',
+    'invalid-argument': 'Argumento inválido proporcionado',
+    'unauthenticated': 'Debes estar autenticado para realizar esta acción',
+    'unavailable': 'Servicio no disponible temporalmente',
+    'network-request-failed': 'Error de conexión. Verifica tu internet.'
+  };
+  
+  const userMessage = errorMessages[error.code] || 'Error desconocido. Intenta de nuevo.';
+  
+  return {
+    code: error.code,
+    message: userMessage,
+    originalMessage: error.message
+  };
+}
+
+// Función para validar permisos de usuario
+export function validateUserPermissions(user, action, resource = null) {
+  if (!user || !user.rol) {
+    return { allowed: false, reason: 'Usuario no autenticado' };
+  }
+  
+  const userConfig = getUserConfig(user.rol);
+  
+  switch (action) {
+    case 'create_event':
+      return { 
+        allowed: userConfig.canCreateEvents, 
+        reason: userConfig.canCreateEvents ? null : 'No tienes permisos para crear eventos' 
+      };
+      
+    case 'edit_event':
+      if (user.rol === 'administrador') {
+        return { allowed: true, reason: null };
+      }
+      
+      if (user.rol === 'editor' && resource) {
+        const canEdit = user.eventos_asignados?.includes(resource.id);
+        return { 
+          allowed: canEdit, 
+          reason: canEdit ? null : 'No tienes permisos para editar este evento' 
+        };
+      }
+      
+      return { allowed: false, reason: 'No tienes permisos para editar eventos' };
+      
+    case 'verify_user':
+      return { 
+        allowed: userConfig.canVerifyUsers, 
+        reason: userConfig.canVerifyUsers ? null : 'No tienes permisos para verificar usuarios' 
+      };
+      
+    case 'manage_users':
+      return { 
+        allowed: userConfig.canManageUsers, 
+        reason: userConfig.canManageUsers ? null : 'No tienes permisos para gestionar usuarios' 
+      };
+      
+    default:
+      return { allowed: false, reason: 'Acción no reconocida' };
+  }
+}
+
+// Función para generar código de respaldo
+export function generateBackupCode() {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let code = '';
+  
+  for (let i = 0; i < 8; i++) {
+    code += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  
+  return code;
+}
+
+// Función para detectar dispositivo móvil
+export function isMobileDevice() {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
+// Función para copiar texto al portapapeles
+export async function copyToClipboard(text) {
+  try {
+    await navigator.clipboard.write
