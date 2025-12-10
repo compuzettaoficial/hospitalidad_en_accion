@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventos Cristianos - Hospitalidad en Acción</title>
+    
+    <!-- SEO -->
+    <meta name="description" content="Descubre convenciones y eventos cristianos en todo el Perú. Encuentra información de hospedaje y hospitalidad.">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="../assets/images/branding/favicon.ico">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <link rel="stylesheet" href="../assets/css/responsive.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Estilos específicos para eventos.html */
+        .page-hero {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            color: white;
+            padding: var(--spacing-xl) 0;
+            text-align: center;
+        }
+        
+        .page-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: var(--spacing-sm);
+            font-weight: 800;
+        }
+        
+        .page-hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .search-filter-section {
+            background: white;
+            padding: var(--spacing-lg) 0;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 70px;
+            z-index: 100;
+        }
+        
+        .search-bar {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .search-input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 0.75rem var(--spacing-md);
+            padding-left: 3rem;
+            border: 2px solid var(--color-bg-medium);
+            border-radius: var(--border-radius-md);
+            font-size: 1rem;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-text-light);
+            font-size: 1.2rem;
+        }
+        
+        .filter-chips {
+            display: flex;
+            gap: var(--spacing-sm);
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .filter-chip {
+            padding: 0.5rem var(--spacing-md);
+            border: 2px solid var(--color-bg-medium);
+            border-radius: var(--border-radius-lg);
+            background: white;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+        
+        .filter-chip:hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+        
+        .filter-chip.active {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+        
+        .filter-chip i {
+            font-size: 0.9rem;
+        }
+        
+        .eventos-content {
+            padding: var(--spacing-xl) 0;
+            background: var(--color-bg-light);
+            min-height: 60vh;
+        }
+        
+        .eventos-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .eventos-count {
+            color: var(--color-text-light);
+            font-size: 1.1rem;
+        }
+        
+        .view-toggle {
+            display: flex;
+            gap: var(--spacing-xs);
+        }
+        
+        .view-btn {
+            padding: 0.5rem var(--spacing-md);
+            border: 2px solid var(--color-bg-medium);
+            border-radius: var(--border-radius-md);
+            background: white;
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+        
+        .view-btn.active {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+        
+        .eventos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: var(--spacing-lg);
+        }
+        
+        .eventos-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+        
+        .evento-card-list {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-lg);
+            display: grid;
+            grid-template-columns: 200px 1fr auto;
+            gap: var(--spacing-lg);
+            align-items: center;
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-base);
+        }
+        
+        .evento-card-list:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .evento-card-list .event-image {
+            height: 140px;
+            border-radius: var(--border-radius-md);
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .evento-card-list .event-content-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-xs);
+        }
+        
+        .evento-card-list h3 {
+            font-size: 1.3rem;
+            color: var(--color-accent);
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .evento-card-list .event-meta {
+            display: flex;
+            gap: var(--spacing-md);
+            flex-wrap: wrap;
+            color: var(--color-text-light);
+            font-size: 0.95rem;
+        }
+        
+        .evento-card-list .event-meta span {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+        
+        .estado-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem var(--spacing-md);
+            border-radius: var(--border-radius-lg);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .estado-badge.proximo {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--color-info);
+        }
+        
+        .estado-badge.en-curso {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--color-success);
+        }
+        
+        .estado-badge.finalizado {
+            background: rgba(107, 114, 128, 0.1);
+            color: var(--color-text-light);
+        }
+        
+        .estado-badge i {
+            font-size: 0.7rem;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: var(--spacing-xl) 0;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--color-text-light);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .empty-state h3 {
+            color: var(--color-text-dark);
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .empty-state p {
+            color: var(--color-text-light);
+        }
+        
+        .departamentos-sidebar {
+            background: white;
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 170px;
+        }
+        
+        .departamentos-sidebar h3 {
+            font-size: 1.2rem;
+            margin-bottom: var(--spacing-md);
+            color: var(--color-accent);
+        }
+        
+        .departamento-item {
+            padding: var(--spacing-sm) 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border-bottom: 1px solid var(--color-bg-light);
+            transition: all var(--transition-base);
+        }
+        
+        .departamento-item:hover {
+            color: var(--color-primary);
+            padding-left: var(--spacing-xs);
+        }
+        
+        .departamento-item.active {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+        
+        .departamento-count {
+            background: var(--color-bg-light);
+            padding: 0.2rem 0.6rem;
+            border-radius: var(--border-radius-md);
+            font-size: 0.85rem;
+        }
+        
+        .layout-with-sidebar {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: var(--spacing-lg);
+        }
+        
+        @media (max-width: 768px) {
+            .page-hero h1 {
+                font-size: 1.75rem;
+            }
+            
+            .search-bar {
+                flex-direction: column;
+            }
+            
+            .search-filter-section {
+                position: static;
+            }
+            
+            .filter-chips {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .filter-chip {
+                white-space: nowrap;
+            }
+            
+            .eventos-header {
+                flex-direction: column;
+                gap: var(--spacing-md);
+                align-items: flex-start;
+            }
+            
+            .eventos-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .evento-card-list {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .evento-card-list .event-image {
+                height: 180px;
+            }
+            
+            .layout-with-sidebar {
+                grid-template-columns: 1fr;
+            }
+            
+            .departamentos-sidebar {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- HEADER -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="navbar-brand">
+                    <img src="../assets/images/branding/logo.png" alt="Logo" class="logo">
+                    <span class="brand-name">Hospitalidad en Acción</span>
+                </div>
+                
+                <button class="navbar-toggle" id="navbarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <ul class="navbar-menu" id="navbarMenu">
+                    <li><a href="../index.html">Inicio</a></li>
+                    <li><a href="#" class="active">Eventos</a></li>
+                    <li><a href="../index.html#como-funciona">Cómo Funciona</a></li>
+                    <li><a href="../index.html#contacto">Contacto</a></li>
+                    <li><a href="auth/login.html" class="btn-login">Iniciar Sesión</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- PAGE HERO -->
+    <section class="page-hero">
+        <div class="container">
+            <h1><i class="fas fa-calendar-alt"></i> Eventos Cristianos en Perú</h1>
+            <p>Descubre convenciones, conferencias y encuentros en todo el país</p>
+        </div>
+    </section>
+
+    <!-- BÚSQUEDA Y FILTROS -->
+    <section class="search-filter-section">
+        <div class="container">
+            <!-- Barra de búsqueda -->
+            <div class="search-bar">
+                <div class="search-input-wrapper">
+                    <i class="fas fa-search search-icon"></i>
+                    <input 
+                        type="text" 
+                        class="search-input" 
+                        id="searchInput"
+                        placeholder="Buscar eventos por nombre, ciudad, lugar..."
+                    >
+                </div>
+                <button class="btn btn-primary" id="btnBuscar">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+            </div>
+            
+            <!-- Filtros rápidos -->
+            <div class="filter-chips">
+                <span style="color: var(--color-text-light); font-weight: 600;">Filtrar:</span>
+                <button class="filter-chip active" data-filter="todos">
+                    <i class="fas fa-list"></i> Todos
+                </button>
+                <button class="filter-chip" data-filter="activos">
+                    <i class="fas fa-check-circle"></i> Activos
+                </button>
+                <button class="filter-chip" data-filter="proximos">
+                    <i class="fas fa-clock"></i> Próximos
+                </button>
+                <button class="filter-chip" data-filter="destacados">
+                    <i class="fas fa-star"></i> Destacados
+                </button>
+                <button class="btn btn-outline" id="btnLimpiarFiltros">
+                    <i class="fas fa-redo"></i> Limpiar
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTENIDO DE EVENTOS -->
+    <section class="eventos-content">
+        <div class="container">
+            <div class="layout-with-sidebar" id="eventosLayout">
+                
+                <!-- SIDEBAR: Departamentos -->
+                <aside class="departamentos-sidebar">
+                    <h3><i class="fas fa-map-marked-alt"></i> Departamentos</h3>
+                    <div id="departamentosList">
+                        <div class="departamento-item active" data-departamento="todos">
+                            <span>Todos los departamentos</span>
+                            <span class="departamento-count" id="totalEventos">0</span>
+                        </div>
+                        <!-- Se carga dinámicamente -->
+                    </div>
+                </aside>
+                
+                <!-- MAIN: Lista de eventos -->
+                <div>
+                    <!-- Header -->
+                    <div class="eventos-header">
+                        <div class="eventos-count">
+                            Mostrando <strong id="countMostrados">0</strong> de <strong id="countTotal">0</strong> eventos
+                        </div>
+                        
+                        <div class="view-toggle">
+                            <button class="view-btn active" data-view="grid" title="Vista de cuadrícula">
+                                <i class="fas fa-th"></i>
+                            </button>
+                            <button class="view-btn" data-view="list" title="Vista de lista">
+                                <i class="fas fa-list"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Grid/List de eventos -->
+                    <div class="eventos-grid" id="eventosContainer">
+                        <div class="loading">
+                            <i class="fas fa-spinner fa-spin"></i> Cargando eventos...
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Hospitalidad en Acción</h4>
+                    <p>Conectando corazones a través de la hospitalidad cristiana en eventos por todo el Perú.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Enlaces Rápidos</h4>
+                    <ul>
+                        <li><a href="../index.html">Inicio</a></li>
+                        <li><a href="#">Eventos</a></li>
+                        <li><a href="auth/register.html">Registrarse</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Hospitalidad en Acción. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../assets/js/services/eventos.service.js"></script>
+    <script>
+        // Variables globales
+        let todosLosEventos = [];
+        let eventosFiltrados = [];
+        let filtroActual = 'todos';
+        let departamentoActual = 'todos';
+        let terminoBusqueda = '';
+        let vistaActual = 'grid';
+        
+        // Cargar eventos al iniciar
+        async function cargarEventos() {
+            try {
+                todosLosEventos = await EventosService.getEventos();
+                eventosFiltrados = todosLosEventos;
+                
+                cargarDepartamentos();
+                aplicarFiltros();
+                
+            } catch (error) {
+                console.error('Error al cargar eventos:', error);
+                mostrarError();
+            }
+        }
+        
+        // Cargar lista de departamentos
+        function cargarDepartamentos() {
+            const departamentos = {};
+            
+            todosLosEventos.forEach(evento => {
+                const dep = evento.departamento;
+                departamentos[dep] = (departamentos[dep] || 0) + 1;
+            });
+            
+            const listHTML = Object.entries(departamentos)
+                .sort((a, b) => a[0].localeCompare(b[0]))
+                .map(([dep, count]) => `
+                    <div class="departamento-item" data-departamento="${dep}">
+                        <span>${dep}</span>
+                        <span class="departamento-count">${count}</span>
+                    </div>
+                `).join('');
+            
+            document.getElementById('departamentosList').innerHTML += listHTML;
+            document.getElementById('totalEventos').textContent = todosLosEventos.length;
+            
+            // Event listeners para departamentos
+            document.querySelectorAll('.departamento-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    document.querySelectorAll('.departamento-item').forEach(i => 
+                        i.classList.remove('active'));
+                    item.classList.add('active');
+                    
+                    departamentoActual = item.dataset.departamento;
+                    aplicarFiltros();
+                });
+            });
+        }
+        
+        // Aplicar todos los filtros
+        function aplicarFiltros() {
+            eventosFiltrados = todosLosEventos;
+            
+            // Filtro por búsqueda
+            if (terminoBusqueda) {
+                eventosFiltrados = eventosFiltrados.filter(e =>
+                    e.titulo.toLowerCase().includes(terminoBusqueda) ||
+                    e.ciudad.toLowerCase().includes(terminoBusqueda) ||
+                    e.departamento.toLowerCase().includes(terminoBusqueda) ||
+                    e.lugar.toLowerCase().includes(terminoBusqueda)
+                );
+            }
+            
+            // Filtro por departamento
+            if (departamentoActual !== 'todos') {
+                eventosFiltrados = eventosFiltrados.filter(e => 
+                    e.departamento === departamentoActual);
+            }
+            
+            // Filtros rápidos
+            switch(filtroActual) {
+                case 'activos':
+                    eventosFiltrados = eventosFiltrados.filter(e => e.estado === 'activo');
+                    break;
+                case 'proximos':
+                    eventosFiltrados = eventosFiltrados.filter(e => {
+                        const dias = EventosService.diasRestantes(e.fechaInicio);
+                        return dias >= 0;
+                    });
+                    break;
+                case 'destacados':
+                    eventosFiltrados = eventosFiltrados.filter(e => e.destacado === true);
+                    break;
+            }
+            
+            // Ordenar por fecha
+            eventosFiltrados.sort((a, b) => 
+                new Date(a.fechaInicio) - new Date(b.fechaInicio));
+            
+            mostrarEventos();
+            actualizarContadores();
+        }
+        
+        // Mostrar eventos
+        function mostrarEventos() {
+            const container = document.getElementById('eventosContainer');
+            
+            if (eventosFiltrados.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-calendar-times"></i>
+                        <h3>No se encontraron eventos</h3>
+                        <p>Intenta ajustar tus filtros de búsqueda</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            if (vistaActual === 'grid') {
+                mostrarVistaGrid(eventosFiltrados);
+            } else {
+                mostrarVistaLista(eventosFiltrados);
+            }
+        }
+        
+        // Vista Grid
+        function mostrarVistaGrid(eventos) {
+            const container = document.getElementById('eventosContainer');
+            container.className = 'eventos-grid';
+            
+            container.innerHTML = eventos.map(evento => {
+                const estadoEvento = EventosService.getEstadoEvento(evento.fechaInicio, evento.fechaFin);
+                const diasRestantes = EventosService.diasRestantes(evento.fechaInicio);
+                
+                let estadoBadge = '';
+                if (estadoEvento === 'en-curso') {
+                    estadoBadge = '<span class="estado-badge en-curso"><i class="fas fa-circle"></i> En curso</span>';
+                } else if (estadoEvento === 'proximo' && diasRestantes <= 30) {
+                    estadoBadge = `<span class="estado-badge proximo"><i class="fas fa-circle"></i> Faltan ${diasRestantes} días</span>`;
+                }
+                
+                return `
+                    <div class="event-card">
+                        <div class="event-image" style="background-image: url('${evento.imagenes.principal}')">
+                            ${evento.destacado ? '<span class="event-badge">Destacado</span>' : ''}
+                        </div>
+                        <div class="event-content">
+                            <h3>${evento.titulo}</h3>
+                            <div class="event-meta">
+                                <span><i class="fas fa-map-marker-alt"></i> ${evento.ciudad}, ${evento.departamento}</span>
+                                <span><i class="fas fa-calendar"></i> ${EventosService.formatearRangoFechas(evento.fechaInicio, evento.fechaFin)}</span>
+                            </div>
+                            <p class="event-location">
+                                <i class="fas fa-building"></i> ${evento.lugar}
+                            </p>
+                            ${estadoBadge ? `<div style="margin-top: var(--spacing-sm);">${estadoBadge}</div>` : ''}
+                            <a href="evento-detalle.html?id=${evento.id}" class="btn btn-primary btn-block">
+                                Ver Detalles <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Vista Lista
+        function mostrarVistaLista(eventos) {
+            const container = document.getElementById('eventosContainer');
+            container.className = 'eventos-list';
+            
+            container.innerHTML = eventos.map(evento => {
+                const estadoEvento = EventosService.getEstadoEvento(evento.fechaInicio, evento.fechaFin);
+                const diasRestantes = EventosService.diasRestantes(evento.fechaInicio);
+                
+                let estadoBadge = '';
+                if (estadoEvento === 'en-curso') {
+                    estadoBadge = '<span class="estado-badge en-curso"><i class="fas fa-circle"></i> En curso</span>';
+                } else if (estadoEvento === 'proximo' && diasRestantes <= 30) {
+                    estadoBadge = `<span class="estado-badge proximo"><i class="fas fa-circle"></i> ${diasRestantes} días</span>`;
+                } else if (estadoEvento === 'finalizado') {
+                    estadoBadge = '<span class="estado-badge finalizado"><i class="fas fa-circle"></i> Finalizado</span>';
+                }
+                
+                return `
+                    <div class="evento-card-list">
+                        <div class="event-image" style="background-image: url('${evento.imagenes.principal}')"></div>
+                        
+                        <div class="event-content-list">
+                            <h3>${evento.titulo}</h3>
+                            <div class="event-meta">
+                                <span><i class="fas fa-calendar"></i> ${EventosService.formatearRangoFechas(evento.fechaInicio, evento.fechaFin)}</span>
+                                <span><i class="fas fa-map-marker-alt"></i> ${evento.ciudad}, ${evento.departamento}</span>
+                                <span><i class="fas fa-building"></i> ${evento.lugar}</span>
+                            </div>
+                            ${estadoBadge}
+                        </div>
+                        
+                        <a href="evento-detalle.html?id=${evento.id}" class="btn btn-primary">
+                            Ver Detalles <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Actualizar contadores
+        function actualizarContadores() {
+            document.getElementById('countMostrados').textContent = eventosFiltrados.length;
+            document.getElementById('countTotal').textContent = todosLosEventos.length;
+        }
+        
+        // Mostrar error
+        function mostrarError() {
+            document.getElementById('eventosContainer').innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Error al cargar eventos</h3>
+                    <p>Por favor, intenta nuevamente más tarde</p>
+                </div>
+            `;
+        }
+        
+        // Event Listeners
+        
+        // Búsqueda
+        document.getElementById('btnBuscar').addEventListener('click', () => {
+            terminoBusqueda = document.getElementById('searchInput').value.toLowerCase().trim();
+            aplicarFiltros();
+        });
+        
+        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                terminoBusqueda = e.target.value.toLowerCase().trim();
+                aplicarFiltros();
+            }
+        });
+        
+        // Filtros rápidos
+        document.querySelectorAll('.filter-chip[data-filter]').forEach(chip => {
+            chip.addEventListener('click', () => {
+                document.querySelectorAll('.filter-chip[data-filter]').forEach(c => 
+                    c.classList.remove('active'));
+                chip.classList.add('active');
+                
+                filtroActual = chip.dataset.filter;
+                aplicarFiltros();
+            });
+        });
+        
+        // Limpiar filtros
+        document.getElementById('btnLimpiarFiltros').addEventListener('click', () => {
+            document.getElementById('searchInput').value = '';
+            terminoBusqueda = '';
+            filtroActual = 'todos';
+            departamentoActual = 'todos';
+            
+            document.querySelectorAll('.filter-chip[data-filter]').forEach(c => 
+                c.classList.remove('active'));
+            document.querySelector('.filter-chip[data-filter="todos"]').classList.add('active');
+            
+            document.querySelectorAll('.departamento-item').forEach(i => 
+                i.classList.remove('active'));
+            document.querySelector('.departamento-item[data-departamento="todos"]').classList.add('active');
+            
+            aplicarFiltros();
+        });
+        
+        // Cambio de vista
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.view-btn').forEach(b => 
+                    b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                vistaActual = btn.dataset.view;
+                mostrarEventos();
+            });
+        });
+        
+        // Menú móvil
+        document.getElementById('navbarToggle').addEventListener('click', () => {
+            document.getElementById('navbarMenu').classList.toggle('active');
+        });
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', cargarEventos);
+    </script>
+</body>
+</html>

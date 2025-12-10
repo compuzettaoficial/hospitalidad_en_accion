@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convención AMIP 2025 - Hospitalidad en Acción</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <link rel="stylesheet" href="../assets/css/responsive.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Estilos específicos para evento-detalle */
+        .event-hero {
+            height: 400px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+        }
+        
+        .event-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(55, 65, 81, 0.95), rgba(55, 65, 81, 0.3));
+        }
+        
+        .event-hero-content {
+            position: relative;
+            z-index: 1;
+            color: white;
+            padding: var(--spacing-xl) 0;
+        }
+        
+        .event-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .event-meta-info {
+            display: flex;
+            gap: var(--spacing-lg);
+            flex-wrap: wrap;
+            font-size: 1.1rem;
+        }
+        
+        .event-meta-info span {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+        
+        .event-badges {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-md);
+        }
+        
+        .event-content-section {
+            background: white;
+            padding: var(--spacing-xl) 0;
+        }
+        
+        .event-sidebar {
+            background: var(--color-bg-light);
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius-lg);
+            position: sticky;
+            top: 100px;
+        }
+        
+        .event-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: var(--spacing-xl);
+            margin-top: var(--spacing-xl);
+        }
+        
+        .programa-dia {
+            background: var(--color-bg-light);
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius-lg);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .programa-dia h4 {
+            color: var(--color-primary);
+            font-size: 1.3rem;
+            margin-bottom: var(--spacing-md);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+        
+        .actividad {
+            background: white;
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            margin-bottom: var(--spacing-sm);
+            border-left: 4px solid var(--color-secondary);
+        }
+        
+        .actividad:last-child {
+            margin-bottom: 0;
+        }
+        
+        .actividad-hora {
+            color: var(--color-primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .actividad-titulo {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .expositores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-md);
+        }
+        
+        .expositor-card {
+            background: var(--color-white);
+            border: 2px solid var(--color-bg-medium);
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-lg);
+            text-align: center;
+        }
+        
+        .expositor-foto {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto var(--spacing-md);
+            background: var(--color-bg-medium);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--color-primary);
+        }
+        
+        .hoteles-section {
+            background: var(--color-bg-light);
+            padding: var(--spacing-xl) 0;
+        }
+        
+        .hotel-card {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-base);
+        }
+        
+        .hotel-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .hotel-card.destacado {
+            border: 2px solid var(--color-primary);
+        }
+        
+        .hotel-imagen {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .hotel-destacado-badge {
+            position: absolute;
+            top: var(--spacing-sm);
+            left: var(--spacing-sm);
+            background: var(--color-primary);
+            color: white;
+            padding: 0.4rem var(--spacing-sm);
+            border-radius: var(--border-radius-md);
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+        
+        .hotel-content {
+            padding: var(--spacing-lg);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .hotel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .hotel-estrellas {
+            color: #FFA500;
+            font-size: 0.9rem;
+        }
+        
+        .hotel-info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-md);
+            margin: var(--spacing-md) 0;
+        }
+        
+        .hotel-info-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            color: var(--color-text-light);
+            font-size: 0.95rem;
+        }
+        
+        .hotel-servicios {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-xs);
+            margin: var(--spacing-md) 0;
+        }
+        
+        .servicio-tag {
+            background: var(--color-bg-light);
+            padding: 0.3rem var(--spacing-sm);
+            border-radius: var(--border-radius-md);
+            font-size: 0.85rem;
+            color: var(--color-text-dark);
+        }
+        
+        .hotel-precios {
+            display: flex;
+            gap: var(--spacing-md);
+            margin: var(--spacing-md) 0;
+        }
+        
+        .precio-item {
+            background: var(--color-bg-light);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            text-align: center;
+        }
+        
+        .precio-tipo {
+            font-size: 0.85rem;
+            color: var(--color-text-light);
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+        
+        .precio-valor {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+        
+        .hotel-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin-top: auto;
+        }
+        
+        .filtros-hoteles {
+            background: white;
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .filtros-row {
+            display: flex;
+            gap: var(--spacing-md);
+            flex-wrap: wrap;
+        }
+        
+        @media (max-width: 768px) {
+            .event-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .event-sidebar {
+                position: static;
+            }
+            
+            .hotel-card {
+                grid-template-columns: 1fr;
+            }
+            
+            .hotel-imagen {
+                height: 180px;
+            }
+            
+            .hotel-info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .event-title {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- HEADER -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="navbar-brand">
+                    <img src="../assets/images/branding/logo.png" alt="Logo" class="logo">
+                    <span class="brand-name">Hospitalidad en Acción</span>
+                </div>
+                
+                <button class="navbar-toggle" id="navbarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <ul class="navbar-menu" id="navbarMenu">
+                    <li><a href="../index.html">Inicio</a></li>
+                    <li><a href="eventos.html">Eventos</a></li>
+                    <li><a href="../index.html#como-funciona">Cómo Funciona</a></li>
+                    <li><a href="../index.html#contacto">Contacto</a></li>
+                    <li><a href="auth/login.html" class="btn-login">Iniciar Sesión</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO DEL EVENTO -->
+    <section class="event-hero" id="eventHero">
+        <div class="container">
+            <div class="event-hero-content">
+                <div class="breadcrumbs" style="color: rgba(255,255,255,0.8); margin-bottom: var(--spacing-md);">
+                    <a href="../index.html" style="color: white;">Inicio</a>
+                    <span class="separator">/</span>
+                    <a href="eventos.html" style="color: white;">Eventos</a>
+                    <span class="separator">/</span>
+                    <span id="breadcrumbTitle">Cargando...</span>
+                </div>
+                
+                <h1 class="event-title" id="eventTitle">Cargando...</h1>
+                
+                <div class="event-meta-info" id="eventMetaInfo">
+                    <!-- Se carga dinámicamente -->
+                </div>
+                
+                <div class="event-badges" id="eventBadges">
+                    <!-- Se carga dinámicamente -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTENIDO DEL EVENTO -->
+    <section class="event-content-section">
+        <div class="container">
+            <div class="event-grid">
+                <!-- COLUMNA PRINCIPAL -->
+                <div class="event-main">
+                    
+                    <!-- Descripción -->
+                    <div class="card" style="margin-bottom: var(--spacing-xl);">
+                        <div class="card-header">
+                            <h3><i class="fas fa-info-circle"></i> Acerca del Evento</h3>
+                        </div>
+                        <div class="card-body">
+                            <p id="eventDescription">Cargando descripción...</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Programa -->
+                    <div id="programaSection">
+                        <h2 style="margin-bottom: var(--spacing-lg); color: var(--color-accent);">
+                            <i class="fas fa-calendar-alt"></i> Programa del Evento
+                        </h2>
+                        <div id="programaContainer">
+                            <!-- Se carga dinámicamente -->
+                        </div>
+                    </div>
+                    
+                    <!-- Expositores -->
+                    <div id="expositoresSection" style="margin-top: var(--spacing-xl);">
+                        <h2 style="margin-bottom: var(--spacing-lg); color: var(--color-accent);">
+                            <i class="fas fa-users"></i> Expositores Confirmados
+                        </h2>
+                        <div class="expositores-grid" id="expositoresGrid">
+                            <!-- Se carga dinámicamente -->
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <!-- SIDEBAR -->
+                <aside class="event-sidebar">
+                    <h3 style="margin-bottom: var(--spacing-md); color: var(--color-accent);">
+                        <i class="fas fa-ticket-alt"></i> Información de Inscripción
+                    </h3>
+                    
+                    <div id="costoInfo">
+                        <!-- Se carga dinámicamente -->
+                    </div>
+                    
+                    <div style="margin-top: var(--spacing-lg);">
+                        <h4 style="margin-bottom: var(--spacing-sm); font-size: 1rem;">
+                            <i class="fas fa-check-circle" style="color: var(--color-success);"></i> Incluye:
+                        </h4>
+                        <ul id="costoIncluye" style="padding-left: var(--spacing-md); color: var(--color-text-light);">
+                            <!-- Se carga dinámicamente -->
+                        </ul>
+                    </div>
+                    
+                    <div style="margin-top: var(--spacing-md);">
+                        <h4 style="margin-bottom: var(--spacing-sm); font-size: 1rem;">
+                            <i class="fas fa-times-circle" style="color: var(--color-error);"></i> No Incluye:
+                        </h4>
+                        <ul id="costoNoIncluye" style="padding-left: var(--spacing-md); color: var(--color-text-light);">
+                            <!-- Se carga dinámicamente -->
+                        </ul>
+                    </div>
+                    
+                    <div style="margin-top: var(--spacing-lg); padding-top: var(--spacing-lg); border-top: 2px solid var(--color-bg-medium);">
+                        <h4 style="margin-bottom: var(--spacing-sm);">Organizador</h4>
+                        <div id="organizadorInfo">
+                            <!-- Se carga dinámicamente -->
+                        </div>
+                    </div>
+                    
+                    <a href="auth/register.html" class="btn btn-primary btn-block" style="margin-top: var(--spacing-lg);">
+                        <i class="fas fa-hand-holding-heart"></i> Solicitar Hospitalidad
+                    </a>
+                </aside>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOTELES -->
+    <section class="hoteles-section" id="hoteles">
+        <div class="container">
+            <div class="section-header">
+                <h2><i class="fas fa-hotel"></i> Hoteles Cercanos al Evento</h2>
+                <p>Opciones de hospedaje a pocos minutos del auditorio</p>
+            </div>
+            
+            <!-- Filtros -->
+            <div class="filtros-hoteles">
+                <div class="filtros-row">
+                    <select class="form-select" id="filtroOrden" style="max-width: 250px;">
+                        <option value="distancia">Ordenar por: Distancia</option>
+                        <option value="precio">Ordenar por: Precio</option>
+                        <option value="estrellas">Ordenar por: Estrellas</option>
+                    </select>
+                    
+                    <select class="form-select" id="filtroEstrellas" style="max-width: 200px;">
+                        <option value="">Todas las categorías</option>
+                        <option value="3">3+ estrellas</option>
+                        <option value="2">2+ estrellas</option>
+                        <option value="1">1+ estrellas</option>
+                    </select>
+                    
+                    <button class="btn btn-outline" id="btnResetFiltros">
+                        <i class="fas fa-redo"></i> Restablecer
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Lista de Hoteles -->
+            <div id="hotelesContainer">
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Cargando hoteles...
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 Hospitalidad en Acción. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../assets/js/services/eventos.service.js"></script>
+    <script src="../assets/js/services/hoteles.service.js"></script>
+    <script>
+        // Obtener ID del evento desde URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const eventoId = urlParams.get('id');
+        
+        let eventoActual = null;
+        let hotelesActuales = [];
+        
+        // Cargar evento
+        async function cargarEvento() {
+            if (!eventoId) {
+                alert('No se especificó un evento');
+                window.location.href = 'eventos.html';
+                return;
+            }
+            
+            try {
+                eventoActual = await EventosService.getEventoById(eventoId);
+                
+                if (!eventoActual) {
+                    alert('Evento no encontrado');
+                    window.location.href = 'eventos.html';
+                    return;
+                }
+                
+                mostrarEvento(eventoActual);
+                cargarHoteles();
+                
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al cargar el evento');
+            }
+        }
+        
+        function mostrarEvento(evento) {
+            // Hero
+            document.getElementById('eventHero').style.backgroundImage = 
+                `url('${evento.imagenes.principal}')`;
+            
+            document.getElementById('breadcrumbTitle').textContent = evento.titulo;
+            document.getElementById('eventTitle').textContent = evento.titulo;
+            document.getElementById('eventDescription').textContent = evento.descripcion;
+            
+            // Meta info
+            document.getElementById('eventMetaInfo').innerHTML = `
+                <span><i class="fas fa-calendar"></i> ${EventosService.formatearRangoFechas(evento.fechaInicio, evento.fechaFin)}</span>
+                <span><i class="fas fa-map-marker-alt"></i> ${evento.ciudad}, ${evento.departamento}</span>
+                <span><i class="fas fa-building"></i> ${evento.lugar}</span>
+            `;
+            
+            // Badges
+            let badges = '';
+            if (evento.destacado) badges += '<span class="badge badge-primary">Destacado</span>';
+            if (evento.estado === 'activo') badges += '<span class="badge badge-success">Inscripciones Abiertas</span>';
+            document.getElementById('eventBadges').innerHTML = badges;
+            
+            // Programa
+            if (evento.programa && evento.programa.length > 0) {
+                document.getElementById('programaContainer').innerHTML = evento.programa.map(dia => `
+                    <div class="programa-dia">
+                        <h4>
+                            <i class="fas fa-calendar-day"></i>
+                            ${dia.diaNombre} ${EventosService.formatearFecha(dia.dia)}
+                        </h4>
+                        ${dia.actividades.map(act => `
+                            <div class="actividad">
+                                <div class="actividad-hora">${act.hora}</div>
+                                <div class="actividad-titulo">${act.titulo}</div>
+                                <div style="color: var(--color-text-light); font-size: 0.9rem;">
+                                    ${act.expositor} • ${act.lugar}
+                                </div>
+                                ${act.descripcion ? `<div style="margin-top: 0.5rem; font-size: 0.9rem;">${act.descripcion}</div>` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                `).join('');
+            }
+            
+            // Expositores
+            if (evento.expositores && evento.expositores.length > 0) {
+                document.getElementById('expositoresGrid').innerHTML = evento.expositores.map(exp => `
+                    <div class="expositor-card">
+                        <div class="expositor-foto">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <h4 style="margin-bottom: 0.5rem;">${exp.nombre}</h4>
+                        <div style="color: var(--color-primary); margin-bottom: 0.5rem;">
+                            <i class="fas fa-globe"></i> ${exp.pais}
+                        </div>
+                        <div style="color: var(--color-text-light); font-size: 0.9rem;">
+                            ${exp.tema}
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            // Costo
+            const costo = evento.costo;
+            document.getElementById('costoInfo').innerHTML = `
+                <div style="background: white; padding: var(--spacing-md); border-radius: var(--border-radius-md); text-align: center;">
+                    <div style="color: var(--color-text-light); font-size: 0.9rem; margin-bottom: 0.5rem;">
+                        Inversión por persona
+                    </div>
+                    <div style="font-size: 2rem; font-weight: 800; color: var(--color-primary);">
+                        ${costo.textoInscripcion}
+                    </div>
+                </div>
+            `;
+            
+            if (costo.incluye) {
+                document.getElementById('costoIncluye').innerHTML = costo.incluye
+                    .map(item => `<li style="margin-bottom: 0.5rem;">${item}</li>`).join('');
+            }
+            
+            if (costo.noIncluye) {
+                document.getElementById('costoNoIncluye').innerHTML = costo.noIncluye
+                    .map(item => `<li style="margin-bottom: 0.5rem;">${item}</li>`).join('');
+            }
+            
+            // Organizador
+            const org = evento.organizador;
+            document.getElementById('organizadorInfo').innerHTML = `
+                <p style="font-weight: 600; margin-bottom: 0.5rem;">${org.nombre}</p>
+                <p style="color: var(--color-text-light); font-size: 0.9rem; margin-bottom: 0.25rem;">
+                    <i class="fas fa-phone"></i> ${org.contacto}
+                </p>
+                <p style="color: var(--color-text-light); font-size: 0.9rem;">
+                    <i class="fas fa-envelope"></i> ${org.email}
+                </p>
+            `;
+        }
+        
+        // Cargar hoteles
+        async function cargarHoteles() {
+            try {
+                hotelesActuales = await HotelesService.getHotelesByEvento(eventoId);
+                mostrarHoteles(hotelesActuales);
+                
+            } catch (error) {
+                console.error('Error al cargar hoteles:', error);
+                document.getElementById('hotelesContainer').innerHTML = 
+                    '<p class="text-center text-error">Error al cargar hoteles</p>';
+            }
+        }
+        
+        function mostrarHoteles(hoteles) {
+            if (hoteles.length === 0) {
+                document.getElementById('hotelesContainer').innerHTML = 
+                    '<p class="text-center">No hay hoteles disponibles para este evento</p>';
+                return;
+            }
+            
+            document.getElementById('hotelesContainer').innerHTML = hoteles.map(hotel => {
+                const estrellas = '★'.repeat(hotel.caracteristicas?.estrellas || 0);
+                const telWhatsApp = HotelesService.getTelefonoWhatsApp(hotel);
+                const telPrincipal = HotelesService.getTelefonoPrincipal(hotel);
+                
+                return `
+                    <div class="hotel-card ${hotel.destacado ? 'destacado' : ''}">
+                        <div class="hotel-imagen" style="background-image: url('${hotel.imagenes.fachada}')">
+                            ${hotel.destacado ? '<div class="hotel-destacado-badge">Recomendado</div>' : ''}
+                        </div>
+                        <div class="hotel-content">
+                            <div class="hotel-header">
+                                <div>
+                                    <h3>${hotel.nombre}</h3>
+                                    <div class="hotel-estrellas">${estrellas}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="hotel-info-grid">
+                                <div class="hotel-info-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    ${hotel.distanciaEvento.texto}
+                                </div>
+                                <div class="hotel-info-item">
+                                    <i class="fas fa-door-open"></i>
+                                    ${hotel.caracteristicas?.habitaciones || 'N/A'} habitaciones
+                                </div>
+                            </div>
+                            
+                            <div class="hotel-servicios">
+                                ${hotel.servicios.slice(0, 4).map(s => 
+                                    `<span class="servicio-tag">${s}</span>`
+                                ).join('')}
+                                ${hotel.servicios.length > 4 ? 
+                                    `<span class="servicio-tag">+${hotel.servicios.length - 4} más</span>` : ''}
+                            </div>
+                            
+                            <div class="hotel-precios">
+                                ${Object.entries(hotel.tarifas).map(([tipo, tarifa]) => `
+                                    <div class="precio-item">
+                                        <div class="precio-tipo">${tipo}</div>
+                                        <div class="precio-valor">${tarifa.texto}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            
+                            <div class="hotel-actions">
+                                ${telWhatsApp ? `
+                                    <a href="${HotelesService.getWhatsAppLink(telWhatsApp.numero, 
+                                        `Hola, quisiera información sobre hospedaje para el evento AMIP 2025`)}" 
+                                       target="_blank" class="btn btn-primary" style="flex: 1;">
+                                        <i class="fab fa-whatsapp"></i> WhatsApp
+                                    </a>
+                                ` : ''}
+                                ${telPrincipal ? `
+                                    <a href="tel:${telPrincipal.numero}" class="btn btn-outline" style="flex: 1;">
+                                        <i class="fas fa-phone"></i> Llamar
+                                    </a>
+                                ` : ''}
+                                ${hotel.maps ? `
+                                    <a href="${hotel.maps}" target="_blank" class="btn btn-outline">
+                                        <i class="fas fa-map"></i>
+                                    </a>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Filtros
+        document.getElementById('filtroOrden')?.addEventListener('change', (e) => {
+            let ordenados = [...hotelesActuales];
+            
+            switch(e.target.value) {
+                case 'distancia':
+                    ordenados = HotelesService.ordenarPorDistancia(ordenados);
+                    break;
+                case 'precio':
+                    ordenados = HotelesService.ordenarPorPrecio(ordenados);
+                    break;
+                case 'estrellas':
+                    ordenados = HotelesService.ordenarPorEstrellas(ordenados);
+                    break;
+            }
+            
+            mostrarHoteles(ordenados);
+        });
+        
+        document.getElementById('filtroEstrellas')?.addEventListener('change', (e) => {
+            const estrellas = parseInt(e.target.value);
+            
+            if (!estrellas) {
+                mostrarHoteles(hotelesActuales);
+                return;
+            }
+            
+            const filtrados = HotelesService.filtrarPorEstrellas(hotelesActuales, estrellas);
+            mostrarHoteles(filtrados);
+        });
+        
+        document.getElementById('btnResetFiltros')?.addEventListener('click', () => {
+            document.getElementById('filtroOrden').value = 'distancia';
+            document.getElementById('filtroEstrellas').value = '';
+            mostrarHoteles(hotelesActuales);
+        });
+        
+        // Menú móvil
+        document.getElementById('navbarToggle')?.addEventListener('click', () => {
+            document.getElementById('navbarMenu').classList.toggle('active');
+        });
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', cargarEvento);
+    </script>
+</body>
+</html>
