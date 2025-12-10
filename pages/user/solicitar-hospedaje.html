@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitar Hospedaje - Hospitalidad en Acción</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="../../assets/images/branding/favicon.ico">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/components.css">
+    <link rel="stylesheet" href="../../assets/css/responsive.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .form-page {
+            background: var(--color-bg-light);
+            min-height: 100vh;
+            padding: 100px 0 var(--spacing-xl);
+        }
+        
+        .form-header {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            color: white;
+            padding: var(--spacing-xl) 0;
+            margin-bottom: var(--spacing-xl);
+            text-align: center;
+        }
+        
+        .form-header h1 {
+            font-size: 2rem;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .form-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .form-card {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-xl);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .form-section {
+            margin-bottom: var(--spacing-xl);
+            padding-bottom: var(--spacing-xl);
+            border-bottom: 2px solid var(--color-bg-light);
+        }
+        
+        .form-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            color: var(--color-accent);
+            margin-bottom: var(--spacing-md);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+        
+        .section-title i {
+            color: var(--color-primary);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-md);
+        }
+        
+        .info-box {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid var(--color-info);
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .info-box p {
+            margin: 0;
+            color: var(--color-text-dark);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .info-box i {
+            color: var(--color-info);
+            margin-right: var(--spacing-xs);
+        }
+        
+        .counter-input {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+        
+        .counter-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--color-primary);
+            background: white;
+            color: var(--color-primary);
+            border-radius: var(--border-radius-md);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+        
+        .counter-btn:hover {
+            background: var(--color-primary);
+            color: white;
+        }
+        
+        .counter-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        .edad-input-group {
+            display: flex;
+            gap: var(--spacing-sm);
+            flex-wrap: wrap;
+            margin-top: var(--spacing-sm);
+        }
+        
+        .edad-input {
+            width: 80px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: flex-end;
+            margin-top: var(--spacing-xl);
+        }
+        
+        @media (max-width: 768px) {
+            .form-page {
+                padding-top: 80px;
+            }
+            
+            .form-header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .form-card {
+                padding: var(--spacing-lg);
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- HEADER -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="navbar-brand">
+                    <img src="../../assets/images/branding/logo.png" alt="Logo" class="logo">
+                    <span class="brand-name">Hospitalidad en Acción</span>
+                </div>
+                
+                <button class="navbar-toggle" id="navbarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <ul class="navbar-menu" id="navbarMenu">
+                    <li><a href="../../index.html">Inicio</a></li>
+                    <li><a href="../eventos.html">Eventos</a></li>
+                    <li><a href="perfil.html">Mi Cuenta</a></li>
+                    <li><a href="#" id="logoutBtn" class="btn-login">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- FORM HEADER -->
+    <div class="form-header">
+        <div class="container">
+            <h1><i class="fas fa-hand-holding-heart"></i> Solicitar Hospedaje</h1>
+            <p>Completa el formulario para solicitar hospedaje gratuito durante el evento</p>
+        </div>
+    </div>
+
+    <!-- FORM CONTENT -->
+    <div class="form-page">
+        <div class="container">
+            <div class="form-container">
+                
+                <!-- Breadcrumbs -->
+                <div class="breadcrumbs" style="margin-bottom: var(--spacing-lg);">
+                    <a href="../../index.html">Inicio</a>
+                    <span class="separator">/</span>
+                    <a href="../eventos.html">Eventos</a>
+                    <span class="separator">/</span>
+                    <span>Solicitar Hospedaje</span>
+                </div>
+                
+                <!-- Alerts -->
+                <div id="alertContainer"></div>
+                
+                <!-- Info Box -->
+                <div class="info-box">
+                    <p>
+                        <i class="fas fa-info-circle"></i>
+                        <strong>Importante:</strong> El hospedaje es ofrecido gratuitamente por familias cristianas. 
+                        Por favor, completa todos los datos con honestidad. Nos pondremos en contacto contigo una vez 
+                        que revisemos tu solicitud.
+                    </p>
+                </div>
+                
+                <!-- Formulario -->
+                <div class="form-card">
+                    <form id="solicitudForm">
+                        
+                        <!-- SECCIÓN 1: EVENTO -->
+                        <div class="form-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-calendar"></i>
+                                Evento al que Asistirás
+                            </h3>
+                            
+                            <div class="form-group">
+                                <label for="eventoId" class="form-label required">Selecciona el Evento</label>
+                                <select id="eventoId" class="form-select" required>
+                                    <option value="">Cargando eventos...</option>
+                                </select>
+                                <span class="form-error" id="eventoIdError"></span>
+                            </div>
+                            
+                            <div id="eventoInfo" style="display: none; margin-top: var(--spacing-md);">
+                                <!-- Se carga dinámicamente -->
+                            </div>
+                        </div>
+                        
+                        <!-- SECCIÓN 2: DATOS PERSONALES -->
+                        <div class="form-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-user"></i>
+                                Tus Datos Personales
+                            </h3>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="nombre" class="form-label required">Nombre Completo</label>
+                                    <input type="text" id="nombre" class="form-input" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="telefono" class="form-label required">Teléfono / WhatsApp</label>
+                                    <input type="tel" id="telefono" class="form-input" placeholder="+51 999 888 777" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email" class="form-label required">Correo Electrónico</label>
+                                <input type="email" id="email" class="form-input" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="ciudadOrigen" class="form-label required">Ciudad de Origen</label>
+                                <input type="text" id="ciudadOrigen" class="form-input" placeholder="Ej: Lima, Arequipa, Trujillo" required>
+                            </div>
+                        </div>
+                        
+                        <!-- SECCIÓN 3: FECHAS -->
+                        <div class="form-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-calendar-check"></i>
+                                Fechas de tu Viaje
+                            </h3>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="fechaLlegada" class="form-label required">Fecha de Llegada</label>
+                                    <input type="date" id="fechaLlegada" class="form-input" required>
+                                    <span class="form-error" id="fechaLlegadaError"></span>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="fechaSalida" class="form-label required">Fecha de Salida</label>
+                                    <input type="date" id="fechaSalida" class="form-input" required>
+                                    <span class="form-error" id="fechaSalidaError"></span>
+                                </div>
+                            </div>
+                            
+                            <div id="nochesInfo" style="display: none; padding: var(--spacing-md); background: var(--color-bg-light); border-radius: var(--border-radius-md); margin-top: var(--spacing-md);">
+                                <strong>Total de noches:</strong> <span id="totalNoches">0</span>
+                            </div>
+                        </div>
+                        
+                        <!-- SECCIÓN 4: GRUPO -->
+                        <div class="form-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-users"></i>
+                                ¿Cuántas Personas?
+                            </h3>
+                            
+                            <div class="form-group">
+                                <label class="form-label required">Número de Personas (incluido tú)</label>
+                                <div class="counter-input">
+                                    <button type="button" class="counter-btn" id="btnMenos">-</button>
+                                    <span class="counter-value" id="numeroPersonas">1</span>
+                                    <button type="button" class="counter-btn" id="btnMas">+</button>
+                                </div>
+                                <input type="hidden" id="numeroPersonasInput" value="1">
+                            </div>
+                            
+                            <div class="form-group" id="edadesGroup" style="display: none;">
+                                <label class="form-label">Edades de cada persona (opcional)</label>
+                                <div class="edad-input-group" id="edadesContainer">
+                                    <!-- Se generan dinámicamente -->
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="genero" class="form-label required">Género del Grupo</label>
+                                <select id="genero" class="form-select" required>
+                                    <option value="mixto">Mixto (hombres y mujeres)</option>
+                                    <option value="masculino">Solo hombres</option>
+                                    <option value="femenino">Solo mujeres</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- SECCIÓN 5: INFORMACIÓN ADICIONAL -->
+                        <div class="form-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-info-circle"></i>
+                                Información Adicional
+                            </h3>
+                            
+                            <div class="form-group">
+                                <label for="iglesiaOrigen" class="form-label">Iglesia de Origen</label>
+                                <input type="text" id="iglesiaOrigen" class="form-input" placeholder="Nombre de tu iglesia">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="pastorReferencia" class="form-label">Pastor de Referencia</label>
+                                <input type="text" id="pastorReferencia" class="form-input" placeholder="Nombre de tu pastor">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="necesidadesEspeciales" class="form-label">Necesidades Especiales</label>
+                                <textarea id="necesidadesEspeciales" class="form-textarea" rows="3" placeholder="Alergias, movilidad reducida, dieta especial, etc."></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="comentarios" class="form-label">Comentarios Adicionales</label>
+                                <textarea id="comentarios" class="form-textarea" rows="4" placeholder="Cualquier información adicional que quieras compartir..."></textarea>
+                            </div>
+                        </div>
+                        
+                        <!-- ACCIONES -->
+                        <div class="form-actions">
+                            <a href="../eventos.html" class="btn btn-outline">
+                                <i class="fas fa-times"></i> Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-primary" id="btnEnviar">
+                                <i class="fas fa-paper-plane"></i> Enviar Solicitud
+                            </button>
+                        </div>
+                        
+                    </form>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    
+    <!-- Configuración Firebase -->
+    <script src="../../assets/js/config/firebase-config.js"></script>
+    
+    <!-- Services -->
+    <script src="../../assets/js/services/auth.service.js"></script>
+    <script src="../../assets/js/services/eventos.service.js"></script>
+    <script src="../../assets/js/services/hospitalidad.service.js"></script>
+    
+    <script>
+        // Proteger página
+        AuthService.protectPage('../auth/login.html');
+        
+        let eventoSeleccionado = null;
+        let userData = null;
+        
+        // Cargar datos del usuario
+        async function cargarDatosUsuario() {
+            userData = await AuthService.getCurrentUserData();
+            
+            if (userData) {
+                document.getElementById('nombre').value = userData.nombre || '';
+                document.getElementById('email').value = userData.email || '';
+                document.getElementById('telefono').value = userData.telefono || '';
+            }
+        }
+        
+        // Cargar eventos
+        async function cargarEventos() {
+            try {
+                const eventos = await EventosService.getEventosActivos();
+                const select = document.getElementById('eventoId');
+                
+                if (eventos.length === 0) {
+                    select.innerHTML = '<option value="">No hay eventos disponibles</option>';
+                    return;
+                }
+                
+                select.innerHTML = '<option value="">Selecciona un evento</option>' +
+                    eventos.map(e => `<option value="${e.id}">${e.titulo} - ${e.ciudad}</option>`).join('');
+                
+                // Si viene eventoId por URL, seleccionarlo
+                const urlParams = new URLSearchParams(window.location.search);
+                const eventoId = urlParams.get('eventoId');
+                if (eventoId) {
+                    select.value = eventoId;
+                    select.dispatchEvent(new Event('change'));
+                }
+                
+            } catch (error) {
+                console.error('Error al cargar eventos:', error);
+            }
+        }
+        
+        // Mostrar info del evento
+        document.getElementById('eventoId').addEventListener('change', async (e) => {
+            const eventoId = e.target.value;
+            
+            if (!eventoId) {
+                document.getElementById('eventoInfo').style.display = 'none';
+                return;
+            }
+            
+            eventoSeleccionado = await EventosService.getEventoById(eventoId);
+            
+            if (eventoSeleccionado) {
+                document.getElementById('eventoInfo').innerHTML = `
+                    <div style="background: var(--color-bg-light); padding: var(--spacing-md); border-radius: var(--border-radius-md);">
+                        <strong>${eventoSeleccionado.titulo}</strong><br>
+                        <span style="color: var(--color-text-light);">
+                            ${EventosService.formatearRangoFechas(eventoSeleccionado.fechaInicio, eventoSeleccionado.fechaFin)}
+                            • ${eventoSeleccionado.lugar}
+                        </span>
+                    </div>
+                `;
+                document.getElementById('eventoInfo').style.display = 'block';
+                
+                // Autocompletar fechas
+                document.getElementById('fechaLlegada').value = eventoSeleccionado.fechaInicio;
+                document.getElementById('fechaSalida').value = eventoSeleccionado.fechaFin;
+                calcularNoches();
+            }
+        });
+        
+        // Contador de personas
+        let numPersonas = 1;
+        
+        document.getElementById('btnMenos').addEventListener('click', () => {
+            if (numPersonas > 1) {
+                numPersonas--;
+                actualizarPersonas();
+            }
+        });
+        
+        document.getElementById('btnMas').addEventListener('click', () => {
+            if (numPersonas < 10) {
+                numPersonas++;
+                actualizarPersonas();
+            }
+        });
+        
+        function actualizarPersonas() {
+            document.getElementById('numeroPersonas').textContent = numPersonas;
+            document.getElementById('numeroPersonasInput').value = numPersonas;
+            
+            // Mostrar/ocultar inputs de edades
+            const edadesGroup = document.getElementById('edadesGroup');
+            const edadesContainer = document.getElementById('edadesContainer');
+            
+            if (numPersonas > 1) {
+                edadesGroup.style.display = 'block';
+                
+                // Generar inputs
+                edadesContainer.innerHTML = '';
+                for (let i = 1; i <= numPersonas; i++) {
+                    edadesContainer.innerHTML += `
+                        <input type="number" class="form-input edad-input" 
+                               placeholder="Edad ${i}" min="0" max="120" data-edad="${i}">
+                    `;
+                }
+            } else {
+                edadesGroup.style.display = 'none';
+            }
+        }
+        
+        // Calcular noches
+        function calcularNoches() {
+            const llegada = document.getElementById('fechaLlegada').value;
+            const salida = document.getElementById('fechaSalida').value;
+            
+            if (llegada && salida) {
+                const noches = HospitalidadService.calcularNoches(llegada, salida);
+                
+                if (noches > 0) {
+                    document.getElementById('totalNoches').textContent = noches;
+                    document.getElementById('nochesInfo').style.display = 'block';
+                } else {
+                    document.getElementById('nochesInfo').style.display = 'none';
+                }
+            }
+        }
+        
+        document.getElementById('fechaLlegada').addEventListener('change', calcularNoches);
+        document.getElementById('fechaSalida').addEventListener('change', calcularNoches);
+        
+        // Enviar formulario
+        document.getElementById('solicitudForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Validar fechas
+            const fechaLlegada = document.getElementById('fechaLlegada').value;
+            const fechaSalida = document.getElementById('fechaSalida').value;
+            
+            const validacionFechas = HospitalidadService.validateFechas(fechaLlegada, fechaSalida);
+            if (!validacionFechas.valid) {
+                showAlert(validacionFechas.message, 'error');
+                return;
+            }
+            
+            // Recopilar edades
+            const edades = [];
+            document.querySelectorAll('.edad-input').forEach(input => {
+                const valor = input.value.trim();
+                if (valor) edades.push(parseInt(valor));
+            });
+            
+            // Preparar datos
+            const datos = {
+                eventoId: document.getElementById('eventoId').value,
+                nombre: document.getElementById('nombre').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                telefono: document.getElementById('telefono').value.trim(),
+                ciudadOrigen: document.getElementById('ciudadOrigen').value.trim(),
+                fechaLlegada: fechaLlegada,
+                fechaSalida: fechaSalida,
+                numeroPersonas: numPersonas,
+                edades: edades,
+                genero: document.getElementById('genero').value,
+                iglesiaOrigen: document.getElementById('iglesiaOrigen').value.trim(),
+                pastorReferencia: document.getElementById('pastorReferencia').value.trim(),
+                necesidadesEspeciales: document.getElementById('necesidadesEspeciales').value.trim(),
+                comentarios: document.getElementById('comentarios').value.trim()
+            };
+            
+            // Deshabilitar botón
+            const btnEnviar = document.getElementById('btnEnviar');
+            btnEnviar.disabled = true;
+            btnEnviar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+            
+            try {
+                const result = await HospitalidadService.postularComoVisitante(datos);
+                
+                if (result.success) {
+                    showAlert('¡Solicitud enviada exitosamente! Pronto nos pondremos en contacto contigo.', 'success');
+                    
+                    setTimeout(() => {
+                        window.location.href = 'mis-postulaciones.html';
+                    }, 2000);
+                    
+                } else {
+                    showAlert(result.error, 'error');
+                    btnEnviar.disabled = false;
+                    btnEnviar.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Solicitud';
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Error al enviar la solicitud. Por favor intenta nuevamente.', 'error');
+                btnEnviar.disabled = false;
+                btnEnviar.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Solicitud';
+            }
+        });
+        
+        // Cerrar sesión
+        document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            await AuthService.logout();
+            window.location.href = '../../index.html';
+        });
+        
+        // Menú móvil
+        document.getElementById('navbarToggle')?.addEventListener('click', () => {
+            document.getElementById('navbarMenu').classList.toggle('active');
+        });
+        
+        // Mostrar alert
+        function showAlert(message, type = 'error') {
+            const container = document.getElementById('alertContainer');
+            container.innerHTML = `
+                <div class="alert alert-${type}" style="margin-bottom: var(--spacing-lg);">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                    ${message}
+                </div>
+            `;
+            container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            
+            if (type !== 'success') {
+                setTimeout(() => container.innerHTML = '', 5000);
+            }
+        }
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarDatosUsuario();
+            cargarEventos();
+        });
+    </script>
+</body>
+</html>

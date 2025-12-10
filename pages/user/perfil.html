@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - Hospitalidad en Acción</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="../../assets/images/branding/favicon.ico">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/components.css">
+    <link rel="stylesheet" href="../../assets/css/responsive.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .user-dashboard {
+            background: var(--color-bg-light);
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+        
+        .user-header {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            color: white;
+            padding: var(--spacing-xl) 0;
+            margin-bottom: var(--spacing-xl);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-lg);
+        }
+        
+        .user-avatar {
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .user-details h1 {
+            font-size: 2rem;
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .user-details p {
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            margin-bottom: 0.5rem;
+        }
+        
+        .user-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-lg);
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-lg);
+            text-align: center;
+        }
+        
+        .stat-card i {
+            font-size: 2rem;
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: var(--spacing-lg);
+        }
+        
+        .sidebar-menu {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-md);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md);
+            color: var(--color-text-dark);
+            border-radius: var(--border-radius-md);
+            margin-bottom: var(--spacing-xs);
+            transition: all var(--transition-base);
+            cursor: pointer;
+        }
+        
+        .menu-item:hover {
+            background: var(--color-bg-light);
+            color: var(--color-primary);
+        }
+        
+        .menu-item.active {
+            background: var(--color-primary);
+            color: white;
+        }
+        
+        .menu-item i {
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+        
+        .main-content {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-xl);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .content-section {
+            display: none;
+        }
+        
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 2px solid var(--color-bg-light);
+        }
+        
+        .section-header h2 {
+            font-size: 1.75rem;
+            color: var(--color-accent);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+        
+        .profile-form {
+            max-width: 600px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-md);
+        }
+        
+        .info-display {
+            background: var(--color-bg-light);
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .info-label {
+            font-size: 0.85rem;
+            color: var(--color-text-light);
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .info-value {
+            font-size: 1.1rem;
+            color: var(--color-text-dark);
+            font-weight: 600;
+        }
+        
+        .verification-status {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: 0.5rem var(--spacing-md);
+            border-radius: var(--border-radius-lg);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .verification-status.verified {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--color-success);
+        }
+        
+        .verification-status.pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--color-warning);
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+        }
+        
+        .action-card {
+            background: var(--color-bg-light);
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius-lg);
+            text-align: center;
+            transition: all var(--transition-base);
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .action-card:hover {
+            background: white;
+            border-color: var(--color-primary);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .action-card i {
+            font-size: 2.5rem;
+            color: var(--color-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .action-card h4 {
+            color: var(--color-accent);
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .action-card p {
+            color: var(--color-text-light);
+            font-size: 0.9rem;
+        }
+        
+        .password-section {
+            background: var(--color-bg-light);
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius-lg);
+            margin-top: var(--spacing-lg);
+        }
+        
+        .danger-zone {
+            background: rgba(239, 68, 68, 0.05);
+            border: 2px solid var(--color-error);
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius-lg);
+            margin-top: var(--spacing-lg);
+        }
+        
+        .danger-zone h3 {
+            color: var(--color-error);
+            margin-bottom: var(--spacing-md);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+        
+        @media (max-width: 768px) {
+            .user-dashboard {
+                padding-top: 70px;
+            }
+            
+            .user-info {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .user-avatar {
+                width: 80px;
+                height: 80px;
+                font-size: 2.5rem;
+            }
+            
+            .user-details h1 {
+                font-size: 1.5rem;
+            }
+            
+            .user-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar-menu {
+                position: static;
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: var(--spacing-xs);
+            }
+            
+            .menu-item {
+                flex-direction: column;
+                text-align: center;
+                padding: var(--spacing-sm);
+                font-size: 0.85rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- HEADER -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="navbar-brand">
+                    <img src="../../assets/images/branding/logo.png" alt="Logo" class="logo">
+                    <span class="brand-name">Hospitalidad en Acción</span>
+                </div>
+                
+                <button class="navbar-toggle" id="navbarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <ul class="navbar-menu" id="navbarMenu">
+                    <li><a href="../../index.html">Inicio</a></li>
+                    <li><a href="../eventos.html">Eventos</a></li>
+                    <li><a href="#" class="active">Mi Cuenta</a></li>
+                    <li><a href="#" id="logoutBtn" class="btn-login">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- DASHBOARD -->
+    <div class="user-dashboard">
+        
+        <!-- User Header -->
+        <div class="user-header">
+            <div class="container">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <h1 id="userName">Cargando...</h1>
+                        <p><i class="fas fa-envelope"></i> <span id="userEmail">email@ejemplo.com</span></p>
+                        <p><i class="fas fa-phone"></i> <span id="userPhone">+51 999 888 777</span></p>
+                        <div id="emailVerification"></div>
+                    </div>
+                </div>
+                
+                <!-- Stats -->
+                <div class="user-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-hand-holding-heart"></i>
+                        <div class="stat-number" id="statPostulaciones">0</div>
+                        <div class="stat-label">Postulaciones</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-calendar-check"></i>
+                        <div class="stat-number" id="statEventos">0</div>
+                        <div class="stat-label">Eventos Asistidos</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-home"></i>
+                        <div class="stat-number" id="statHospedajes">0</div>
+                        <div class="stat-label">Hospedajes Dados</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Dashboard Content -->
+        <div class="container">
+            <div class="dashboard-content">
+                
+                <!-- Sidebar Menu -->
+                <aside class="sidebar-menu">
+                    <div class="menu-item active" data-section="inicio">
+                        <i class="fas fa-home"></i>
+                        <span>Inicio</span>
+                    </div>
+                    <div class="menu-item" data-section="perfil">
+                        <i class="fas fa-user-edit"></i>
+                        <span>Editar Perfil</span>
+                    </div>
+                    <div class="menu-item" data-section="postulaciones">
+                        <i class="fas fa-clipboard-list"></i>
+                        <span>Mis Postulaciones</span>
+                    </div>
+                    <div class="menu-item" data-section="seguridad">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Seguridad</span>
+                    </div>
+                    <div class="menu-item" data-section="notificaciones">
+                        <i class="fas fa-bell"></i>
+                        <span>Notificaciones</span>
+                    </div>
+                </aside>
+                
+                <!-- Main Content -->
+                <main class="main-content">
+                    
+                    <!-- SECCIÓN: INICIO -->
+                    <section class="content-section active" id="section-inicio">
+                        <div class="section-header">
+                            <h2><i class="fas fa-home"></i> Panel de Inicio</h2>
+                        </div>
+                        
+                        <!-- Alerts -->
+                        <div id="alertContainer"></div>
+                        
+                        <!-- Quick Actions -->
+                        <div class="quick-actions">
+                            <div class="action-card" onclick="window.location.href='../eventos.html'">
+                                <i class="fas fa-calendar-alt"></i>
+                                <h4>Ver Eventos</h4>
+                                <p>Explora próximas convenciones</p>
+                            </div>
+                            <div class="action-card" data-section="postulaciones">
+                                <i class="fas fa-hand-holding-heart"></i>
+                                <h4>Postular</h4>
+                                <p>Solicitar u ofrecer hospitalidad</p>
+                            </div>
+                            <div class="action-card" data-section="perfil">
+                                <i class="fas fa-user-edit"></i>
+                                <h4>Mi Perfil</h4>
+                                <p>Actualizar mis datos</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Info Cards -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-info-circle"></i> Información de Cuenta</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="info-display">
+                                        <div class="info-label">Fecha de Registro</div>
+                                        <div class="info-value" id="fechaRegistro">--/--/----</div>
+                                    </div>
+                                    <div class="info-display">
+                                        <div class="info-label">Última Conexión</div>
+                                        <div class="info-value" id="ultimaConexion">--/--/----</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- SECCIÓN: EDITAR PERFIL -->
+                    <section class="content-section" id="section-perfil">
+                        <div class="section-header">
+                            <h2><i class="fas fa-user-edit"></i> Editar Perfil</h2>
+                        </div>
+                        
+                        <div id="alertContainerPerfil"></div>
+                        
+                        <form class="profile-form" id="profileForm">
+                            <div class="form-group">
+                                <label for="editNombre" class="form-label required">Nombre Completo</label>
+                                <input 
+                                    type="text" 
+                                    id="editNombre" 
+                                    class="form-input"
+                                    required
+                                >
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="editEmail" class="form-label">Correo Electrónico</label>
+                                <input 
+                                    type="email" 
+                                    id="editEmail" 
+                                    class="form-input"
+                                    disabled
+                                >
+                                <span class="form-help">El email no se puede cambiar</span>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="editTelefono" class="form-label required">Teléfono / WhatsApp</label>
+                                <input 
+                                    type="tel" 
+                                    id="editTelefono" 
+                                    class="form-input"
+                                    required
+                                >
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary" id="btnGuardarPerfil">
+                                <i class="fas fa-save"></i> Guardar Cambios
+                            </button>
+                        </form>
+                    </section>
+                    
+                    <!-- SECCIÓN: POSTULACIONES -->
+                    <section class="content-section" id="section-postulaciones">
+                        <div class="section-header">
+                            <h2><i class="fas fa-clipboard-list"></i> Mis Postulaciones</h2>
+                            <a href="#" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Nueva Postulación
+                            </a>
+                        </div>
+                        
+                        <div id="postulacionesContainer">
+                            <p class="text-center" style="padding: var(--spacing-xl); color: var(--color-text-light);">
+                                Aún no tienes postulaciones. ¡Comienza postulando a un evento!
+                            </p>
+                        </div>
+                    </section>
+                    
+                    <!-- SECCIÓN: SEGURIDAD -->
+                    <section class="content-section" id="section-seguridad">
+                        <div class="section-header">
+                            <h2><i class="fas fa-shield-alt"></i> Seguridad</h2>
+                        </div>
+                        
+                        <div id="alertContainerSeguridad"></div>
+                        
+                        <!-- Cambiar Contraseña -->
+                        <div class="password-section">
+                            <h3 style="margin-bottom: var(--spacing-md);">
+                                <i class="fas fa-key"></i> Cambiar Contraseña
+                            </h3>
+                            
+                            <form id="passwordForm" style="max-width: 500px;">
+                                <div class="form-group">
+                                    <label for="currentPassword" class="form-label required">Contraseña Actual</label>
+                                    <input 
+                                        type="password" 
+                                        id="currentPassword" 
+                                        class="form-input"
+                                        required
+                                    >
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="newPassword" class="form-label required">Nueva Contraseña</label>
+                                    <input 
+                                        type="password" 
+                                        id="newPassword" 
+                                        class="form-input"
+                                        required
+                                    >
+                                    <span class="form-help">Mínimo 6 caracteres</span>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="confirmPassword" class="form-label required">Confirmar Nueva Contraseña</label>
+                                    <input 
+                                        type="password" 
+                                        id="confirmPassword" 
+                                        class="form-input"
+                                        required
+                                    >
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary" id="btnCambiarPassword">
+                                    <i class="fas fa-key"></i> Cambiar Contraseña
+                                </button>
+                            </form>
+                        </div>
+                        
+                        <!-- Zona de Peligro -->
+                        <div class="danger-zone">
+                            <h3><i class="fas fa-exclamation-triangle"></i> Zona de Peligro</h3>
+                            <p style="color: var(--color-text-light); margin-bottom: var(--spacing-md);">
+                                Las siguientes acciones son permanentes y no se pueden deshacer.
+                            </p>
+                            <button class="btn" style="background: var(--color-error); color: white;" onclick="desactivarCuenta()">
+                                <i class="fas fa-user-slash"></i> Desactivar Cuenta
+                            </button>
+                        </div>
+                    </section>
+                    
+                    <!-- SECCIÓN: NOTIFICACIONES -->
+                    <section class="content-section" id="section-notificaciones">
+                        <div class="section-header">
+                            <h2><i class="fas fa-bell"></i> Notificaciones</h2>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-body">
+                                <p style="text-align: center; color: var(--color-text-light); padding: var(--spacing-xl);">
+                                    <i class="fas fa-bell-slash" style="font-size: 3rem; margin-bottom: var(--spacing-md); display: block;"></i>
+                                    No tienes notificaciones nuevas
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+                    
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    
+    <!-- Configuración Firebase -->
+    <script src="../../assets/js/config/firebase-config.js"></script>
+    
+    <!-- Auth Service -->
+    <script src="../../assets/js/services/auth.service.js"></script>
+    
+    <script>
+        // Proteger página
+        AuthService.protectPage('../auth/login.html');
+        
+        let currentUser = null;
+        let userData = null;
+        
+        // Cargar datos del usuario
+        async function cargarDatosUsuario() {
+            currentUser = AuthService.getCurrentUser();
+            
+            if (!currentUser) {
+                window.location.href = '../auth/login.html';
+                return;
+            }
+            
+            userData = await AuthService.getCurrentUserData();
+            
+            if (!userData) {
+                console.error('No se pudieron cargar los datos del usuario');
+                return;
+            }
+            
+            mostrarDatosUsuario();
+        }
+        
+        // Mostrar datos en la interfaz
+        function mostrarDatosUsuario() {
+            // Header
+            document.getElementById('userName').textContent = userData.nombre || 'Usuario';
+            document.getElementById('userEmail').textContent = userData.email;
+            document.getElementById('userPhone').textContent = userData.telefono || 'No especificado';
+            
+            // Verificación de email
+            const verificationHTML = currentUser.emailVerified
+                ? '<span class="verification-status verified"><i class="fas fa-check-circle"></i> Email Verificado</span>'
+                : '<span class="verification-status pending"><i class="fas fa-exclamation-circle"></i> Email No Verificado</span>';
+            document.getElementById('emailVerification').innerHTML = verificationHTML;
+            
+            // Fechas
+            if (userData.fechaCreacion) {
+                const fecha = userData.fechaCreacion.toDate();
+                document.getElementById('fechaRegistro').textContent = fecha.toLocaleDateString('es-PE');
+            }
+            
+            if (userData.ultimaConexion) {
+                const fecha = userData.ultimaConexion.toDate();
+                document.getElementById('ultimaConexion').textContent = fecha.toLocaleDateString('es-PE');
+            }
+            
+            // Formulario de edición
+            document.getElementById('editNombre').value = userData.nombre || '';
+            document.getElementById('editEmail').value = userData.email || '';
+            document.getElementById('editTelefono').value = userData.telefono || '';
+        }
+        
+        // Navegación entre secciones
+        document.querySelectorAll('.menu-item, .action-card').forEach(item => {
+            item.addEventListener('click', () => {
+                const section = item.dataset.section;
+                if (!section) return;
+                
+                // Cambiar menú activo
+                document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+                document.querySelector(`.menu-item[data-section="${section}"]`)?.classList.add('active');
+                
+                // Cambiar sección activa
+                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+                document.getElementById(`section-${section}`).classList.add('active');
+                
+                // Scroll al inicio en móvil
+                if (window.innerWidth <= 768) {
+                    window.scrollTo(0, 0);
+                }
+            });
+        });
+        
+        // Guardar perfil
+        document.getElementById('profileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const btnGuardar = document.getElementById('btnGuardarPerfil');
+            btnGuardar.disabled = true;
+            btnGuardar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+            
+            const nombre = document.getElementById('editNombre').value.trim();
+            const telefono = document.getElementById('editTelefono').value.trim();
+            
+            try {
+                const result = await AuthService.updateProfile({
+                    nombre: nombre,
+                    telefono: telefono
+                });
+                
+                if (result.success) {
+                    showAlert('Perfil actualizado correctamente', 'success', 'alertContainerPerfil');
+                    await cargarDatosUsuario();
+                } else {
+                    showAlert(result.error, 'error', 'alertContainerPerfil');
+                }
+            } catch (error) {
+                showAlert('Error al actualizar perfil', 'error', 'alertContainerPerfil');
+            }
+            
+            btnGuardar.disabled = false;
+            btnGuardar.innerHTML = '<i class="fas fa-save"></i> Guardar Cambios';
+        });
+        
+        // Cambiar contraseña
+        document.getElementById('passwordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (newPassword !== confirmPassword) {
+                showAlert('Las contraseñas no coinciden', 'error', 'alertContainerSeguridad');
+                return;
+            }
+            
+            const validation = AuthService.validatePassword(newPassword);
+            if (!validation.valid) {
+                showAlert(validation.message, 'error', 'alertContainerSeguridad');
+                return;
+            }
+            
+            const btnCambiar = document.getElementById('btnCambiarPassword');
+            btnCambiar.disabled = true;
+            btnCambiar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cambiando...';
+            
+            try {
+                const result = await AuthService.changePassword(currentPassword, newPassword);
+                
+                if (result.success) {
+                    showAlert('Contraseña actualizada correctamente', 'success', 'alertContainerSeguridad');
+                    document.getElementById('passwordForm').reset();
+                } else {
+                    showAlert(result.error, 'error', 'alertContainerSeguridad');
+                }
+            } catch (error) {
+                showAlert('Error al cambiar contraseña', 'error', 'alertContainerSeguridad');
+            }
+            
+            btnCambiar.disabled = false;
+            btnCambiar.innerHTML = '<i class="fas fa-key"></i> Cambiar Contraseña';
+        });
+        
+        // Cerrar sesión
+        document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            
+            if (confirm('¿Estás seguro de cerrar sesión?')) {
+                const result = await AuthService.logout();
+                
+                if (result.success) {
+                    window.location.href = '../../index.html';
+                }
+            }
+        });
+        
+        // Desactivar cuenta
+        function desactivarCuenta() {
+            const confirmar = confirm('⚠️ ADVERTENCIA: Esta acción desactivará tu cuenta.\n\n¿Estás completamente seguro?');
+            
+            if (confirmar) {
+                const confirmar2 = prompt('Escribe "DESACTIVAR" para confirmar:');
+                
+                if (confirmar2 === 'DESACTIVAR') {
+                    alert('Función de desactivación en desarrollo. Contacta al administrador.');
+                }
+            }
+        }
+        
+        // Mostrar alert
+        function showAlert(message, type = 'error', containerId = 'alertContainer') {
+            const container = document.getElementById(containerId);
+            container.innerHTML = `
+                <div class="alert alert-${type}" style="margin-bottom: var(--spacing-lg);">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                    ${message}
+                </div>
+            `;
+            
+            container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 5000);
+        }
+        
+        // Menú móvil
+        document.getElementById('navbarToggle')?.addEventListener('click', () => {
+            document.getElementById('navbarMenu').classList.toggle('active');
+        });
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', cargarDatosUsuario);
+    </script>
+</body>
+</html>
