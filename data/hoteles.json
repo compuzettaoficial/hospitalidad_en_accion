@@ -1,0 +1,292 @@
+{
+  "hoteles": [
+    {
+      "id": "costa-sol-chimbote",
+      "eventoId": "chimbote-2025",
+      "nombre": "Hotel Costa del Sol",
+      "ciudad": "Nuevo Chimbote",
+      "departamento": "Áncash",
+      "direccion": "Av. Enrique Meiggs 396, Nuevo Chimbote",
+      "maps": "https://maps.google.com/?q=-9.0794,-78.5934",
+      "coordenadas": {
+        "lat": -9.0794,
+        "lng": -78.5934
+      },
+      
+      "distanciaEvento": {
+        "metros": 800,
+        "texto": "800 metros (10 minutos caminando)"
+      },
+      
+      "imagenes": {
+        "fachada": "/assets/images/hoteles/chimbote/costa-sol/fachada.jpg",
+        "habitaciones": [
+          "/assets/images/hoteles/chimbote/costa-sol/hab-simple.jpg",
+          "/assets/images/hoteles/chimbote/costa-sol/hab-doble.jpg",
+          "/assets/images/hoteles/chimbote/costa-sol/hab-triple.jpg"
+        ],
+        "servicios": [
+          "/assets/images/hoteles/chimbote/costa-sol/restaurant.jpg",
+          "/assets/images/hoteles/chimbote/costa-sol/lobby.jpg"
+        ]
+      },
+      
+      "tarifas": {
+        "simple": {
+          "precio": 120,
+          "moneda": "PEN",
+          "texto": "S/. 120 por noche",
+          "capacidad": 1
+        },
+        "doble": {
+          "precio": 180,
+          "moneda": "PEN",
+          "texto": "S/. 180 por noche",
+          "capacidad": 2
+        },
+        "triple": {
+          "precio": 230,
+          "moneda": "PEN",
+          "texto": "S/. 230 por noche",
+          "capacidad": 3
+        }
+      },
+      
+      "contacto": {
+        "telefonos": [
+          {
+            "numero": "+51 043 123456",
+            "tipo": "recepcion",
+            "horario": "24 horas",
+            "principal": true
+          },
+          {
+            "numero": "+51 999 777 888",
+            "tipo": "whatsapp",
+            "horario": "8:00 AM - 10:00 PM"
+          }
+        ],
+        "email": "reservas@costadelsol-chimbote.com",
+        "website": "https://www.costadelsol.com"
+      },
+      
+      "servicios": [
+        "WiFi gratuito",
+        "Desayuno incluido",
+        "Estacionamiento gratuito",
+        "Aire acondicionado",
+        "TV por cable",
+        "Room service",
+        "Lavandería",
+        "Restaurant",
+        "Bar"
+      ],
+      
+      "politicas": {
+        "checkIn": "14:00",
+        "checkOut": "12:00",
+        "cancelacion": "24 horas antes sin cargo",
+        "mascotas": false,
+        "fumadores": false
+      },
+      
+      "caracteristicas": {
+        "estrellas": 3,
+        "habitaciones": 45,
+        "pisos": 4,
+        "añoRemodelacion": 2023
+      },
+      
+      "recomendado": true,
+      "verificado": true,
+      "destacado": true,
+      
+      "agregadoPor": "editor-chimbote",
+      "fechaAgregado": "2024-12-09T10:00:00Z",
+      "ultimaActualizacion": "2024-12-09T10:00:00Z"
+    },
+    {
+      "id": "gran-chimbote",
+      "eventoId": "chimbote-2025",
+      "nombre": "Hotel Gran Chimbote",
+      "ciudad": "Nuevo Chimbote",
+      "departamento": "Áncash",
+      "direccion": "Jr. Tumbes 245, Nuevo Chimbote",
+      "maps": "https://maps.google.com/?q=-9.0825,-78.5982",
+      "coordenadas": {
+        "lat": -9.0825,
+        "lng": -78.5982
+      },
+      
+      "distanciaEvento": {
+        "metros": 1200,
+        "texto": "1.2 kilómetros (15 minutos caminando)"
+      },
+      
+      "imagenes": {
+        "fachada": "/assets/images/hoteles/chimbote/gran-chimbote/fachada.jpg",
+        "habitaciones": [
+          "/assets/images/hoteles/chimbote/gran-chimbote/hab-simple.jpg",
+          "/assets/images/hoteles/chimbote/gran-chimbote/hab-doble.jpg"
+        ]
+      },
+      
+      "tarifas": {
+        "simple": {
+          "precio": 80,
+          "moneda": "PEN",
+          "texto": "S/. 80 por noche",
+          "capacidad": 1
+        },
+        "doble": {
+          "precio": 120,
+          "moneda": "PEN",
+          "texto": "S/. 120 por noche",
+          "capacidad": 2
+        },
+        "triple": {
+          "precio": 150,
+          "moneda": "PEN",
+          "texto": "S/. 150 por noche",
+          "capacidad": 3
+        }
+      },
+      
+      "contacto": {
+        "telefonos": [
+          {
+            "numero": "+51 043 234567",
+            "tipo": "recepcion",
+            "horario": "7:00 AM - 11:00 PM",
+            "principal": true
+          },
+          {
+            "numero": "+51 988 666 555",
+            "tipo": "whatsapp",
+            "horario": "8:00 AM - 9:00 PM"
+          }
+        ],
+        "email": "info@granchimbote.com"
+      },
+      
+      "servicios": [
+        "WiFi",
+        "Estacionamiento",
+        "Desayuno (costo adicional S/. 15)",
+        "Ventilador",
+        "TV cable",
+        "Agua caliente"
+      ],
+      
+      "politicas": {
+        "checkIn": "13:00",
+        "checkOut": "11:00",
+        "cancelacion": "48 horas antes sin cargo",
+        "mascotas": false,
+        "fumadores": false
+      },
+      
+      "caracteristicas": {
+        "estrellas": 2,
+        "habitaciones": 28,
+        "pisos": 3,
+        "añoConstruccion": 2015
+      },
+      
+      "recomendado": false,
+      "verificado": true,
+      "destacado": false,
+      
+      "agregadoPor": "editor-chimbote",
+      "fechaAgregado": "2024-12-09T10:00:00Z",
+      "ultimaActualizacion": "2024-12-09T10:00:00Z"
+    },
+    {
+      "id": "hostal-pacifico-chimbote",
+      "eventoId": "chimbote-2025",
+      "nombre": "Hostal Pacífico",
+      "ciudad": "Nuevo Chimbote",
+      "departamento": "Áncash",
+      "direccion": "Av. Pacífico 612, Nuevo Chimbote",
+      "maps": "https://maps.google.com/?q=-9.0802,-78.5945",
+      "coordenadas": {
+        "lat": -9.0802,
+        "lng": -78.5945
+      },
+      
+      "distanciaEvento": {
+        "metros": 400,
+        "texto": "400 metros (5 minutos caminando)"
+      },
+      
+      "imagenes": {
+        "fachada": "/assets/images/hoteles/chimbote/hostal-pacifico/fachada.jpg",
+        "habitaciones": [
+          "/assets/images/hoteles/chimbote/hostal-pacifico/hab-simple.jpg"
+        ]
+      },
+      
+      "tarifas": {
+        "simple": {
+          "precio": 60,
+          "moneda": "PEN",
+          "texto": "S/. 60 por noche",
+          "capacidad": 1
+        },
+        "doble": {
+          "precio": 90,
+          "moneda": "PEN",
+          "texto": "S/. 90 por noche",
+          "capacidad": 2
+        }
+      },
+      
+      "contacto": {
+        "telefonos": [
+          {
+            "numero": "+51 043 345678",
+            "tipo": "recepcion",
+            "principal": true
+          }
+        ]
+      },
+      
+      "servicios": [
+        "WiFi",
+        "Agua caliente",
+        "TV",
+        "Ventilador"
+      ],
+      
+      "politicas": {
+        "checkIn": "12:00",
+        "checkOut": "11:00",
+        "cancelacion": "Sin reembolso",
+        "mascotas": false,
+        "fumadores": false
+      },
+      
+      "caracteristicas": {
+        "estrellas": 1,
+        "habitaciones": 15,
+        "pisos": 2
+      },
+      
+      "recomendado": false,
+      "verificado": true,
+      "destacado": false,
+      
+      "observaciones": "Opción económica cercana al evento. Instalaciones básicas pero limpias.",
+      
+      "agregadoPor": "editor-chimbote",
+      "fechaAgregado": "2024-12-09T10:00:00Z",
+      "ultimaActualizacion": "2024-12-09T10:00:00Z"
+    }
+  ],
+  
+  "metadata": {
+    "version": "1.0",
+    "ultimaActualizacion": "2024-12-09T10:00:00Z",
+    "totalHoteles": 3
+  }
+}
