@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospitalidad en Acción - Eventos Cristianos en Perú</title>
+    
+    <!-- SEO -->
+    <meta name="description" content="Plataforma de hospitalidad para eventos cristianos en Perú. Conectamos anfitriones con visitantes y ofrecemos información de hoteles cercanos.">
+    <meta name="keywords" content="eventos cristianos, hospitalidad, AMIP Perú, convenciones cristianas">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="assets/images/branding/favicon.ico">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    
+    <!-- HEADER -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="navbar-brand">
+                    <img src="assets/images/branding/logo.png" alt="Logo" class="logo">
+                    <span class="brand-name">Hospitalidad en Acción</span>
+                </div>
+                
+                <button class="navbar-toggle" id="navbarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <ul class="navbar-menu" id="navbarMenu">
+                    <li><a href="#" class="active">Inicio</a></li>
+                    <li><a href="pages/eventos.html">Eventos</a></li>
+                    <li><a href="#como-funciona">Cómo Funciona</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                    <li><a href="pages/auth/login.html" class="btn-login">Iniciar Sesión</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO SLIDER -->
+    <section class="hero-slider">
+        <div class="slider-container">
+            <!-- Slide 1: Evento Principal -->
+            <div class="slide active" style="background-image: linear-gradient(rgba(91, 149, 194, 0.7), rgba(80, 121, 145, 0.8)), url('assets/images/eventos/chimbote-2025/auditorio.jpg');">
+                <div class="container">
+                    <div class="slide-content">
+                        <span class="slide-tag">Próximo Evento</span>
+                        <h1 class="slide-title">Convención Nacional AMIP Perú 2025</h1>
+                        <p class="slide-subtitle">20 - 23 de Febrero | Nuevo Chimbote, Áncash</p>
+                        <p class="slide-description">
+                            Instituto Carlos Salazar Romero - Conferencistas internacionales
+                        </p>
+                        <div class="slide-actions">
+                            <a href="pages/evento-detalle.html?id=chimbote-2025" class="btn btn-primary">
+                                <i class="fas fa-info-circle"></i> Ver Detalles
+                            </a>
+                            <a href="pages/auth/register.html" class="btn btn-secondary">
+                                <i class="fas fa-hand-holding-heart"></i> Ofrecer Hospitalidad
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2: Hospitalidad -->
+            <div class="slide" style="background-image: linear-gradient(rgba(86, 180, 160, 0.7), rgba(91, 149, 194, 0.8)), url('assets/images/eventos/chimbote-2025/auditorio-interior.jpg');">
+                <div class="container">
+                    <div class="slide-content">
+                        <span class="slide-tag">Hospitalidad</span>
+                        <h1 class="slide-title">Abre las Puertas de Tu Hogar</h1>
+                        <p class="slide-subtitle">Sé parte del ministerio de hospitalidad</p>
+                        <p class="slide-description">
+                            Bendice a hermanos que vienen de lejos hospedándolos en tu casa
+                        </p>
+                        <div class="slide-actions">
+                            <a href="pages/auth/register.html" class="btn btn-primary">
+                                <i class="fas fa-home"></i> Ser Anfitrión
+                            </a>
+                            <a href="#como-funciona" class="btn btn-secondary">
+                                <i class="fas fa-question-circle"></i> Más Información
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: Hoteles -->
+            <div class="slide" style="background-image: linear-gradient(rgba(80, 121, 145, 0.7), rgba(91, 149, 194, 0.8)), url('assets/images/hoteles/chimbote/costa-sol/fachada.jpg');">
+                <div class="container">
+                    <div class="slide-content">
+                        <span class="slide-tag">Alojamiento</span>
+                        <h1 class="slide-title">Hoteles Cercanos al Evento</h1>
+                        <p class="slide-subtitle">Opciones de hospedaje para todos los presupuestos</p>
+                        <p class="slide-description">
+                            Encuentra hoteles a pocos minutos del auditorio con tarifas especiales
+                        </p>
+                        <div class="slide-actions">
+                            <a href="pages/evento-detalle.html?id=chimbote-2025#hoteles" class="btn btn-primary">
+                                <i class="fas fa-hotel"></i> Ver Hoteles
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controles del Slider -->
+        <button class="slider-control prev" id="prevSlide">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="slider-control next" id="nextSlide">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+
+        <!-- Indicadores -->
+        <div class="slider-indicators">
+            <span class="indicator active" data-slide="0"></span>
+            <span class="indicator" data-slide="1"></span>
+            <span class="indicator" data-slide="2"></span>
+        </div>
+    </section>
+
+    <!-- CARACTERÍSTICAS -->
+    <section class="features" id="como-funciona">
+        <div class="container">
+            <div class="section-header">
+                <h2>¿Cómo Funciona?</h2>
+                <p>Tres formas de participar en nuestros eventos</p>
+            </div>
+
+            <div class="features-grid">
+                <!-- Visitante -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <h3>Soy Visitante</h3>
+                    <p>¿Necesitas hospedaje gratuito? Postula y te conectaremos con un anfitrión de confianza.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Crea tu cuenta</li>
+                        <li><i class="fas fa-check"></i> Postula al evento</li>
+                        <li><i class="fas fa-check"></i> Espera confirmación</li>
+                        <li><i class="fas fa-check"></i> ¡Disfruta el evento!</li>
+                    </ul>
+                    <a href="pages/auth/register.html" class="btn btn-outline">Postular Ahora</a>
+                </div>
+
+                <!-- Anfitrión -->
+                <div class="feature-card featured">
+                    <div class="featured-badge">Más Popular</div>
+                    <div class="feature-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h3>Soy Anfitrión</h3>
+                    <p>¿Tienes espacio en tu casa? Bendice a hermanos de otras ciudades hospedándolos.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Regístrate como anfitrión</li>
+                        <li><i class="fas fa-check"></i> Indica cuántos puedes hospedar</li>
+                        <li><i class="fas fa-check"></i> Te asignamos visitantes</li>
+                        <li><i class="fas fa-check"></i> Comparte tu hogar</li>
+                    </ul>
+                    <a href="pages/auth/register.html" class="btn btn-primary">Ofrecer Hospitalidad</a>
+                </div>
+
+                <!-- Hoteles -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-hotel"></i>
+                    </div>
+                    <h3>Prefiero Hotel</h3>
+                    <p>Encuentra hoteles cercanos al evento con información de contacto y tarifas.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Lista de hoteles cercanos</li>
+                        <li><i class="fas fa-check"></i> Fotos y servicios</li>
+                        <li><i class="fas fa-check"></i> Contacto directo</li>
+                        <li><i class="fas fa-check"></i> Sin intermediarios</li>
+                    </ul>
+                    <a href="pages/eventos.html" class="btn btn-outline">Ver Hoteles</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRÓXIMOS EVENTOS -->
+    <section class="upcoming-events">
+        <div class="container">
+            <div class="section-header">
+                <h2>Próximos Eventos</h2>
+                <p>Descubre las convenciones cristianas en todo el Perú</p>
+            </div>
+
+            <div class="events-grid" id="eventsGrid">
+                <!-- Los eventos se cargarán dinámicamente desde eventos.json -->
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Cargando eventos...
+                </div>
+            </div>
+
+            <div class="text-center" style="margin-top: 2rem;">
+                <a href="pages/eventos.html" class="btn btn-primary">Ver Todos los Eventos</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIOS -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <h2>Testimonios</h2>
+                <p>Experiencias de quienes han vivido la hospitalidad cristiana</p>
+            </div>
+
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-icon">
+                        <i class="fas fa-quote-left"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        "Gracias a esta plataforma pude asistir a la convención en Lima. La familia que me hospedó fue un ángel de Dios. ¡Una experiencia increíble!"
+                    </p>
+                    <div class="testimonial-author">
+                        <strong>María González</strong>
+                        <span>Visitante - Cusco</span>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-icon">
+                        <i class="fas fa-quote-left"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        "Hospedar a hermanos de otras ciudades ha sido una bendición para nuestra familia. Dios nos ha recompensado abundantemente."
+                    </p>
+                    <div class="testimonial-author">
+                        <strong>Pastor Carlos Ramírez</strong>
+                        <span>Anfitrión - Arequipa</span>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-icon">
+                        <i class="fas fa-quote-left"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        "La información de hoteles fue muy útil. Pude comparar precios y ubicaciones antes de viajar. Todo muy organizado."
+                    </p>
+                    <div class="testimonial-author">
+                        <strong>Juan Pérez</strong>
+                        <span>Visitante - Trujillo</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer" id="contacto">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Hospitalidad en Acción</h4>
+                    <p>Conectando corazones a través de la hospitalidad cristiana en eventos por todo el Perú.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                        <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Enlaces Rápidos</h4>
+                    <ul>
+                        <li><a href="pages/eventos.html">Eventos</a></li>
+                        <li><a href="#como-funciona">Cómo Funciona</a></li>
+                        <li><a href="pages/auth/register.html">Registrarse</a></li>
+                        <li><a href="pages/auth/login.html">Iniciar Sesión</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Soporte</h4>
+                    <ul>
+                        <li><a href="#">Preguntas Frecuentes</a></li>
+                        <li><a href="#">Términos y Condiciones</a></li>
+                        <li><a href="#">Política de Privacidad</a></li>
+                        <li><a href="#">Contacto</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Contacto</h4>
+                    <ul class="contact-info">
+                        <li>
+                            <i class="fas fa-envelope"></i>
+                            <a href="mailto:info@hospitalidadenaccion.pe">info@hospitalidadenaccion.pe</a>
+                        </li>
+                        <li>
+                            <i class="fas fa-phone"></i>
+                            <a href="tel:+51999888777">+51 999 888 777</a>
+                        </li>
+                        <li>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Lima, Perú</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 Hospitalidad en Acción. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    
+    <!-- Configuración Firebase -->
+    <script src="assets/js/config/firebase-config.js"></script>
+    
+    <!-- Scripts -->
+    <script src="assets/js/services/eventos.service.js"></script>
+    <script>
+        // ============================================
+        // SLIDER
+        // ============================================
+        const slides = document.querySelectorAll('.slide');
+        const indicators = document.querySelectorAll('.indicator');
+        const prevBtn = document.getElementById('prevSlide');
+        const nextBtn = document.getElementById('nextSlide');
+        let currentSlide = 0;
+        let slideInterval;
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            indicators.forEach(ind => ind.classList.remove('active'));
+            
+            if (index >= slides.length) currentSlide = 0;
+            if (index < 0) currentSlide = slides.length - 1;
+            
+            slides[currentSlide].classList.add('active');
+            indicators[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            currentSlide++;
+            showSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            currentSlide--;
+            showSlide(currentSlide);
+        }
+
+        function startAutoSlide() {
+            slideInterval = setInterval(nextSlide, 5000);
+        }
+
+        function stopAutoSlide() {
+            clearInterval(slideInterval);
+        }
+
+        // Event Listeners
+        nextBtn.addEventListener('click', () => {
+            stopAutoSlide();
+            nextSlide();
+            startAutoSlide();
+        });
+
+        prevBtn.addEventListener('click', () => {
+            stopAutoSlide();
+            prevSlide();
+            startAutoSlide();
+        });
+
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => {
+                stopAutoSlide();
+                currentSlide = index;
+                showSlide(currentSlide);
+                startAutoSlide();
+            });
+        });
+
+        // Iniciar auto-slide
+        startAutoSlide();
+
+        // ============================================
+        // NAVBAR MÓVIL
+        // ============================================
+        const navbarToggle = document.getElementById('navbarToggle');
+        const navbarMenu = document.getElementById('navbarMenu');
+
+        navbarToggle.addEventListener('click', () => {
+            navbarMenu.classList.toggle('active');
+        });
+
+        // ============================================
+        // CARGAR EVENTOS
+        // ============================================
+        async function loadEvents() {
+            const eventsGrid = document.getElementById('eventsGrid');
+            
+            try {
+                const eventos = await EventosService.getEventos();
+                
+                // Filtrar solo eventos activos y ordenar por fecha
+                const eventosActivos = eventos
+                    .filter(e => e.estado === 'activo')
+                    .sort((a, b) => new Date(a.fechaInicio) - new Date(b.fechaInicio))
+                    .slice(0, 3); // Mostrar solo los 3 primeros
+
+                if (eventosActivos.length === 0) {
+                    eventsGrid.innerHTML = '<p class="text-center">No hay eventos próximos en este momento.</p>';
+                    return;
+                }
+
+                eventsGrid.innerHTML = eventosActivos.map(evento => `
+                    <div class="event-card">
+                        <div class="event-image" style="background-image: url('${evento.imagenes.principal}')">
+                            <span class="event-badge">${formatDate(evento.fechaInicio)}</span>
+                        </div>
+                        <div class="event-content">
+                            <h3>${evento.titulo}</h3>
+                            <div class="event-meta">
+                                <span><i class="fas fa-map-marker-alt"></i> ${evento.ciudad}, ${evento.departamento}</span>
+                                <span><i class="fas fa-calendar"></i> ${formatDateRange(evento.fechaInicio, evento.fechaFin)}</span>
+                            </div>
+                            <p class="event-location">
+                                <i class="fas fa-building"></i> ${evento.lugar}
+                            </p>
+                            <a href="pages/evento-detalle.html?id=${evento.id}" class="btn btn-primary btn-block">
+                                Ver Detalles <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                console.error('Error al cargar eventos:', error);
+                eventsGrid.innerHTML = '<p class="text-center text-error">Error al cargar eventos. Por favor, intenta más tarde.</p>';
+            }
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+            return `${date.getDate()} ${months[date.getMonth()]}`;
+        }
+
+        function formatDateRange(startDate, endDate) {
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+            
+            if (start.getMonth() === end.getMonth()) {
+                return `${start.getDate()}-${end.getDate()} ${months[start.getMonth()]}`;
+            } else {
+                return `${start.getDate()} ${months[start.getMonth()]} - ${end.getDate()} ${months[end.getMonth()]}`;
+            }
+        }
+
+        // Cargar eventos al cargar la página
+        document.addEventListener('DOMContentLoaded', loadEvents);
+    </script>
+</body>
+</html>
