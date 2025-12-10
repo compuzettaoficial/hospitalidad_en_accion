@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrarse - Hospitalidad en Acción</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="../../assets/images/branding/favicon.ico">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/components.css">
+    <link rel="stylesheet" href="../../assets/css/responsive.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .auth-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-primary) 100%);
+            padding: var(--spacing-lg);
+        }
+        
+        .auth-container {
+            background: white;
+            border-radius: var(--border-radius-xl);
+            box-shadow: var(--shadow-xl);
+            max-width: 500px;
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        .auth-header {
+            text-align: center;
+            padding: var(--spacing-xl) var(--spacing-lg) var(--spacing-lg);
+        }
+        
+        .auth-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto var(--spacing-md);
+            background: linear-gradient(135deg, var(--color-secondary), var(--color-primary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+        }
+        
+        .auth-header h1 {
+            font-size: 1.75rem;
+            color: var(--color-accent);
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .auth-header p {
+            color: var(--color-text-light);
+        }
+        
+        .auth-body {
+            padding: 0 var(--spacing-lg) var(--spacing-xl);
+        }
+        
+        .form-group {
+            position: relative;
+        }
+        
+        .form-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-text-light);
+            font-size: 1.1rem;
+        }
+        
+        .form-input-icon {
+            padding-left: 3rem;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--color-text-light);
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 0.5rem;
+        }
+        
+        .password-toggle:hover {
+            color: var(--color-primary);
+        }
+        
+        .password-strength {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+        }
+        
+        .strength-bar {
+            height: 4px;
+            background: var(--color-bg-medium);
+            border-radius: 2px;
+            margin-bottom: 0.25rem;
+            overflow: hidden;
+        }
+        
+        .strength-fill {
+            height: 100%;
+            width: 0;
+            transition: all var(--transition-base);
+        }
+        
+        .strength-weak {
+            width: 33%;
+            background: var(--color-error);
+        }
+        
+        .strength-medium {
+            width: 66%;
+            background: var(--color-warning);
+        }
+        
+        .strength-strong {
+            width: 100%;
+            background: var(--color-success);
+        }
+        
+        .terms-checkbox {
+            background: var(--color-bg-light);
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            margin: var(--spacing-md) 0;
+        }
+        
+        .terms-checkbox label {
+            font-size: 0.9rem;
+            color: var(--color-text-dark);
+        }
+        
+        .terms-checkbox a {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+        
+        .auth-footer {
+            text-align: center;
+            padding: var(--spacing-lg);
+            background: var(--color-bg-light);
+            color: var(--color-text-light);
+        }
+        
+        .auth-footer a {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+        
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: var(--spacing-lg) 0;
+            color: var(--color-text-light);
+            font-size: 0.9rem;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--color-bg-medium);
+        }
+        
+        .divider::before {
+            margin-right: var(--spacing-md);
+        }
+        
+        .divider::after {
+            margin-left: var(--spacing-md);
+        }
+        
+        .back-home {
+            position: absolute;
+            top: var(--spacing-lg);
+            left: var(--spacing-lg);
+        }
+        
+        .back-home a {
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            font-weight: 600;
+            transition: all var(--transition-base);
+        }
+        
+        .back-home a:hover {
+            opacity: 0.8;
+            transform: translateX(-5px);
+        }
+        
+        @media (max-width: 480px) {
+            .auth-page {
+                padding: var(--spacing-md);
+            }
+            
+            .auth-header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .back-home {
+                top: var(--spacing-md);
+                left: var(--spacing-md);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-page">
+        
+        <!-- Botón Volver al Inicio -->
+        <div class="back-home">
+            <a href="../../index.html">
+                <i class="fas fa-arrow-left"></i> Volver al Inicio
+            </a>
+        </div>
+        
+        <!-- Contenedor de Registro -->
+        <div class="auth-container">
+            
+            <!-- Header -->
+            <div class="auth-header">
+                <div class="auth-logo">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <h1>Crear Cuenta</h1>
+                <p>Únete a nuestra comunidad de hospitalidad</p>
+            </div>
+            
+            <!-- Alerts -->
+            <div id="alertContainer" style="padding: 0 var(--spacing-lg);"></div>
+            
+            <!-- Formulario -->
+            <div class="auth-body">
+                <form id="registerForm">
+                    
+                    <!-- Nombre Completo -->
+                    <div class="form-group">
+                        <label for="nombre" class="form-label required">Nombre Completo</label>
+                        <i class="fas fa-user form-icon"></i>
+                        <input 
+                            type="text" 
+                            id="nombre" 
+                            name="nombre"
+                            class="form-input form-input-icon" 
+                            placeholder="Juan Pérez"
+                            required
+                            autocomplete="name"
+                        >
+                        <span class="form-error" id="nombreError"></span>
+                    </div>
+                    
+                    <!-- Email -->
+                    <div class="form-group">
+                        <label for="email" class="form-label required">Correo Electrónico</label>
+                        <i class="fas fa-envelope form-icon"></i>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email"
+                            class="form-input form-input-icon" 
+                            placeholder="tu@email.com"
+                            required
+                            autocomplete="email"
+                        >
+                        <span class="form-error" id="emailError"></span>
+                    </div>
+                    
+                    <!-- Teléfono -->
+                    <div class="form-group">
+                        <label for="telefono" class="form-label required">Teléfono / WhatsApp</label>
+                        <i class="fas fa-phone form-icon"></i>
+                        <input 
+                            type="tel" 
+                            id="telefono" 
+                            name="telefono"
+                            class="form-input form-input-icon" 
+                            placeholder="+51 999 888 777"
+                            required
+                            autocomplete="tel"
+                        >
+                        <span class="form-help">Formato: +51 999 888 777</span>
+                        <span class="form-error" id="telefonoError"></span>
+                    </div>
+                    
+                    <!-- Password -->
+                    <div class="form-group">
+                        <label for="password" class="form-label required">Contraseña</label>
+                        <i class="fas fa-lock form-icon"></i>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password"
+                            class="form-input form-input-icon" 
+                            placeholder="Mínimo 6 caracteres"
+                            required
+                            autocomplete="new-password"
+                        >
+                        <button type="button" class="password-toggle" id="togglePassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        
+                        <!-- Indicador de fortaleza -->
+                        <div class="password-strength" id="passwordStrength" style="display: none;">
+                            <div class="strength-bar">
+                                <div class="strength-fill" id="strengthFill"></div>
+                            </div>
+                            <span id="strengthText"></span>
+                        </div>
+                        
+                        <span class="form-error" id="passwordError"></span>
+                    </div>
+                    
+                    <!-- Confirmar Password -->
+                    <div class="form-group">
+                        <label for="passwordConfirm" class="form-label required">Confirmar Contraseña</label>
+                        <i class="fas fa-lock form-icon"></i>
+                        <input 
+                            type="password" 
+                            id="passwordConfirm" 
+                            name="passwordConfirm"
+                            class="form-input form-input-icon" 
+                            placeholder="Repite tu contraseña"
+                            required
+                            autocomplete="new-password"
+                        >
+                        <button type="button" class="password-toggle" id="togglePasswordConfirm">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <span class="form-error" id="passwordConfirmError"></span>
+                    </div>
+                    
+                    <!-- Términos y Condiciones -->
+                    <div class="terms-checkbox">
+                        <label class="form-checkbox">
+                            <input type="checkbox" id="terms" name="terms" required>
+                            <span>
+                                Acepto los <a href="#">Términos y Condiciones</a> y la 
+                                <a href="#">Política de Privacidad</a>
+                            </span>
+                        </label>
+                        <span class="form-error" id="termsError"></span>
+                    </div>
+                    
+                    <!-- Submit -->
+                    <button type="submit" class="btn btn-primary btn-block" id="btnRegister">
+                        <i class="fas fa-user-plus"></i> Crear Cuenta
+                    </button>
+                    
+                </form>
+                
+                <!-- Divider -->
+                <div class="divider">o</div>
+                
+                <!-- Link a Login -->
+                <a href="login.html" class="btn btn-outline btn-block">
+                    <i class="fas fa-sign-in-alt"></i> Ya tengo una cuenta
+                </a>
+            </div>
+            
+            <!-- Footer -->
+            <div class="auth-footer">
+                Al registrarte, podrás solicitar u ofrecer hospitalidad en eventos cristianos
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    
+    <!-- Configuración Firebase -->
+    <script src="../../assets/js/config/firebase-config.js"></script>
+    
+    <!-- Auth Service -->
+    <script src="../../assets/js/services/auth.service.js"></script>
+    
+    <script>
+        // Redirigir si ya está autenticado
+        AuthService.redirectIfAuthenticated('../user/perfil.html');
+        
+        // Referencias DOM
+        const registerForm = document.getElementById('registerForm');
+        const btnRegister = document.getElementById('btnRegister');
+        const alertContainer = document.getElementById('alertContainer');
+        const passwordInput = document.getElementById('password');
+        const passwordStrength = document.getElementById('passwordStrength');
+        const strengthFill = document.getElementById('strengthFill');
+        const strengthText = document.getElementById('strengthText');
+        
+        // Toggle mostrar/ocultar contraseña
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+        
+        document.getElementById('togglePasswordConfirm').addEventListener('click', function() {
+            const passwordConfirm = document.getElementById('passwordConfirm');
+            const icon = this.querySelector('i');
+            
+            if (passwordConfirm.type === 'password') {
+                passwordConfirm.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordConfirm.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+        
+        // Indicador de fortaleza de contraseña
+        passwordInput.addEventListener('input', function() {
+            const password = this.value;
+            
+            if (password.length === 0) {
+                passwordStrength.style.display = 'none';
+                return;
+            }
+            
+            passwordStrength.style.display = 'block';
+            
+            let strength = 0;
+            
+            // Calcular fortaleza
+            if (password.length >= 6) strength++;
+            if (password.length >= 10) strength++;
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^a-zA-Z0-9]/.test(password)) strength++;
+            
+            // Actualizar UI
+            strengthFill.className = 'strength-fill';
+            
+            if (strength <= 2) {
+                strengthFill.classList.add('strength-weak');
+                strengthText.textContent = 'Contraseña débil';
+                strengthText.style.color = 'var(--color-error)';
+            } else if (strength <= 4) {
+                strengthFill.classList.add('strength-medium');
+                strengthText.textContent = 'Contraseña media';
+                strengthText.style.color = 'var(--color-warning)';
+            } else {
+                strengthFill.classList.add('strength-strong');
+                strengthText.textContent = 'Contraseña fuerte';
+                strengthText.style.color = 'var(--color-success)';
+            }
+        });
+        
+        // Mostrar alert
+        function showAlert(message, type = 'error') {
+            alertContainer.innerHTML = `
+                <div class="alert alert-${type}">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                    ${message}
+                </div>
+            `;
+            
+            // Scroll al alert
+            alertContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        
+        // Limpiar errores
+        function clearErrors() {
+            document.getElementById('nombreError').textContent = '';
+            document.getElementById('emailError').textContent = '';
+            document.getElementById('telefonoError').textContent = '';
+            document.getElementById('passwordError').textContent = '';
+            document.getElementById('passwordConfirmError').textContent = '';
+            document.getElementById('termsError').textContent = '';
+        }
+        
+        // Validar formulario
+        function validateForm(nombre, email, telefono, password, passwordConfirm, terms) {
+            clearErrors();
+            let valid = true;
+            
+            // Validar nombre
+            if (!nombre || nombre.length < 3) {
+                document.getElementById('nombreError').textContent = 'El nombre debe tener al menos 3 caracteres';
+                valid = false;
+            }
+            
+            // Validar email
+            if (!email) {
+                document.getElementById('emailError').textContent = 'El email es requerido';
+                valid = false;
+            } else if (!AuthService.validateEmail(email)) {
+                document.getElementById('emailError').textContent = 'Email inválido';
+                valid = false;
+            }
+            
+            // Validar teléfono
+            if (!telefono) {
+                document.getElementById('telefonoError').textContent = 'El teléfono es requerido';
+                valid = false;
+            } else if (!AuthService.validatePhone(telefono)) {
+                document.getElementById('telefonoError').textContent = 'Formato inválido (ej: +51 999 888 777)';
+                valid = false;
+            }
+            
+            // Validar password
+            const passwordValidation = AuthService.validatePassword(password);
+            if (!passwordValidation.valid) {
+                document.getElementById('passwordError').textContent = passwordValidation.message;
+                valid = false;
+            }
+            
+            // Validar confirmación
+            if (password !== passwordConfirm) {
+                document.getElementById('passwordConfirmError').textContent = 'Las contraseñas no coinciden';
+                valid = false;
+            }
+            
+            // Validar términos
+            if (!terms) {
+                document.getElementById('termsError').textContent = 'Debes aceptar los términos y condiciones';
+                valid = false;
+            }
+            
+            return valid;
+        }
+        
+        // Submit del formulario
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Obtener datos
+            const nombre = document.getElementById('nombre').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const telefono = document.getElementById('telefono').value.trim();
+            const password = document.getElementById('password').value;
+            const passwordConfirm = document.getElementById('passwordConfirm').value;
+            const terms = document.getElementById('terms').checked;
+            
+            // Validar
+            if (!validateForm(nombre, email, telefono, password, passwordConfirm, terms)) {
+                return;
+            }
+            
+            // Deshabilitar botón
+            btnRegister.disabled = true;
+            btnRegister.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creando cuenta...';
+            
+            try {
+                // Intentar registro
+                const result = await AuthService.registrar({
+                    nombre: nombre,
+                    email: email,
+                    telefono: AuthService.formatPhone(telefono),
+                    password: password
+                });
+                
+                if (result.success) {
+                    showAlert('¡Cuenta creada exitosamente! Por favor verifica tu email.', 'success');
+                    
+                    // Redirigir después de 3 segundos
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 3000);
+                    
+                } else {
+                    showAlert(result.error, 'error');
+                    btnRegister.disabled = false;
+                    btnRegister.innerHTML = '<i class="fas fa-user-plus"></i> Crear Cuenta';
+                }
+                
+            } catch (error) {
+                console.error('Error en registro:', error);
+                showAlert('Error al crear cuenta. Por favor intenta nuevamente.', 'error');
+                btnRegister.disabled = false;
+                btnRegister.innerHTML = '<i class="fas fa-user-plus"></i> Crear Cuenta';
+            }
+        });
+        
+        // Limpiar errores al escribir
+        document.getElementById('nombre').addEventListener('input', () => {
+            document.getElementById('nombreError').textContent = '';
+        });
+        
+        document.getElementById('email').addEventListener('input', () => {
+            document.getElementById('emailError').textContent = '';
+        });
+        
+        document.getElementById('telefono').addEventListener('input', () => {
+            document.getElementById('telefonoError').textContent = '';
+        });
+        
+        document.getElementById('password').addEventListener('input', () => {
+            document.getElementById('passwordError').textContent = '';
+        });
+        
+        document.getElementById('passwordConfirm').addEventListener('input', () => {
+            document.getElementById('passwordConfirmError').textContent = '';
+        });
+        
+        document.getElementById('terms').addEventListener('change', () => {
+            document.getElementById('termsError').textContent = '';
+        });
+    </script>
+</body>
+</html>
