@@ -11,7 +11,7 @@ class HotelesService {
    */
   static async getHoteles() {
     try {
-      const response = await fetch('/data/hoteles.json');
+      const response = await fetch('/hospitalidad_en_accion/data/hoteles.json');
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
