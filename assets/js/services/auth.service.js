@@ -1,38 +1,526 @@
-static async logout() {
-  try {
-    console.log('👋 Cerrando sesión...');
-    await firebase.auth().signOut();
-    console.log('✅ Sesión cerrada');
-    window.location.href = AppConfig.PAGES.LOGIN();
-  } catch (error) {
-    console.error('❌ Error al cerrar sesión:', error);
-    throw error;
-  }
-}
+// ============================================
+// AUTH.SERVICE.JS - Servicio de Autenticación
+// Gestión completa de usuarios con Firebase
+// ============================================
 
-static protegerPagina(requiereAdmin = false) {
-  return new Promise((resolve, reject) => {
-    const unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
-      unsubscribe();
+class AuthService {
+  
+  // ============================================
+  // REGISTRO DE NUEVO USUARIO
+  // ============================================
+  static async register(datos) {
+    try {
+      console.log('📝 Iniciando registro para:', datos.email);
       
-      if (!user) {
-        console.log('🚫 No autenticado, redirigiendo...');
-        window.location.href = AppConfig.PAGES.LOGIN();
-        reject('No autenticado');
-        return;
+      // Validaciones previas
+      if (!datos.email || !datos.password || !datos.nombre || !datos.telefono) {
+        throw new Error('Todos los campos son obligatorios');
       }
       
-      if (requiereAdmin) {
-        const esAdmin = await this.isAdmin(user.uid);
-        if (!esAdmin) {
-          console.log('🚫 No es admin');
-          window.location.href = AppConfig.PAGES.PERFIL();
-          reject('No autorizado');
-          return;
+      if (datos.password.length < 6) {
+        throw new Error('La contraseña debe tener al menos 6 caracteres');
+      }
+      
+      // Crear usuario en Firebase Auth
+      const userCredential = await firebase.auth()
+        .createUserWithEmailAndPassword(datos.email, datos.password);
+      
+      const user = userCredential.user;
+      console.log('✅ Usuario creado en Auth:', user.uid);
+      
+      // Enviar email de verificación
+      try {
+        await user.sendEmailVerification({
+          url: window.location.origin + AppConfig.PAGES.LOGIN(),
+          handleCodeInApp: false
+        });
+        console.log('📧 Email de verificación enviado a:', datos.email);
+      } catch (emailError) {
+        console.warn('⚠️ No se pudo enviar email de verificación:', emailError);
+        // No lanzar error, continuar con el registro
+      }
+      
+      // Guardar datos adicionales en Firestore
+      await firebase.firestore()
+        .collection('usuarios')
+        .doc(user.uid)
+        .set({
+          nombre: datos.nombre,
+          email: datos.email,
+          telefono: datos.telefono,
+          rol: 'usuario',
+          emailVerificado: false,
+          activo: true,
+          fechaCreacion: firebase.firestore.FieldValue.serverTimestamp(),
+          ultimaConexion: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      
+      console.log('✅ Datos guardados en Firestore');
+      console.log('✅ Registro completado exitosamente');
+      
+      return user;
+      
+    } catch (error) {
+      console.error('❌ Error en registro:', error);
+      console.error('Code:', error.code);
+      console.error('Message:', error.message);
+      throw error;
+    }
+  }
+  
+  // ============================================
+  // LOGIN
+  // ============================================
+  static async login(email, password) {
+    try {
+      console.log('🔐 Iniciando login para:', email);
+      
+      // Validaciones previas
+      if (!email || !password) {
+        throw new Error('Email y contraseña son obligatorios');
+      }
+      
+      // Intentar login
+      const userCredential = await firebase.auth()
+        .signInWithEmailAndPassword(email, password);
+      
+      const user = userCredential.user;
+      console.log('✅ Auth exitoso. UID:', user.uid);
+      console.log('📧 Email verificado:', user.emailVerified);
+      
+      // Verificar si el usuario existe en Firestore
+      const docRef = firebase.firestore()
+        .collection('usuarios')
+        .doc(user.uid);
+      
+      const doc = await docRef.get();
+      
+      if (!doc.exists) {
+        console.error('❌ Usuario no existe en Firestore');
+        throw new Error('Usuario no encontrado en base de datos');
+      }
+      
+      const userData = doc.data();
+      console.log('✅ Datos Firestore obtenidos:', userData);
+      
+      // Verificar si la cuenta está activa
+      if (userData.activo === false) {
+        await firebase.auth().signOut();
+        throw new Error('Tu cuenta ha sido deshabilitada. Contacta al administrador.');
+      }
+      
+      // Actualizar última conexión
+      await docRef.update({
+        ultimaConexion: firebase.firestore.FieldValue.serverTimestamp(),
+        emailVerificado: user.emailVerified
+      });
+      
+      console.log('✅ Última conexión actualizada');
+      console.log('✅ Login completado exitosamente');
+      
+      return user;
+      
+    } catch (error) {
+      console.error('❌ Error en login:');
+      console.error('Code:', error.code);
+      console.error('Message:', error.message);
+      throw error;
+    }
+  }
+  
+  // ============================================
+  // LOGOUT
+  // ============================================
+  static async logout() {
+    try {
+      console.log('👋 Cerrando sesión...');
+      
+      const user = firebase.auth().currentUser;
+      if (user) {
+        console.log('Usuario actual:', user.email);
+      }
+      
+      await firebase.auth().signOut();
+      console.log('✅ Sesión cerrada exitosamente');
+      
+      // Redirigir al login usando AppConfig
+      window.location.href = AppConfig.PAGES.LOGIN();
+      
+    } catch (error) {
+      console.error('❌ Error al cerrar sesión:', error);
+      throw error;
+    }
+  }
+  
+  // ============================================
+  // OBSERVAR ESTADO DE AUTENTICACIÓN
+  // ============================================
+  static observarEstadoAuth(callback) {
+    console.log('👁️ Iniciando observador de autenticación...');
+    
+    return firebase.auth().onAuthStateChanged(async (user) => {
+      if (user) {
+        console.log('👤 Usuario autenticado detectado');
+        console.log('📧 Email:', user.email);
+        console.log('🔑 UID:', user.uid);
+        console.log('✅ Email verificado:', user.emailVerified);
+        
+        try {
+          // Obtener datos de Firestore
+          const doc = await firebase.firestore()
+            .collection('usuarios')
+            .doc(user.uid)
+            .get();
+          
+          if (doc.exists) {
+            const firestoreData = doc.data();
+            console.log('✅ Datos Firestore obtenidos:', firestoreData);
+            
+            // Combinar datos de Auth y Firestore
+            const fullUserData = {
+              uid: user.uid,
+              email: user.email,
+              emailVerified: user.emailVerified,
+              ...firestoreData
+            };
+            
+            callback(fullUserData);
+          } else {
+            console.error('❌ Documento no existe en Firestore para UID:', user.uid);
+            console.log('🔍 Ruta buscada: usuarios/' + user.uid);
+            callback(null);
+          }
+        } catch (error) {
+          console.error('❌ Error obteniendo datos de Firestore:', error);
+          callback(null);
+        }
+      } else {
+        console.log('🚫 No hay usuario autenticado');
+        callback(null);
+      }
+    });
+  }
+  
+  // ============================================
+  // OBTENER USUARIO ACTUAL
+  // ============================================
+  static getCurrentUser() {
+    const user = firebase.auth().currentUser;
+    if (user) {
+      console.log('👤 Usuario actual:', user.email);
+      return user;
+    } else {
+      console.log('🚫 No hay usuario autenticado');
+      return null;
+    }
+  }
+  
+  // ============================================
+  // OBTENER DATOS DE FIRESTORE
+  // ============================================
+  static async getUserData(uid) {
+    try {
+      console.log('📊 Obteniendo datos para UID:', uid);
+      
+      const doc = await firebase.firestore()
+        .collection('usuarios')
+        .doc(uid)
+        .get();
+      
+      if (doc.exists) {
+        const data = doc.data();
+        console.log('✅ Datos encontrados:', data);
+        return data;
+      } else {
+        console.error('❌ No se encontró el documento para UID:', uid);
+        return null;
+      }
+    } catch (error) {
+      console.error('❌ Error obteniendo datos:', error);
+      throw error;
+    }
+  }
+  
+  // ============================================
+  // REENVIAR EMAIL DE VERIFICACIÓN
+  // ============================================
+  static async reenviarVerificacion() {
+    try {
+      const user = firebase.auth().currentUser;
+      
+      if (!user) {
+        throw new Error('No hay usuario autenticado');
+      }
+      
+      if (user.emailVerified) {
+        console.log('✅ El email ya está verificado');
+        return { success: true, message: 'El email ya está verificado' };
+      }
+      
+      console.log('📧 Enviando email de verificación a:', user.email);
+      
+      await user.sendEmailVerification({
+        url: window.location.origin + AppConfig.PAGES.LOGIN(),
+        handleCodeInApp: false
+      });
+      
+      console.log('✅ Email de verificación reenviado');
+      return { success: true, message: 'Email enviado correctamente' };
+      
+    } catch (error) {
+      console.error('❌ Error reenviando email:', error);
+      
+      // Manejar error de demasiados intentos
+      if (error.code === 'auth/too-many-requests') {
+        throw new Error('Demasiados intentos. Espera unos minutos antes de intentar nuevamente.');
+      }
+      
+      throw error;
+    }
+  }
+  
+  // ============================================
+  // RESETEAR CONTRASEÑA
+  // ============================================
+  static async resetPassword(email) {
+    try {
+      if (!email) {
+        throw new Error('El email es obligatorio');
+      }
+      
+      console.log('🔑 Enviando email de recuperación a:', email);
+      
+      await firebase.auth().sendPasswordResetEmail(email, {
+        url: window.location.origin + AppConfig.PAGES.LOGIN(),
+        handleCodeInApp: false
+      });
+      
+      console.log('✅ Email de recuperación enviado');
+      return { success: true, message: 'Email enviado correctamente' };
+      
+    } catch (error) {
+      console.error('❌ Error enviando email de recuperación:', error);
+      
+      if (error.code === 'auth/user-not-found') {
+        throw new Error('No existe una cuenta con este email');
+      }
+      
+      if (error.code === 'auth/invalid-email') {
+        throw new Error('Email inválido');
+      }
+      
+      throw error;
+    }
+  }
+  
+  // ============================================
+  // ACTUALIZAR PERFIL
+  // ============================================
+  static async actualizarPerfil(uid, datos) {
+    try {
+      console.log('📝 Actualizando perfil para UID:', uid);
+      console.log('Datos a actualizar:', datos);
+      
+      // Validar que no se intente cambiar campos restringidos
+      const camposPermitidos = ['nombre', 'telefono'];
+      const datosLimpios = {};
+      
+      for (const key of camposPermitidos) {
+        if (datos.hasOwnProperty(key)) {
+          datosLimpios[key] = datos[key];
         }
       }
       
-      resolve(user);
+      if (Object.keys(datosLimpios).length === 0) {
+        throw new Error('No hay datos válidos para actualizar');
+      }
+      
+      await firebase.firestore()
+        .collection('usuarios')
+        .doc(uid)
+        .update(datosLimpios);
+      
+      console.log('✅ Perfil actualizado exitosamente');
+      return { success: true, message: 'Perfil actualizado' };
+      
+    } catch (error) {
+      console.error('❌ Error actualizando perfil:', error);
+      throw error;
+    }
+  }
+  
+  // ============================================
+  // CAMBIAR CONTRASEÑA
+  // ============================================
+  static async cambiarPassword(passwordActual, passwordNueva) {
+    try {
+      const user = firebase.auth().currentUser;
+      
+      if (!user) {
+        throw new Error('No hay usuario autenticado');
+      }
+      
+      console.log('🔑 Cambiando contraseña para:', user.email);
+      
+      // Re-autenticar usuario
+      const credential = firebase.auth.EmailAuthProvider.credential(
+        user.email,
+        passwordActual
+      );
+      
+      await user.reauthenticateWithCredential(credential);
+      console.log('✅ Re-autenticación exitosa');
+      
+      // Cambiar contraseña
+      await user.updatePassword(passwordNueva);
+      console.log('✅ Contraseña actualizada');
+      
+      return { success: true, message: 'Contraseña actualizada correctamente' };
+      
+    } catch (error) {
+      console.error('❌ Error cambiando contraseña:', error);
+      
+      if (error.code === 'auth/wrong-password') {
+        throw new Error('La contraseña actual es incorrecta');
+      }
+      
+      if (error.code === 'auth/weak-password') {
+        throw new Error('La nueva contraseña es demasiado débil');
+      }
+      
+      throw error;
+    }
+  }
+  
+  // ============================================
+  // VERIFICAR SI ES ADMIN
+  // ============================================
+  static async isAdmin(uid) {
+    try {
+      const userData = await this.getUserData(uid);
+      const esAdmin = userData?.rol === 'admin';
+      console.log('🔐 ¿Es admin?:', esAdmin);
+      return esAdmin;
+    } catch (error) {
+      console.error('❌ Error verificando admin:', error);
+      return false;
+    }
+  }
+  
+  // ============================================
+  // PROTEGER PÁGINA (Requiere autenticación)
+  // ============================================
+  static protegerPagina(requiereAdmin = false) {
+    console.log('🔒 Protegiendo página. Requiere admin:', requiereAdmin);
+    
+    return new Promise((resolve, reject) => {
+      const unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
+        unsubscribe(); // Desuscribirse después de la primera verificación
+        
+        if (!user) {
+          console.log('🚫 No hay usuario autenticado');
+          console.log('🔄 Redirigiendo a login...');
+          window.location.href = AppConfig.PAGES.LOGIN();
+          reject(new Error('No autenticado'));
+          return;
+        }
+        
+        console.log('✅ Usuario autenticado:', user.email);
+        
+        // Si requiere admin, verificar rol
+        if (requiereAdmin) {
+          console.log('🔐 Verificando permisos de administrador...');
+          const esAdmin = await this.isAdmin(user.uid);
+          
+          if (!esAdmin) {
+            console.log('🚫 Usuario no es admin');
+            console.log('🔄 Redirigiendo a perfil...');
+            window.location.href = AppConfig.PAGES.PERFIL();
+            reject(new Error('No autorizado'));
+            return;
+          }
+          
+          console.log('✅ Usuario es admin, acceso permitido');
+        }
+        
+        console.log('✅ Acceso permitido');
+        resolve(user);
+      });
     });
-  });
+  }
+  
+  // ============================================
+  // ELIMINAR CUENTA
+  // ============================================
+  static async eliminarCuenta(password) {
+    try {
+      const user = firebase.auth().currentUser;
+      
+      if (!user) {
+        throw new Error('No hay usuario autenticado');
+      }
+      
+      console.log('⚠️ Eliminando cuenta para:', user.email);
+      
+      // Re-autenticar usuario
+      const credential = firebase.auth.EmailAuthProvider.credential(
+        user.email,
+        password
+      );
+      
+      await user.reauthenticateWithCredential(credential);
+      console.log('✅ Re-autenticación exitosa');
+      
+      // Eliminar datos de Firestore
+      await firebase.firestore()
+        .collection('usuarios')
+        .doc(user.uid)
+        .delete();
+      
+      console.log('✅ Datos de Firestore eliminados');
+      
+      // Eliminar cuenta de Auth
+      await user.delete();
+      console.log('✅ Cuenta de Auth eliminada');
+      
+      // Redirigir a home
+      window.location.href = AppConfig.PAGES.HOME();
+      
+      return { success: true, message: 'Cuenta eliminada correctamente' };
+      
+    } catch (error) {
+      console.error('❌ Error eliminando cuenta:', error);
+      
+      if (error.code === 'auth/wrong-password') {
+        throw new Error('Contraseña incorrecta');
+      }
+      
+      if (error.code === 'auth/requires-recent-login') {
+        throw new Error('Por seguridad, debes iniciar sesión nuevamente antes de eliminar tu cuenta');
+      }
+      
+      throw error;
+    }
+  }
+  
+  // ============================================
+  // REFRESCAR TOKEN
+  // ============================================
+  static async refrescarToken() {
+    try {
+      const user = firebase.auth().currentUser;
+      if (user) {
+        const token = await user.getIdToken(true);
+        console.log('✅ Token refrescado');
+        return token;
+      }
+      return null;
+    } catch (error) {
+      console.error('❌ Error refrescando token:', error);
+      throw error;
+    }
+  }
 }
+
+// Log de inicialización
+console.log('✅ AuthService cargado correctamente');
