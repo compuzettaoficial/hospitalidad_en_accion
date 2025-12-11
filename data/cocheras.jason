@@ -1,0 +1,41 @@
+{
+  "cocheras": [
+    {
+      "id": "parking-central-chimbote",
+      "eventoId": "chimbote-2025",
+      "nombre": "Estacionamiento Central",
+      "direccion": "Jr. Bolognesi 234, Nuevo Chimbote",
+      "maps": "https://maps.google.com/?q=-9.0802,-78.5945",
+      "distanciaEvento": "300m (4 min caminando)",
+      "imagen": "/assets/images/cocheras/chimbote/parking-central.jpg",
+      "tarifa": {
+        "hora": 5,
+        "dia": 30,
+        "texto": "S/. 5/hora - S/. 30/día"
+      },
+      "horario": "24 horas",
+      "contacto": {
+        "telefono": "+51 043 456789",
+        "whatsapp": "+51 988 555 444"
+      },
+      "servicios": ["Vigilancia", "Techado", "CCTV"],
+      "capacidad": 50
+    }
+  ]
+}
+```
+
+### ✅ Actualización de estructura
+```
+assets/
+├── images/
+│   └── cocheras/          ← NUEVO
+│       ├── chimbote/
+│       │   ├── parking-central.jpg
+│       │   └── playa-azul.jpg
+│       └── arequipa/
+│
+data/
+├── eventos.json
+├── hoteles.json
+└── cocheras.json          ← NUEVO
