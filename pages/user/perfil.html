@@ -636,32 +636,55 @@
     <script src="../../assets/js/services/auth.service.js"></script>
     
     <script>
-        // Proteger página
-        AuthService.protectPage('../auth/login.html');
+        // Verificar autenticación al cargar
+        let isLoading = false;
+        
+        firebase.auth().onAuthStateChanged(async (user) => {
+            if (isLoading) return; // Evitar múltiples llamadas
+            isLoading = true;
+            
+            if (!user) {
+                window.location.replace('../auth/login.html');
+                return;
+            }
+            
+            currentUser = user;
+            await cargarDatosUsuario();
+        });
         
         let currentUser = null;
         let userData = null;
         
         // Cargar datos del usuario
         async function cargarDatosUsuario() {
-            currentUser = AuthService.getCurrentUser();
+            if (!currentUser) {
+                currentUser = AuthService.getCurrentUser();
+            }
             
             if (!currentUser) {
                 window.location.href = '../auth/login.html';
                 return;
             }
             
-            userData = await AuthService.getCurrentUserData();
+            try {
+                userData = await AuthService.getCurrentUserData();
+            } catch (error) {
+                console.log('Error al cargar datos de Firestore:', error);
+                userData = null;
+            }
             
             // Si no hay datos en Firestore, usar datos básicos de Auth
             if (!userData) {
                 userData = {
                     uid: currentUser.uid,
-                    nombre: currentUser.displayName || 'Usuario',
+                    nombre: currentUser.displayName || currentUser.email.split('@')[0] || 'Usuario',
                     email: currentUser.email,
                     telefono: '',
-                    emailVerificado: currentUser.emailVerified
+                    emailVerificado: currentUser.emailVerified,
+                    rol: 'usuario'
                 };
+                
+                console.log('Usando datos básicos de Firebase Auth');
             }
             
             mostrarDatosUsuario();
