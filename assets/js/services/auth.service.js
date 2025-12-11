@@ -97,7 +97,7 @@ class AuthService {
       console.log('👋 Cerrando sesión...');
       await firebase.auth().signOut();
       console.log('✅ Sesión cerrada');
-      window.location.href = '/pages/auth/login.html';
+      window.location.href = '/hospitalidad_en_accion/pages/auth/login.html';
     } catch (error) {
       console.error('❌ Error al cerrar sesión:', error);
       throw error;
