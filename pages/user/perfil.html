@@ -636,21 +636,32 @@
     <script src="../../assets/js/services/auth.service.js"></script>
     
     <script>
-        // Verificar autenticación al cargar
-        let isLoading = false;
+        // Verificar autenticación al cargar (solo una vez)
+        let authCheckComplete = false;
         
-        firebase.auth().onAuthStateChanged(async (user) => {
-            if (isLoading) return; // Evitar múltiples llamadas
-            isLoading = true;
+        async function inicializarPerfil() {
+            if (authCheckComplete) return;
             
-            if (!user) {
-                window.location.replace('../auth/login.html');
-                return;
-            }
-            
-            currentUser = user;
-            await cargarDatosUsuario();
-        });
+            return new Promise((resolve) => {
+                const unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
+                    if (authCheckComplete) return;
+                    authCheckComplete = true;
+                    unsubscribe(); // Importante: desuscribirse después de la primera ejecución
+                    
+                    if (!user) {
+                        window.location.replace('../auth/login.html');
+                        return;
+                    }
+                    
+                    currentUser = user;
+                    await cargarDatosUsuario();
+                    resolve();
+                });
+            });
+        }
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', inicializarPerfil);
         
         let currentUser = null;
         let userData = null;
@@ -865,7 +876,7 @@
         });
         
         // Inicializar
-        document.addEventListener('DOMContentLoaded', cargarDatosUsuario);
+        document.addEventListener('DOMContentLoaded', inicializarPerfil);
     </script>
 </body>
 </html>
