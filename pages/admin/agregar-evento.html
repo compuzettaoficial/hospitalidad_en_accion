@@ -1,1 +1,370 @@
-<!-- admin/agregar-evento.html - genera JSON para GitHub -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Evento - Admin</title>
+    
+    <link rel="icon" href="../../assets/images/branding/favicon.ico">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/components.css">
+    <link rel="stylesheet" href="../../assets/css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .admin-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+            padding-top: 70px;
+        }
+        
+        .admin-sidebar {
+            background: var(--color-accent);
+            color: white;
+            padding: var(--spacing-lg);
+            position: fixed;
+            left: 0;
+            top: 70px;
+            bottom: 0;
+            width: 250px;
+            overflow-y: auto;
+        }
+        
+        .sidebar-menu-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-md);
+            color: rgba(255,255,255,0.8);
+            border-radius: var(--border-radius-md);
+            margin-bottom: var(--spacing-xs);
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+        
+        .sidebar-menu-item:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+        
+        .sidebar-menu-item.active {
+            background: var(--color-primary);
+            color: white;
+        }
+        
+        .admin-main {
+            margin-left: 250px;
+            padding: var(--spacing-xl);
+            background: var(--color-bg-light);
+            min-height: calc(100vh - 70px);
+        }
+        
+        .form-card {
+            background: white;
+            padding: var(--spacing-xl);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+            max-width: 1000px;
+        }
+        
+        .json-output {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius-md);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .copy-btn {
+            position: relative;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        @media (max-width: 768px) {
+            .admin-layout { grid-template-columns: 1fr; }
+            .admin-sidebar { position: static; width: 100%; }
+            .admin-main { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="navbar-brand">
+                    <img src="../../assets/images/branding/logo.png" alt="Logo" class="logo">
+                    <span class="brand-name">Admin Panel</span>
+                </div>
+                <ul class="navbar-menu">
+                    <li><a href="../../index.html">Ver Sitio</a></li>
+                    <li><a href="#" id="logoutBtn" class="btn-login">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="admin-layout">
+        
+        <aside class="admin-sidebar">
+            <div style="font-size: 1.2rem; font-weight: 700; margin-bottom: var(--spacing-lg); padding-bottom: var(--spacing-md); border-bottom: 2px solid rgba(255,255,255,0.2);">
+                <i class="fas fa-shield-alt"></i> Panel Admin
+            </div>
+            
+            <a href="dashboard.html" class="sidebar-menu-item">
+                <i class="fas fa-chart-line"></i><span>Dashboard</span>
+            </a>
+            <a href="agregar-evento.html" class="sidebar-menu-item active">
+                <i class="fas fa-calendar-plus"></i><span>Agregar Evento</span>
+            </a>
+            <a href="agregar-hotel.html" class="sidebar-menu-item">
+                <i class="fas fa-hotel"></i><span>Agregar Hotel</span>
+            </a>
+            <a href="postulaciones.html" class="sidebar-menu-item">
+                <i class="fas fa-clipboard-list"></i><span>Postulaciones</span>
+            </a>
+        </aside>
+        
+        <main class="admin-main">
+            
+            <div style="margin-bottom: var(--spacing-xl);">
+                <h1 style="font-size: 2rem; color: var(--color-accent); margin-bottom: var(--spacing-xs);">
+                    <i class="fas fa-calendar-plus"></i> Agregar Nuevo Evento
+                </h1>
+                <p>Completa el formulario para generar el JSON que debes agregar a eventos.json</p>
+            </div>
+            
+            <div id="alertContainer"></div>
+            
+            <div class="form-card">
+                <form id="eventoForm">
+                    
+                    <h3 style="margin-bottom: var(--spacing-md); color: var(--color-accent);">
+                        <i class="fas fa-info-circle"></i> Información Básica
+                    </h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-lg);">
+                        <div class="form-group">
+                            <label class="form-label required">ID del Evento</label>
+                            <input type="text" id="eventoId" class="form-input" placeholder="chimbote-2025" required>
+                            <span class="form-help">Sin espacios, todo minúsculas</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required">Título</label>
+                            <input type="text" id="titulo" class="form-input" placeholder="Convención Nacional AMIP Perú 2025" required>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-lg);">
+                        <div class="form-group">
+                            <label class="form-label required">Fecha Inicio</label>
+                            <input type="date" id="fechaInicio" class="form-input" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required">Fecha Fin</label>
+                            <input type="date" id="fechaFin" class="form-input" required>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-xl);">
+                        <div class="form-group">
+                            <label class="form-label required">Ciudad</label>
+                            <input type="text" id="ciudad" class="form-input" placeholder="Nuevo Chimbote" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required">Departamento</label>
+                            <input type="text" id="departamento" class="form-input" placeholder="Áncash" required>
+                        </div>
+                    </div>
+                    
+                    <h3 style="margin-bottom: var(--spacing-md); color: var(--color-accent); border-top: 2px solid var(--color-bg-light); padding-top: var(--spacing-lg);">
+                        <i class="fas fa-map-marker-alt"></i> Ubicación
+                    </h3>
+                    
+                    <div class="form-group" style="margin-bottom: var(--spacing-md);">
+                        <label class="form-label required">Lugar del Evento</label>
+                        <input type="text" id="lugar" class="form-input" placeholder="Auditorio Instituto Carlos Salazar Romero" required>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-xl);">
+                        <div class="form-group">
+                            <label class="form-label required">Dirección</label>
+                            <input type="text" id="direccion" class="form-input" placeholder="Av. Pacífico 508" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Google Maps URL</label>
+                            <input type="url" id="maps" class="form-input" placeholder="https://maps.app.goo.gl/...">
+                        </div>
+                    </div>
+                    
+                    <h3 style="margin-bottom: var(--spacing-md); color: var(--color-accent); border-top: 2px solid var(--color-bg-light); padding-top: var(--spacing-lg);">
+                        <i class="fas fa-image"></i> Imágenes
+                    </h3>
+                    
+                    <div class="form-group" style="margin-bottom: var(--spacing-md);">
+                        <label class="form-label required">Imagen Principal (ruta)</label>
+                        <input type="text" id="imagenPrincipal" class="form-input" 
+                               value="/assets/images/eventos/chimbote-2025/auditorio.jpg" required>
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: var(--spacing-xl);">
+                        <label class="form-label">Descripción</label>
+                        <textarea id="descripcion" class="form-textarea" rows="4" 
+                                  placeholder="Descripción del evento..."></textarea>
+                    </div>
+                    
+                    <h3 style="margin-bottom: var(--spacing-md); color: var(--color-accent); border-top: 2px solid var(--color-bg-light); padding-top: var(--spacing-lg);">
+                        <i class="fas fa-cog"></i> Configuración
+                    </h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-lg);">
+                        <label class="form-checkbox">
+                            <input type="checkbox" id="destacado">
+                            <span>Destacado</span>
+                        </label>
+                        
+                        <label class="form-checkbox">
+                            <input type="checkbox" id="activo" checked>
+                            <span>Activo</span>
+                        </label>
+                        
+                        <label class="form-checkbox">
+                            <input type="checkbox" id="publicado" checked>
+                            <span>Publicado</span>
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fas fa-code"></i> Generar JSON
+                    </button>
+                    
+                </form>
+            </div>
+            
+            <!-- JSON Output -->
+            <div id="jsonOutputSection" style="display: none; margin-top: var(--spacing-xl);">
+                <div class="form-card">
+                    <h3 style="margin-bottom: var(--spacing-md); color: var(--color-success);">
+                        <i class="fas fa-check-circle"></i> JSON Generado
+                    </h3>
+                    
+                    <p style="margin-bottom: var(--spacing-md); color: var(--color-text-light);">
+                        Copia este JSON y agrégalo al array "eventos" en <code>data/eventos.json</code>
+                    </p>
+                    
+                    <div class="copy-btn">
+                        <button onclick="copyJSON()" class="btn btn-primary">
+                            <i class="fas fa-copy"></i> Copiar JSON
+                        </button>
+                    </div>
+                    
+                    <pre class="json-output" id="jsonOutput"></pre>
+                </div>
+            </div>
+            
+        </main>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="../../assets/js/config/firebase-config.js"></script>
+    <script src="../../assets/js/services/auth.service.js"></script>
+    
+    <script>
+        AuthService.protectPage('../auth/login.html');
+        
+        let jsonGenerado = '';
+        
+        document.getElementById('eventoForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const evento = {
+                id: document.getElementById('eventoId').value.trim(),
+                titulo: document.getElementById('titulo').value.trim(),
+                slug: document.getElementById('eventoId').value.trim(),
+                fechaInicio: document.getElementById('fechaInicio').value,
+                fechaFin: document.getElementById('fechaFin').value,
+                ciudad: document.getElementById('ciudad').value.trim(),
+                departamento: document.getElementById('departamento').value.trim(),
+                pais: "Perú",
+                lugar: document.getElementById('lugar').value.trim(),
+                direccion: document.getElementById('direccion').value.trim(),
+                maps: document.getElementById('maps').value.trim() || "",
+                
+                descripcion: document.getElementById('descripcion').value.trim() || "",
+                
+                imagenes: {
+                    principal: document.getElementById('imagenPrincipal').value.trim(),
+                    secundaria: "",
+                    galeria: []
+                },
+                
+                expositores: [],
+                programa: [],
+                
+                organizador: {
+                    nombre: "AMIP Perú",
+                    nombreCompleto: "Asociación Ministerial de Pastores del Perú",
+                    logo: "/assets/images/branding/amip-logo.png",
+                    contacto: "+51 999 888 777",
+                    email: "info@amipperu.org",
+                    website: "https://www.amipperu.org"
+                },
+                
+                costo: {
+                    esGratuito: false,
+                    moneda: "PEN",
+                    inscripcion: 0,
+                    textoInscripcion: "Gratuito",
+                    incluye: [],
+                    noIncluye: []
+                },
+                
+                capacidad: {
+                    total: 0,
+                    inscritos: 0,
+                    disponibles: 0
+                },
+                
+                tags: ["convencion"],
+                
+                estado: document.getElementById('activo').checked ? "activo" : "inactivo",
+                destacado: document.getElementById('destacado').checked,
+                publicado: document.getElementById('publicado').checked,
+                fechaCreacion: new Date().toISOString(),
+                ultimaActualizacion: new Date().toISOString(),
+                creadoPor: "admin"
+            };
+            
+            jsonGenerado = JSON.stringify(evento, null, 2);
+            document.getElementById('jsonOutput').textContent = jsonGenerado;
+            document.getElementById('jsonOutputSection').style.display = 'block';
+            
+            document.getElementById('jsonOutputSection').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        function copyJSON() {
+            navigator.clipboard.writeText(jsonGenerado).then(() => {
+                alert('JSON copiado al portapapeles!');
+            });
+        }
+        
+        document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            await AuthService.logout();
+            window.location.href = '../../index.html';
+        });
+    </script>
+</body>
+</html>
