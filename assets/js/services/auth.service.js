@@ -69,10 +69,14 @@ class AuthService {
       
       const user = userCredential.user;
       
-      // Actualizar última conexión
-      await db.collection('usuarios').doc(user.uid).update({
-        ultimaConexion: firebase.firestore.FieldValue.serverTimestamp()
-      });
+      // Actualizar última conexión (solo si el documento existe)
+      try {
+        await db.collection('usuarios').doc(user.uid).update({
+          ultimaConexion: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      } catch (error) {
+        console.log('No se pudo actualizar última conexión:', error.message);
+      }
       
       console.log('Login exitoso:', user.uid);
       
