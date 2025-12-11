@@ -11,7 +11,7 @@ class EventosService {
    */
   static async getEventos() {
     try {
-      const response = await fetch('/data/eventos.json');
+      const response = await fetch('/hospitalidad_en_accion/data/eventos.json');
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -204,11 +204,11 @@ class EventosService {
         maps: 'https://maps.app.goo.gl/ejemplo',
         
         imagenes: {
-          principal: 'assets/images/eventos/chimbote-2025/auditorio.jpg',
+          principal: '/hospitalidad_en_accion/assets/images/eventos/chimbote-2025/auditorio.jpg',
           galeria: [
-            'assets/images/eventos/chimbote-2025/galeria/dia1-01.jpg',
-            'assets/images/eventos/chimbote-2025/galeria/dia2-01.jpg',
-            'assets/images/eventos/chimbote-2025/galeria/dia3-01.jpg'
+            '/hospitalidad_en_accion/assets/images/eventos/chimbote-2025/galeria/dia1-01.jpg',
+            '/hospitalidad_en_accion/assets/images/eventos/chimbote-2025/galeria/dia2-01.jpg',
+            '/hospitalidad_en_accion/assets/images/eventos/chimbote-2025/galeria/dia3-01.jpg'
           ]
         },
         
