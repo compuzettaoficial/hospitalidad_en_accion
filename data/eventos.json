@@ -14,8 +14,8 @@
       "maps": "https://maps.app.goo.gl/tC8kvqZSNaRdR98C7",
       "descripcion": "Gran convención nacional de la Asociación Misionera de Iglesias Pentecostales (AMIP) del Perú. Cuatro días de conferencias, talleres y comunión fraternal con expositores nacionales e internacionales. Un evento que reunirá a líderes cristianos de todo el país para fortalecer el ministerio y la evangelización.",
       "imagenes": {
-        "principal": "/assets/images/eventos/chimbote-2025/auditorio-principal.jpg",
-        "secundaria": "/assets/images/eventos/chimbote-2025/auditorio-interior.jpg",
+        "principal": "/hospitalidad_en_accion/assets/images/eventos/chimbote-2025/auditorio-principal.jpg",
+        "secundaria": "/hospitalidad_en_accion/assets/images/eventos/chimbote-2025/auditorio-interior.jpg",
         "galeria": []
       },
       "expositores": [
@@ -23,14 +23,14 @@
           "nombre": "Pastor Juan Pérez",
           "pais": "Colombia",
           "tema": "Liderazgo en la Iglesia del Siglo XXI",
-          "foto": "/assets/images/expositores/pastor-juan-perez.jpg",
+          "foto": "/hospitalidad_en_accion/assets/images/expositores/pastor-juan-perez.jpg",
           "bio": "Más de 25 años de ministerio pastoral, autor de 5 libros sobre liderazgo cristiano"
         },
         {
           "nombre": "Pastora María González",
           "pais": "Argentina",
           "tema": "Evangelización en la Era Digital",
-          "foto": "/assets/images/expositores/pastora-maria-gonzalez.jpg",
+          "foto": "/hospitalidad_en_accion/assets/images/expositores/pastora-maria-gonzalez.jpg",
           "bio": "Líder de ministerios juveniles y especialista en redes sociales para la evangelización"
         }
       ],
@@ -118,7 +118,7 @@
       "organizador": {
         "nombre": "AMIP Perú",
         "nombreCompleto": "Asociación Ministerial de Pastores del Perú",
-        "logo": "/assets/images/branding/amip-logo.png",
+        "logo": "/hospitalidad_en_accion/assets/images/branding/amip-logo.png",
         "contacto": "",
         "email": "",
         "website": "https://amipinstitucional.org/"
