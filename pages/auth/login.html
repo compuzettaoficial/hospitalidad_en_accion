@@ -309,15 +309,6 @@
     <script src="../../assets/js/services/auth.service.js"></script>
     
     <script>
-        // Redirigir si ya está autenticado (solo al cargar la página)
-        let alreadyChecked = false;
-        AuthService.onAuthStateChanged(user => {
-            if (user && !alreadyChecked) {
-                window.location.href = '../user/perfil.html';
-            }
-            alreadyChecked = true;
-        });
-        
         // Referencias DOM
         const loginForm = document.getElementById('loginForm');
         const btnLogin = document.getElementById('btnLogin');
