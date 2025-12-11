@@ -653,9 +653,15 @@
             
             userData = await AuthService.getCurrentUserData();
             
+            // Si no hay datos en Firestore, usar datos básicos de Auth
             if (!userData) {
-                console.error('No se pudieron cargar los datos del usuario');
-                return;
+                userData = {
+                    uid: currentUser.uid,
+                    nombre: currentUser.displayName || 'Usuario',
+                    email: currentUser.email,
+                    telefono: '',
+                    emailVerificado: currentUser.emailVerified
+                };
             }
             
             mostrarDatosUsuario();
@@ -675,14 +681,18 @@
             document.getElementById('emailVerification').innerHTML = verificationHTML;
             
             // Fechas
-            if (userData.fechaCreacion) {
+            if (userData.fechaCreacion && userData.fechaCreacion.toDate) {
                 const fecha = userData.fechaCreacion.toDate();
                 document.getElementById('fechaRegistro').textContent = fecha.toLocaleDateString('es-PE');
+            } else {
+                document.getElementById('fechaRegistro').textContent = 'No disponible';
             }
             
-            if (userData.ultimaConexion) {
+            if (userData.ultimaConexion && userData.ultimaConexion.toDate) {
                 const fecha = userData.ultimaConexion.toDate();
                 document.getElementById('ultimaConexion').textContent = fecha.toLocaleDateString('es-PE');
+            } else {
+                document.getElementById('ultimaConexion').textContent = 'Ahora';
             }
             
             // Formulario de edición
