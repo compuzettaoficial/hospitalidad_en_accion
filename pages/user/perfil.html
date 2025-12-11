@@ -306,7 +306,7 @@
             
             // Refrescar el token para obtener el estado más reciente
             await authUser.reload();
-            const emailVerificado = authUser.emailVerified;
+            const emailVerificado = authUser.emailVerificado;
             
             console.log('📧 Email verificado (después de reload):', emailVerificado);
             
