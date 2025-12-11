@@ -406,7 +406,8 @@
                     
                     // Redirigir después de 1 segundo
                     setTimeout(() => {
-                        window.location.href = '../user/perfil.html';
+                        // Forzar redirección sin usar location.href
+                        window.location.replace('../user/perfil.html');
                     }, 1000);
                     
                 } else {
