@@ -1,1 +1,510 @@
-<!-- admin/agregar-hotel.html - genera JSON para GitHub -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Hotel - Admin</title>
+    
+    <link rel="icon" href="../../assets/images/branding/favicon.ico">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/components.css">
+    <link rel="stylesheet" href="../../assets/css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .admin-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+            padding-top: 70px;
+        }
+        
+        .admin-sidebar {
+            background: var(--color-accent);
+            color: white;
+            padding: var(--spacing-lg);
+            position: fixed;
+            left: 0;
+            top: 70px;
+            bottom: 0;
+            width: 250px;
+            overflow-y: auto;
+        }
+        
+        .sidebar-menu-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-md);
+            color: rgba(255,255,255,0.8);
+            border-radius: var(--border-radius-md);
+            margin-bottom: var(--spacing-xs);
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+        
+        .sidebar-menu-item:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+        
+        .sidebar-menu-item.active {
+            background: var(--color-primary);
+            color: white;
+        }
+        
+        .admin-main {
+            margin-left: 250px;
+            padding: var(--spacing-xl);
+            background: var(--color-bg-light);
+            min-height: calc(100vh - 70px);
+        }
+        
+        .form-card {
+            background: white;
+            padding: var(--spacing-xl);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+            max-width: 1000px;
+        }
+        
+        .json-output {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius-md);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .servicios-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-sm);
+        }
+        
+        @media (max-width: 768px) {
+            .admin-layout { grid-template-columns: 1fr; }
+            .admin-sidebar { position: static; width: 100%; }
+            .admin-main { margin-left: 0; }
+            .servicios-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="navbar-brand">
+                    <img src="../../assets/images/branding/logo.png" alt="Logo" class="logo">
+                    <span class="brand-name">Admin Panel</span>
+                </div>
+                <ul class="navbar-menu">
+                    <li><a href="../../index.html">Ver Sitio</a></li>
+                    <li><a href="#" id="logoutBtn" class="btn-login">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="admin-layout">
+        
+        <aside class="admin-sidebar">
+            <div style="font-size: 1.2rem; font-weight: 700; margin-bottom: var(--spacing-lg); padding-bottom: var(--spacing-md); border-bottom: 2px solid rgba(255,255,255,0.2);">
+                <i class="fas fa-shield-alt"></i> Panel Admin
+            </div>
+            
+            <a href="dashboard.html" class="sidebar-menu-item">
+                <i class="fas fa-chart-line"></i><span>Dashboard</span>
+            </a>
+            <a href="agregar-evento.html" class="sidebar-menu-item">
+                <i class="fas fa-calendar-plus"></i><span>Agregar Evento</span>
+            </a>
+            <a href="agregar-hotel.html" class="sidebar-menu-item active">
+                <i class="fas fa-hotel"></i><span>Agregar Hotel</span>
+            </a>
+            <a href="postulaciones.html" class="sidebar-menu-item">
+                <i class="fas fa-clipboard-list"></i><span>Postulaciones</span>
+            </a>
+        </aside>
+        
+        <main class="admin-main">
+            
+            <div style="margin-bottom: var(--spacing-xl);">
+                <h1 style="font-size: 2rem; color: var(--color-accent); margin-bottom: var(--spacing-xs);">
+                    <i class="fas fa-hotel"></i> Agregar Nuevo Hotel
+                </h1>
+                <p>Completa el formulario para generar el JSON que debes agregar a hoteles.json</p>
+            </div>
+            
+            <div class="form-card">
+                <form id="hotelForm">
+                    
+                    <h3 style="margin-bottom: var(--spacing-md); color: var(--color-accent);">
+                        <i class="fas fa-info-circle"></i> Información Básica
+                    </h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-md);">
+                        <div class="form-group">
+                            <label class="form-label required">ID del Hotel</label>
+                            <input type="text" id="hotelId" class="form-input" placeholder="costa-sol-chimbote" required>
+                            <span class="form-help">Sin espacios, todo minúsculas</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required">ID del Evento</label>
+                            <input type="text" id="eventoId" class="form-input" placeholder="chimbote-2025" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: var(--spacing-md);">
+                        <label class="form-label required">Nombre del Hotel</label>
+                        <input type="text" id="nombre" class="form-input" placeholder="Hotel Costa del Sol" required>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-xl);">
+                        <div class="form-group">
+                            <label class="form-label required">Ciudad</label>
+                            <input type="text" id="ciudad" class="form-input" placeholder="Nuevo Chimbote" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required">Departamento</label>
+                            <input type="text" id="departamento" class="form-input" placeholder="Áncash" required>
+                        </div>
+                    </div>
+                    
+                    <h3 style="margin-bottom: var(--spacing-md); color: var(--color-accent); border-top: 2px solid var(--color-bg-light); padding-top: var(--spacing-lg);">
+                        <i class="fas fa-map-marker-alt"></i> Ubicación
+                    </h3>
+                    
+                    <div class="form-group" style="margin-bottom: var(--spacing-md);">
+                        <label class="form-label required">Dirección</label>
+                        <input type="text" id="direccion" class="form-input" placeholder="Av. Enrique Meiggs 396" required>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-md);">
+                        <div class="form-group">
+                            <label class="form-label">Google Maps URL</label>
+                            <input type="url" id="maps" class="form-input" placeholder="https://maps.google.com/?q=...">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required">Distancia al Evento</label>
+                            <input type="text" id="distancia" class="form-input" placeholder="800m (10 min caminando)" required>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-xl);">
+                        <div class="form-group">
+                            <label class="form-label">Coordenada Latitud</label>
+                            <input type="number" step="0.000001" id="lat" class="form-input" placeholder="-9.0794">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Coordenada Longitud</label>
+                            <input type="number" step="0.000001" id="lng" class="form-input" placeholder="-78.5934">
+                        </div>
+                    </div>
+                    
+                    <h3 style="margin-bottom: var(--spacing-md); color: var(--color-accent); border-top: 2px solid var(--color-bg-light); padding-top: var(--spacing-lg);">
+                        <i class="fas fa-bed"></i> Tarifas
+                    </h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-xl);">
+                        <div class="form-group">
+                            <label class="form-label required">Simple (S/.)</label>
+                            <input type="number" id="precioSimple" class="form-input" placeholder="120" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required">Doble (S/.)</label>
+                            <input type="number" id="precioDoble" class="form-input" placeholder="180" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Triple (S/.)</label>
+                            <input type="number" id="precioTriple" class="form-input" placeholder="230">
+                        </div>
+                    </div>
+                    
+                    <h3 style="margin-bottom: var(--spacing-md); color: var(--color-accent); border-top: 2px solid var(--color-bg-light); padding-top: var(--spacing-lg);">
+                        <i class="fas fa-phone"></i> Contacto
+                    </h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-md);">
+                        <div class="form-group">
+                            <label class="form-label required">Teléfono Recepción</label>
+                            <input type="tel" id="telefonoRecepcion" class="form-input" placeholder="+51 043 123456" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">WhatsApp</label>
+                            <input type="tel" id="whatsapp" class="form-input" placeholder="+51 999 777 888">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: var(--spacing-xl);">
+                        <label class="form-label">Email</label>
+                        <input type="email" id="email" class="form-input" placeholder="reservas@hotel.com">
+                    </div>
+                    
+                    <h3 style="margin-bottom: var(--spacing-md); color: var(--color-accent); border-top: 2px solid var(--color-bg-light); padding-top: var(--spacing-lg);">
+                        <i class="fas fa-list-check"></i> Servicios
+                    </h3>
+                    
+                    <div class="servicios-grid" style="margin-bottom: var(--spacing-xl);">
+                        <label class="form-checkbox">
+                            <input type="checkbox" class="servicio" value="WiFi gratuito">
+                            <span>WiFi</span>
+                        </label>
+                        <label class="form-checkbox">
+                            <input type="checkbox" class="servicio" value="Desayuno incluido">
+                            <span>Desayuno</span>
+                        </label>
+                        <label class="form-checkbox">
+                            <input type="checkbox" class="servicio" value="Estacionamiento gratuito">
+                            <span>Estacionamiento</span>
+                        </label>
+                        <label class="form-checkbox">
+                            <input type="checkbox" class="servicio" value="Aire acondicionado">
+                            <span>Aire acondicionado</span>
+                        </label>
+                        <label class="form-checkbox">
+                            <input type="checkbox" class="servicio" value="TV por cable">
+                            <span>TV cable</span>
+                        </label>
+                        <label class="form-checkbox">
+                            <input type="checkbox" class="servicio" value="Room service">
+                            <span>Room service</span>
+                        </label>
+                        <label class="form-checkbox">
+                            <input type="checkbox" class="servicio" value="Lavandería">
+                            <span>Lavandería</span>
+                        </label>
+                        <label class="form-checkbox">
+                            <input type="checkbox" class="servicio" value="Restaurant">
+                            <span>Restaurant</span>
+                        </label>
+                        <label class="form-checkbox">
+                            <input type="checkbox" class="servicio" value="Bar">
+                            <span>Bar</span>
+                        </label>
+                    </div>
+                    
+                    <h3 style="margin-bottom: var(--spacing-md); color: var(--color-accent); border-top: 2px solid var(--color-bg-light); padding-top: var(--spacing-lg);">
+                        <i class="fas fa-star"></i> Características
+                    </h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-lg);">
+                        <div class="form-group">
+                            <label class="form-label">Estrellas</label>
+                            <select id="estrellas" class="form-select">
+                                <option value="1">1 estrella</option>
+                                <option value="2">2 estrellas</option>
+                                <option value="3" selected>3 estrellas</option>
+                                <option value="4">4 estrellas</option>
+                                <option value="5">5 estrellas</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Total Habitaciones</label>
+                            <input type="number" id="habitaciones" class="form-input" placeholder="45">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Pisos</label>
+                            <input type="number" id="pisos" class="form-input" placeholder="4">
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-lg);">
+                        <label class="form-checkbox">
+                            <input type="checkbox" id="recomendado">
+                            <span>Recomendado</span>
+                        </label>
+                        
+                        <label class="form-checkbox">
+                            <input type="checkbox" id="destacado">
+                            <span>Destacado</span>
+                        </label>
+                        
+                        <label class="form-checkbox">
+                            <input type="checkbox" id="verificado" checked>
+                            <span>Verificado</span>
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fas fa-code"></i> Generar JSON
+                    </button>
+                    
+                </form>
+            </div>
+            
+            <div id="jsonOutputSection" style="display: none; margin-top: var(--spacing-xl);">
+                <div class="form-card">
+                    <h3 style="margin-bottom: var(--spacing-md); color: var(--color-success);">
+                        <i class="fas fa-check-circle"></i> JSON Generado
+                    </h3>
+                    
+                    <p style="margin-bottom: var(--spacing-md); color: var(--color-text-light);">
+                        Copia este JSON y agrégalo al array "hoteles" en <code>data/hoteles.json</code>
+                    </p>
+                    
+                    <button onclick="copyJSON()" class="btn btn-primary" style="margin-bottom: var(--spacing-md);">
+                        <i class="fas fa-copy"></i> Copiar JSON
+                    </button>
+                    
+                    <pre class="json-output" id="jsonOutput"></pre>
+                </div>
+            </div>
+            
+        </main>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="../../assets/js/config/firebase-config.js"></script>
+    <script src="../../assets/js/services/auth.service.js"></script>
+    
+    <script>
+        AuthService.protectPage('../auth/login.html');
+        
+        let jsonGenerado = '';
+        
+        document.getElementById('hotelForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const servicios = [];
+            document.querySelectorAll('.servicio:checked').forEach(cb => {
+                servicios.push(cb.value);
+            });
+            
+            const precioSimple = parseFloat(document.getElementById('precioSimple').value);
+            const precioDoble = parseFloat(document.getElementById('precioDoble').value);
+            const precioTriple = document.getElementById('precioTriple').value ? 
+                parseFloat(document.getElementById('precioTriple').value) : null;
+            
+            const hotel = {
+                id: document.getElementById('hotelId').value.trim(),
+                eventoId: document.getElementById('eventoId').value.trim(),
+                nombre: document.getElementById('nombre').value.trim(),
+                ciudad: document.getElementById('ciudad').value.trim(),
+                departamento: document.getElementById('departamento').value.trim(),
+                direccion: document.getElementById('direccion').value.trim(),
+                maps: document.getElementById('maps').value.trim() || "",
+                
+                coordenadas: {
+                    lat: parseFloat(document.getElementById('lat').value) || 0,
+                    lng: parseFloat(document.getElementById('lng').value) || 0
+                },
+                
+                distanciaEvento: {
+                    metros: 800,
+                    texto: document.getElementById('distancia').value.trim()
+                },
+                
+                imagenes: {
+                    fachada: `/assets/images/hoteles/${document.getElementById('ciudad').value.toLowerCase().replace(/\s+/g, '-')}/${document.getElementById('hotelId').value}/fachada.jpg`,
+                    habitaciones: [],
+                    servicios: []
+                },
+                
+                tarifas: {
+                    simple: {
+                        precio: precioSimple,
+                        moneda: "PEN",
+                        texto: `S/. ${precioSimple} por noche`,
+                        capacidad: 1
+                    },
+                    doble: {
+                        precio: precioDoble,
+                        moneda: "PEN",
+                        texto: `S/. ${precioDoble} por noche`,
+                        capacidad: 2
+                    }
+                },
+                
+                contacto: {
+                    telefonos: [
+                        {
+                            numero: document.getElementById('telefonoRecepcion').value.trim(),
+                            tipo: "recepcion",
+                            horario: "24 horas",
+                            principal: true
+                        }
+                    ],
+                    email: document.getElementById('email').value.trim() || ""
+                },
+                
+                servicios: servicios,
+                
+                politicas: {
+                    checkIn: "14:00",
+                    checkOut: "12:00",
+                    cancelacion: "24 horas antes sin cargo",
+                    mascotas: false,
+                    fumadores: false
+                },
+                
+                caracteristicas: {
+                    estrellas: parseInt(document.getElementById('estrellas').value),
+                    habitaciones: parseInt(document.getElementById('habitaciones').value) || 0,
+                    pisos: parseInt(document.getElementById('pisos').value) || 0
+                },
+                
+                recomendado: document.getElementById('recomendado').checked,
+                verificado: document.getElementById('verificado').checked,
+                destacado: document.getElementById('destacado').checked,
+                
+                agregadoPor: "admin",
+                fechaAgregado: new Date().toISOString(),
+                ultimaActualizacion: new Date().toISOString()
+            };
+            
+            if (precioTriple) {
+                hotel.tarifas.triple = {
+                    precio: precioTriple,
+                    moneda: "PEN",
+                    texto: `S/. ${precioTriple} por noche`,
+                    capacidad: 3
+                };
+            }
+            
+            if (document.getElementById('whatsapp').value) {
+                hotel.contacto.telefonos.push({
+                    numero: document.getElementById('whatsapp').value.trim(),
+                    tipo: "whatsapp",
+                    horario: "8:00 AM - 10:00 PM"
+                });
+            }
+            
+            jsonGenerado = JSON.stringify(hotel, null, 2);
+            document.getElementById('jsonOutput').textContent = jsonGenerado;
+            document.getElementById('jsonOutputSection').style.display = 'block';
+            
+            document.getElementById('jsonOutputSection').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        function copyJSON() {
+            navigator.clipboard.writeText(jsonGenerado).then(() => {
+                alert('JSON copiado al portapapeles!');
+            });
+        }
+        
+        document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            await AuthService.logout();
+            window.location.href = '../../index.html';
+        });
+    </script>
+</body>
+</html>
