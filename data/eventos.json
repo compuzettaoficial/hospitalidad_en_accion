@@ -12,15 +12,12 @@
       "lugar": "Auditorio Instituto Carlos Salazar Romero",
       "direccion": "Av. Pacífico 508, Nuevo Chimbote 02804",
       "maps": "https://maps.app.goo.gl/tC8kvqZSNaRdR98C7",
-      
       "descripcion": "Gran convención nacional de la Asociación Ministerial de Pastores (AMIP) del Perú. Cuatro días de conferencias, talleres y comunión fraternal con expositores nacionales e internacionales. Un evento que reunirá a líderes cristianos de todo el país para fortalecer el ministerio y la evangelización.",
-      
       "imagenes": {
         "principal": "/assets/images/eventos/chimbote-2025/auditorio-principal.jpg",
         "secundaria": "/assets/images/eventos/chimbote-2025/auditorio-interior.jpg",
         "galeria": []
       },
-      
       "expositores": [
         {
           "nombre": "Pastor Juan Pérez",
@@ -35,9 +32,8 @@
           "tema": "Evangelización en la Era Digital",
           "foto": "/assets/images/expositores/pastora-maria-gonzalez.jpg",
           "bio": "Líder de ministerios juveniles y especialista en redes sociales para la evangelización"
-      
-      },
-      
+        }
+      ],
       "programa": [
         {
           "dia": "2025-02-20",
@@ -119,7 +115,6 @@
           ]
         }
       ],
-      
       "organizador": {
         "nombre": "AMIP Perú",
         "nombreCompleto": "Asociación Ministerial de Pastores del Perú",
@@ -128,7 +123,6 @@
         "email": "info@amipperu.org",
         "website": "https://www.amipperu.org"
       },
-      
       "costo": {
         "esGratuito": false,
         "moneda": "PEN",
@@ -146,15 +140,12 @@
           "Transporte"
         ]
       },
-      
       "capacidad": {
         "total": 2000,
         "inscritos": 450,
         "disponibles": 1550
       },
-      
       "tags": ["convencion", "amip", "liderazgo", "evangelizacion", "ministerial"],
-      
       "estado": "activo",
       "destacado": true,
       "publicado": true,
@@ -163,7 +154,6 @@
       "creadoPor": "admin-nestor"
     }
   ],
-  
   "metadata": {
     "version": "1.0",
     "ultimaActualizacion": "2024-12-09T10:00:00Z",
