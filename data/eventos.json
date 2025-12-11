@@ -36,7 +36,7 @@
       ],
       "programa": [
         {
-          "dia": "2025-02-20",
+          "dia": "2026-02-20",
           "diaNombre": "Jueves",
           "actividades": [
             {
@@ -56,7 +56,7 @@
           ]
         },
         {
-          "dia": "2025-02-21",
+          "dia": "2026-02-21",
           "diaNombre": "Viernes",
           "actividades": [
             {
@@ -119,15 +119,15 @@
         "nombre": "AMIP Perú",
         "nombreCompleto": "Asociación Ministerial de Pastores del Perú",
         "logo": "/assets/images/branding/amip-logo.png",
-        "contacto": "+51 999 888 777",
-        "email": "info@amipperu.org",
-        "website": "https://www.amipperu.org"
+        "contacto": "",
+        "email": "",
+        "website": "https://amipinstitucional.org/"
       },
       "costo": {
         "esGratuito": false,
         "moneda": "PEN",
-        "inscripcion": 80,
-        "textoInscripcion": "S/. 80 por persona",
+        "inscripcion": GRATIS,
+        "textoInscripcion": "S/. 00 Totalmente GRATIS",
         "incluye": [
           "Acceso a todas las conferencias",
           "Material impreso",
@@ -149,14 +149,14 @@
       "estado": "activo",
       "destacado": true,
       "publicado": true,
-      "fechaCreacion": "2024-12-09T10:00:00Z",
-      "ultimaActualizacion": "2024-12-09T10:00:00Z",
+      "fechaCreacion": "2025-12-09T10:00:00Z",
+      "ultimaActualizacion": "2025-12-09T10:00:00Z",
       "creadoPor": "admin-nestor"
     }
   ],
   "metadata": {
     "version": "1.0",
-    "ultimaActualizacion": "2024-12-09T10:00:00Z",
+    "ultimaActualizacion": "2025-12-09T10:00:00Z",
     "totalEventos": 1
   }
 }
