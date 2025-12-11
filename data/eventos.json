@@ -126,7 +126,7 @@
       "costo": {
         "esGratuito": false,
         "moneda": "PEN",
-        "inscripcion": GRATIS,
+        "inscripcion": "GRATIS",
         "textoInscripcion": "S/. 00 Totalmente GRATIS",
         "incluye": [
           "Acceso a todas las conferencias",
