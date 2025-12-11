@@ -23,19 +23,3 @@
     }
   ]
 }
-```
-
-### ✅ Actualización de estructura
-```
-assets/
-├── images/
-│   └── cocheras/          ← NUEVO
-│       ├── chimbote/
-│       │   ├── parking-central.jpg
-│       │   └── playa-azul.jpg
-│       └── arequipa/
-│
-data/
-├── eventos.json
-├── hoteles.json
-└── cocheras.json          ← NUEVO
