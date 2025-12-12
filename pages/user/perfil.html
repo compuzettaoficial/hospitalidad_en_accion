@@ -230,6 +230,62 @@
                         </div>
                     </div>
 
+                    <!-- EDITAR PERFIL -->
+                    <div class="info-card">
+                        <h3 style="margin-bottom: var(--spacing-md);">
+                            <i class="fas fa-user-edit" style="color: var(--color-primary);"></i>
+                            Editar Información
+                        </h3>
+                        
+                        <!-- Editar Nombre -->
+                        <div style="margin-bottom: var(--spacing-lg);">
+                            <label style="display: block; margin-bottom: var(--spacing-xs); font-weight: 600;">
+                                <i class="fas fa-user"></i> Nombre Completo
+                            </label>
+                            <div style="display: flex; gap: var(--spacing-sm);">
+                                <input type="text" id="editNombre" class="input" placeholder="Tu nombre" style="flex: 1;">
+                                <button onclick="editarNombre()" id="btnGuardarNombre" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Guardar
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Editar Teléfono -->
+                        <div style="margin-bottom: var(--spacing-lg);">
+                            <label style="display: block; margin-bottom: var(--spacing-xs); font-weight: 600;">
+                                <i class="fas fa-phone"></i> Teléfono
+                            </label>
+                            <div style="display: flex; gap: var(--spacing-sm);">
+                                <input type="tel" id="editTelefono" class="input" placeholder="+51 999 888 777" style="flex: 1;">
+                                <button onclick="editarTelefono()" id="btnGuardarTelefono" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Guardar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CAMBIAR CONTRASEÑA -->
+                    <div class="info-card">
+                        <h3 style="margin-bottom: var(--spacing-md);">
+                            <i class="fas fa-lock" style="color: var(--color-accent);"></i>
+                            Cambiar Contraseña
+                        </h3>
+                        
+                        <div style="margin-bottom: var(--spacing-md);">
+                            <input type="password" id="passwordActual" class="input" placeholder="Contraseña actual">
+                        </div>
+                        <div style="margin-bottom: var(--spacing-md);">
+                            <input type="password" id="passwordNueva" class="input" placeholder="Nueva contraseña (mín. 6 caracteres)">
+                        </div>
+                        <div style="margin-bottom: var(--spacing-md);">
+                            <input type="password" id="passwordConfirm" class="input" placeholder="Confirmar nueva contraseña">
+                        </div>
+                        
+                        <button onclick="cambiarPassword()" id="btnCambiarPassword" class="btn btn-accent">
+                            <i class="fas fa-key"></i> Cambiar Contraseña
+                        </button>
+                    </div>
+
                     <!-- Información de Cuenta -->
                     <div class="info-card">
                         <h3 style="margin-bottom: var(--spacing-md); display: flex; align-items: center; gap: var(--spacing-sm);">
@@ -250,7 +306,6 @@
                             <span id="estadoEmail">Verificando...</span>
                         </div>
                         
-                        <!-- Botón reenviar verificación (oculto por defecto) -->
                         <button id="btnReenviarVerificacion" class="btn btn-outline" style="display: none; margin-top: var(--spacing-md);">
                             <i class="fas fa-envelope"></i> Reenviar Email de Verificación
                         </button>
@@ -268,7 +323,8 @@
             </div>
         </div>
     </footer>
-<!-- App Config (PRIMERO) -->
+
+    <!-- App Config -->
     <script src="../../assets/js/config/app-config.js"></script>
 
     <!-- Firebase -->
@@ -280,12 +336,14 @@
     
     <script>
         console.log('🔍 Inicializando perfil...');
-        
+
+        let currentUserData = null;
+
         // Proteger página
         AuthService.protegerPagina().catch(error => {
             console.error('❌ Error protegiendo página:', error);
         });
-        
+
         // Cargar datos del usuario
         AuthService.observarEstadoAuth(async (userData) => {
             if (!userData) {
@@ -295,20 +353,20 @@
             }
             
             console.log('✅ Usuario cargado:', userData);
+            currentUserData = userData;
             
             // Mostrar datos básicos
             document.getElementById('userName').textContent = userData.nombre || 'Usuario';
             document.getElementById('userEmail').textContent = userData.email || 'No especificado';
             document.getElementById('userPhone').textContent = userData.telefono || 'No especificado';
             
-            // ✅ SIMPLIFICADO: Email siempre activo
+            // Email siempre activo
             document.getElementById('userEmailVerified').innerHTML = 
                 '<i class="fas fa-check-circle" style="color: #10B981;"></i> Cuenta Activa';
             
             document.getElementById('estadoEmail').innerHTML = 
                 '<span style="color: var(--color-success);"><i class="fas fa-check-circle"></i> Activo</span>';
             
-            // Ocultar botón de verificación
             const btnReenviar = document.getElementById('btnReenviarVerificacion');
             if (btnReenviar) {
                 btnReenviar.style.display = 'none';
@@ -340,15 +398,169 @@
                         minute: '2-digit'
                     });
             }
+            
+            // Cargar datos en campos de edición
+            cargarDatosEdicion();
         });
-        
+
+        // Cargar datos en formularios
+        function cargarDatosEdicion() {
+            if (!currentUserData) return;
+            
+            const inputNombre = document.getElementById('editNombre');
+            const inputTelefono = document.getElementById('editTelefono');
+            
+            if (inputNombre) inputNombre.value = currentUserData.nombre || '';
+            if (inputTelefono) inputTelefono.value = currentUserData.telefono || '';
+        }
+
+        // Editar nombre
+        async function editarNombre() {
+            const nuevoNombre = document.getElementById('editNombre').value.trim();
+            
+            if (!nuevoNombre) {
+                alert('El nombre no puede estar vacío');
+                return;
+            }
+            
+            if (nuevoNombre.length < 3) {
+                alert('El nombre debe tener al menos 3 caracteres');
+                return;
+            }
+            
+            if (nuevoNombre === currentUserData.nombre) {
+                alert('El nombre no ha cambiado');
+                return;
+            }
+            
+            try {
+                const btn = document.getElementById('btnGuardarNombre');
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+                
+                await AuthService.actualizarPerfil(currentUserData.uid, {
+                    nombre: nuevoNombre
+                });
+                
+                document.getElementById('userName').textContent = nuevoNombre;
+                currentUserData.nombre = nuevoNombre;
+                
+                alert('✅ Nombre actualizado correctamente');
+                
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-save"></i> Guardar';
+                
+            } catch (error) {
+                console.error('❌ Error:', error);
+                alert('Error al actualizar el nombre');
+                
+                const btn = document.getElementById('btnGuardarNombre');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-save"></i> Guardar';
+            }
+        }
+
+        // Editar teléfono
+        async function editarTelefono() {
+            const nuevoTelefono = document.getElementById('editTelefono').value.trim();
+            
+            if (!nuevoTelefono) {
+                alert('El teléfono no puede estar vacío');
+                return;
+            }
+            
+            const re = /^[\+]?[0-9\s]{9,15}$/;
+            if (!re.test(nuevoTelefono)) {
+                alert('Por favor ingresa un teléfono válido');
+                return;
+            }
+            
+            if (nuevoTelefono === currentUserData.telefono) {
+                alert('El teléfono no ha cambiado');
+                return;
+            }
+            
+            try {
+                const btn = document.getElementById('btnGuardarTelefono');
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+                
+                await AuthService.actualizarPerfil(currentUserData.uid, {
+                    telefono: nuevoTelefono
+                });
+                
+                document.getElementById('userPhone').textContent = nuevoTelefono;
+                currentUserData.telefono = nuevoTelefono;
+                
+                alert('✅ Teléfono actualizado correctamente');
+                
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-save"></i> Guardar';
+                
+            } catch (error) {
+                console.error('❌ Error:', error);
+                alert('Error al actualizar el teléfono');
+                
+                const btn = document.getElementById('btnGuardarTelefono');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-save"></i> Guardar';
+            }
+        }
+
+        // Cambiar contraseña
+        async function cambiarPassword() {
+            const passwordActual = document.getElementById('passwordActual').value;
+            const passwordNueva = document.getElementById('passwordNueva').value;
+            const passwordConfirm = document.getElementById('passwordConfirm').value;
+            
+            if (!passwordActual || !passwordNueva || !passwordConfirm) {
+                alert('Todos los campos son obligatorios');
+                return;
+            }
+            
+            if (passwordNueva.length < 6) {
+                alert('La nueva contraseña debe tener al menos 6 caracteres');
+                return;
+            }
+            
+            if (passwordNueva !== passwordConfirm) {
+                alert('Las contraseñas nuevas no coinciden');
+                return;
+            }
+            
+            try {
+                const btn = document.getElementById('btnCambiarPassword');
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cambiando...';
+                
+                await AuthService.cambiarPassword(passwordActual, passwordNueva);
+                
+                alert('✅ Contraseña cambiada correctamente');
+                
+                document.getElementById('passwordActual').value = '';
+                document.getElementById('passwordNueva').value = '';
+                document.getElementById('passwordConfirm').value = '';
+                
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-key"></i> Cambiar Contraseña';
+                
+            } catch (error) {
+                console.error('❌ Error:', error);
+                alert(error.message || 'Error al cambiar contraseña');
+                
+                const btn = document.getElementById('btnCambiarPassword');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-key"></i> Cambiar Contraseña';
+            }
+        }
+
         // Logout
         async function handleLogout() {
             if (confirm('¿Estás seguro de cerrar sesión?')) {
                 try {
                     await AuthService.logout();
                 } catch (error) {
-                    console.error('❌ Error al cerrar sesión:', error);
+                    console.error('❌ Error:', error);
                     alert('Error al cerrar sesión');
                 }
             }
