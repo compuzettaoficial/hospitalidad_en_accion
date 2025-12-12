@@ -268,7 +268,7 @@
             </div>
         </div>
     </footer>
-    <!-- App Config (PRIMERO) -->
+<!-- App Config (PRIMERO) -->
     <script src="../../assets/js/config/app-config.js"></script>
 
     <!-- Firebase -->
@@ -301,49 +301,17 @@
             document.getElementById('userEmail').textContent = userData.email || 'No especificado';
             document.getElementById('userPhone').textContent = userData.telefono || 'No especificado';
             
-            // ====== FIX PRINCIPAL: Verificar email ======
-            const authUser = firebase.auth().currentUser;
+            // ✅ SIMPLIFICADO: Email siempre activo
+            document.getElementById('userEmailVerified').innerHTML = 
+                '<i class="fas fa-check-circle" style="color: #10B981;"></i> Cuenta Activa';
             
-            // Refrescar el token para obtener el estado más reciente
-            await authUser.reload();
-            const emailVerificado = authUser.emailVerified;
+            document.getElementById('estadoEmail').innerHTML = 
+                '<span style="color: var(--color-success);"><i class="fas fa-check-circle"></i> Activo</span>';
             
-            console.log('📧 Email verificado (después de reload):', emailVerificado);
-            
-            // Si Firebase Auth dice que NO está verificado, intentar verificar manualmente
-            if (!emailVerificado) {
-                console.log('⚠️ Verificando si el email fue verificado recientemente...');
-                
-                // Forzar actualización del token
-                await authUser.getIdToken(true);
-                await authUser.reload();
-                
-                const emailVerificadoAhora = authUser.emailVerified;
-                console.log('📧 Email verificado (después de forzar reload):', emailVerificadoAhora);
-                
-                // Actualizar badge en header
-                if (emailVerificadoAhora) {
-                    document.getElementById('userEmailVerified').innerHTML = 
-                        '<i class="fas fa-check-circle" style="color: #10B981;"></i> Email Verificado';
-                    
-                    // Actualizar en Firestore
-                    await firebase.firestore()
-                        .collection('usuarios')
-                        .doc(authUser.uid)
-                        .update({ emailVerificado: true });
-                } else {
-                    document.getElementById('userEmailVerified').innerHTML = 
-                        '<i class="fas fa-exclamation-circle" style="color: #F59E0B;"></i> Email No Verificado';
-                }
-                
-                // Actualizar en la sección de información
-                mostrarEstadoEmail(emailVerificadoAhora);
-                
-            } else {
-                // Email ya verificado
-                document.getElementById('userEmailVerified').innerHTML = 
-                    '<i class="fas fa-check-circle" style="color: #10B981;"></i> Email Verificado';
-                mostrarEstadoEmail(true);
+            // Ocultar botón de verificación
+            const btnReenviar = document.getElementById('btnReenviarVerificacion');
+            if (btnReenviar) {
+                btnReenviar.style.display = 'none';
             }
             
             // Fechas
@@ -371,50 +339,6 @@
                         hour: '2-digit',
                         minute: '2-digit'
                     });
-            }
-        });
-        
-        // Función para mostrar estado de email
-        function mostrarEstadoEmail(verificado) {
-            const estadoEmailElement = document.getElementById('estadoEmail');
-            const btnReenviar = document.getElementById('btnReenviarVerificacion');
-            
-            if (verificado) {
-                estadoEmailElement.innerHTML = 
-                    '<span style="color: var(--color-success);"><i class="fas fa-check-circle"></i> Verificado</span>';
-                btnReenviar.style.display = 'none';
-            } else {
-                estadoEmailElement.innerHTML = 
-                    '<span style="color: var(--color-warning);"><i class="fas fa-exclamation-circle"></i> No Verificado</span>';
-                btnReenviar.style.display = 'block';
-            }
-        }
-        
-        // Reenviar verificación
-        document.getElementById('btnReenviarVerificacion')?.addEventListener('click', async () => {
-            const btn = document.getElementById('btnReenviarVerificacion');
-            const originalText = btn.innerHTML;
-            
-            try {
-                btn.disabled = true;
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
-                
-                await AuthService.reenviarVerificacion();
-                
-                alert('✅ Email de verificación enviado. Revisa tu bandeja de entrada y spam.');
-                
-                btn.innerHTML = '<i class="fas fa-check"></i> Email Enviado';
-                
-                setTimeout(() => {
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
-                }, 3000);
-                
-            } catch (error) {
-                console.error('❌ Error:', error);
-                alert('❌ ' + (error.message || 'Error al enviar email'));
-                btn.innerHTML = originalText;
-                btn.disabled = false;
             }
         });
         
