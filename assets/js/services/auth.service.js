@@ -29,13 +29,17 @@ class AuthService {
       const user = userCredential.user;
       console.log('✅ Usuario creado en Auth con UID:', user.uid);
       
-      // 2. Preparar datos para Firestore
-      const userData = {
+      // 2. Preparar datos para Firestore (sin timestamps por ahora)
+      const userDataForInitialSet = {
         nombre: datos.nombre,
         email: datos.email,
         telefono: datos.telefono,
         rol: 'usuario',
-        activo: true,
+        activo: true
+        // NOTA: NO colocamos fechaCreacion ni ultimaConexion aquí (ver explicación)
+      };
+
+      const userTimestamps = {
         fechaCreacion: firebase.firestore.FieldValue.serverTimestamp(),
         ultimaConexion: firebase.firestore.FieldValue.serverTimestamp()
       };
@@ -50,30 +54,52 @@ class AuthService {
           intentos++;
           console.log(`📝 Intento ${intentos}/${maxIntentos} de guardar en Firestore...`);
           
+          // Primera operación: crear el documento SIN serverTimestamp() (para evitar fallos iniciales)
           await firebase.firestore()
             .collection('usuarios')
             .doc(user.uid)
-            .set(userData);
-          
+            .set(userDataForInitialSet);
+
+          // Segunda operación: actualizar timestamps. Hacemos esto en un update separado.
+          await firebase.firestore()
+            .collection('usuarios')
+            .doc(user.uid)
+            .update(userTimestamps);
+
           guardado = true;
-          console.log('✅ Datos guardados exitosamente en Firestore');
+          console.log('✅ Datos guardados exitosamente en Firestore (set + update)');
           
         } catch (firestoreError) {
-          console.error(`❌ Error en intento ${intentos}:`, firestoreError.code, firestoreError.message);
-          
+          // Mostrar información completa del error
+          console.error(`❌ Error en intento ${intentos}:`, firestoreError && firestoreError.code ? firestoreError.code : firestoreError);
+          console.error('Mensaje error Firestore:', firestoreError && firestoreError.message ? firestoreError.message : firestoreError);
+
+          // Si el documento fue parcialmente creado (p.ej. set falló pero update falló o viceversa), intentar limpieza parcial en el último intento.
           if (intentos < maxIntentos) {
             console.log(`⏳ Esperando 1 segundo antes de reintentar...`);
             await new Promise(resolve => setTimeout(resolve, 1000));
           } else {
-            // Si fallan todos los intentos, eliminar usuario de Auth
+            // Si fallan todos los intentos, eliminar usuario de Auth (mantener consistencia)
             console.error('❌ CRÍTICO: No se pudo guardar en Firestore después de 3 intentos');
-            console.log('🗑️ Eliminando usuario de Auth para mantener consistencia...');
+            console.log('🗑️ Intentando eliminar usuario de Auth para mantener consistencia...');
             
             try {
+              // Intentar eliminar el documento Firestore si existe (para no dejar registros huérfanos)
+              try {
+                await firebase.firestore()
+                  .collection('usuarios')
+                  .doc(user.uid)
+                  .delete();
+                console.log('✅ Documento Firestore eliminado (limpieza parcial)');
+              } catch (cleanErr) {
+                console.warn('⚠️ No se pudo eliminar el documento Firestore durante limpieza:', cleanErr);
+              }
+
+              // Eliminar usuario en Auth
               await user.delete();
               console.log('✅ Usuario eliminado de Auth');
             } catch (deleteError) {
-              console.error('❌ Error al eliminar usuario:', deleteError);
+              console.error('❌ Error al eliminar usuario de Auth:', deleteError);
             }
             
             throw new Error('No se pudieron guardar tus datos. Por favor intenta nuevamente en unos momentos.');
@@ -157,11 +183,16 @@ class AuthService {
       }
       
       // Actualizar última conexión
-      await docRef.update({
-        ultimaConexion: firebase.firestore.FieldValue.serverTimestamp()
-      });
+      try {
+        await docRef.update({
+          ultimaConexion: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        console.log('✅ Última conexión actualizada');
+      } catch (updateErr) {
+        console.warn('⚠️ No se pudo actualizar ultimaConexion:', updateErr);
+        // No forzamos logout por este fallo; permitimos el acceso aunque no se actualice la marca de tiempo.
+      }
       
-      console.log('✅ Última conexión actualizada');
       console.log('✅✅✅ LOGIN COMPLETADO EXITOSAMENTE');
       
       return user;
@@ -254,7 +285,7 @@ class AuthService {
           console.error('Error message:', error.message);
           
           // Si es error de permisos, cerrar sesión
-          if (error.code === 'permission-denied') {
+          if (error.code === 'permission-denied' || (error && error.message && error.message.toLowerCase().includes('permission'))) {
             console.error('⚠️ Error de permisos de Firestore');
             console.error('⚠️ Verifica las reglas en Firebase Console');
             console.log('🚪 Cerrando sesión...');
