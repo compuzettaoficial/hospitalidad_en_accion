@@ -6,36 +6,31 @@
 class AuthService {
   
   // ============================================
-  // REGISTRO DE NUEVO USUARIO
+  // REGISTRO DE NUEVO USUARIO (CON RETRY Y VERIFICACIÓN)
   // ============================================
-static async register(datos) {
-  try {
-    console.log('📝 Iniciando registro para:', datos.email);
-    
-    // Validaciones previas
-    if (!datos.email || !datos.password || !datos.nombre || !datos.telefono) {
-      throw new Error('Todos los campos son obligatorios');
-    }
-    
-    if (datos.password.length < 6) {
-      throw new Error('La contraseña debe tener al menos 6 caracteres');
-    }
-    
-    // Crear usuario en Firebase Auth
-    const userCredential = await firebase.auth()
-      .createUserWithEmailAndPassword(datos.email, datos.password);
-    
-    const user = userCredential.user;
-    console.log('✅ Usuario creado en Auth:', user.uid);
-    
-    // ❌ NO ENVIAR EMAIL DE VERIFICACIÓN
-    // Ya no lo necesitamos
-    
-    // Guardar datos en Firestore
-    await firebase.firestore()
-      .collection('usuarios')
-      .doc(user.uid)
-      .set({
+  static async register(datos) {
+    try {
+      console.log('📝 Iniciando registro para:', datos.email);
+      
+      // Validaciones previas
+      if (!datos.email || !datos.password || !datos.nombre || !datos.telefono) {
+        throw new Error('Todos los campos son obligatorios');
+      }
+      
+      if (datos.password.length < 6) {
+        throw new Error('La contraseña debe tener al menos 6 caracteres');
+      }
+      
+      // 1. Crear usuario en Firebase Auth
+      console.log('🔐 Creando usuario en Firebase Auth...');
+      const userCredential = await firebase.auth()
+        .createUserWithEmailAndPassword(datos.email, datos.password);
+      
+      const user = userCredential.user;
+      console.log('✅ Usuario creado en Auth con UID:', user.uid);
+      
+      // 2. Preparar datos para Firestore
+      const userData = {
         nombre: datos.nombre,
         email: datos.email,
         telefono: datos.telefono,
@@ -43,18 +38,82 @@ static async register(datos) {
         activo: true,
         fechaCreacion: firebase.firestore.FieldValue.serverTimestamp(),
         ultimaConexion: firebase.firestore.FieldValue.serverTimestamp()
-      });
-    
-    console.log('✅ Datos guardados en Firestore');
-    console.log('✅ Registro completado exitosamente');
-    
-    return user;
-    
-  } catch (error) {
-    console.error('❌ Error en registro:', error);
-    throw error;
+      };
+      
+      // 3. Guardar en Firestore CON RETRY (3 intentos)
+      let intentos = 0;
+      const maxIntentos = 3;
+      let guardado = false;
+      
+      while (intentos < maxIntentos && !guardado) {
+        try {
+          intentos++;
+          console.log(`📝 Intento ${intentos}/${maxIntentos} de guardar en Firestore...`);
+          
+          await firebase.firestore()
+            .collection('usuarios')
+            .doc(user.uid)
+            .set(userData);
+          
+          guardado = true;
+          console.log('✅ Datos guardados exitosamente en Firestore');
+          
+        } catch (firestoreError) {
+          console.error(`❌ Error en intento ${intentos}:`, firestoreError.code, firestoreError.message);
+          
+          if (intentos < maxIntentos) {
+            console.log(`⏳ Esperando 1 segundo antes de reintentar...`);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+          } else {
+            // Si fallan todos los intentos, eliminar usuario de Auth
+            console.error('❌ CRÍTICO: No se pudo guardar en Firestore después de 3 intentos');
+            console.log('🗑️ Eliminando usuario de Auth para mantener consistencia...');
+            
+            try {
+              await user.delete();
+              console.log('✅ Usuario eliminado de Auth');
+            } catch (deleteError) {
+              console.error('❌ Error al eliminar usuario:', deleteError);
+            }
+            
+            throw new Error('No se pudieron guardar tus datos. Por favor intenta nuevamente en unos momentos.');
+          }
+        }
+      }
+      
+      // 4. Verificar que el documento existe
+      console.log('🔍 Verificando que los datos se guardaron correctamente...');
+      
+      const docVerify = await firebase.firestore()
+        .collection('usuarios')
+        .doc(user.uid)
+        .get();
+      
+      if (!docVerify.exists) {
+        console.error('❌ CRÍTICO: Verificación falló - documento no existe');
+        console.log('🗑️ Eliminando usuario de Auth...');
+        
+        try {
+          await user.delete();
+        } catch (deleteError) {
+          console.error('❌ Error al eliminar usuario:', deleteError);
+        }
+        
+        throw new Error('Error al verificar tus datos. Por favor intenta nuevamente.');
+      }
+      
+      console.log('✅ Verificación exitosa - documento existe en Firestore');
+      console.log('✅✅✅ REGISTRO COMPLETADO EXITOSAMENTE');
+      
+      return user;
+      
+    } catch (error) {
+      console.error('❌ Error en registro:');
+      console.error('Code:', error.code);
+      console.error('Message:', error.message);
+      throw error;
+    }
   }
-}
   
   // ============================================
   // LOGIN
@@ -74,7 +133,6 @@ static async register(datos) {
       
       const user = userCredential.user;
       console.log('✅ Auth exitoso. UID:', user.uid);
-      console.log('📧 Email verificado:', user.emailVerified);
       
       // Verificar si el usuario existe en Firestore
       const docRef = firebase.firestore()
@@ -85,11 +143,12 @@ static async register(datos) {
       
       if (!doc.exists) {
         console.error('❌ Usuario no existe en Firestore');
-        throw new Error('Usuario no encontrado en base de datos');
+        await firebase.auth().signOut();
+        throw new Error('Usuario no encontrado en base de datos. Por favor contacta al administrador.');
       }
       
       const userData = doc.data();
-      console.log('✅ Datos Firestore obtenidos:', userData);
+      console.log('✅ Datos Firestore obtenidos');
       
       // Verificar si la cuenta está activa
       if (userData.activo === false) {
@@ -99,12 +158,11 @@ static async register(datos) {
       
       // Actualizar última conexión
       await docRef.update({
-        ultimaConexion: firebase.firestore.FieldValue.serverTimestamp(),
-        emailVerificado: user.emailVerified
+        ultimaConexion: firebase.firestore.FieldValue.serverTimestamp()
       });
       
       console.log('✅ Última conexión actualizada');
-      console.log('✅ Login completado exitosamente');
+      console.log('✅✅✅ LOGIN COMPLETADO EXITOSAMENTE');
       
       return user;
       
@@ -141,7 +199,7 @@ static async register(datos) {
   }
   
   // ============================================
-  // OBSERVAR ESTADO DE AUTENTICACIÓN
+  // OBSERVAR ESTADO DE AUTENTICACIÓN (CON ESPERA Y MEJOR MANEJO)
   // ============================================
   static observarEstadoAuth(callback) {
     console.log('👁️ Iniciando observador de autenticación...');
@@ -151,9 +209,13 @@ static async register(datos) {
         console.log('👤 Usuario autenticado detectado');
         console.log('📧 Email:', user.email);
         console.log('🔑 UID:', user.uid);
-        console.log('✅ Email verificado:', user.emailVerified);
         
         try {
+          // Esperar 500ms para asegurar que Firestore tenga los datos
+          // Esto es importante en registros recientes
+          console.log('⏳ Esperando sincronización con Firestore...');
+          await new Promise(resolve => setTimeout(resolve, 500));
+          
           // Obtener datos de Firestore
           const doc = await firebase.firestore()
             .collection('usuarios')
@@ -175,11 +237,30 @@ static async register(datos) {
             callback(fullUserData);
           } else {
             console.error('❌ Documento no existe en Firestore para UID:', user.uid);
-            console.log('🔍 Ruta buscada: usuarios/' + user.uid);
+            console.error('🔍 Ruta buscada: usuarios/' + user.uid);
+            console.error('⚠️ Esto puede indicar:');
+            console.error('   1. Problema con las reglas de Firestore');
+            console.error('   2. El documento no se creó durante el registro');
+            console.error('   3. El documento fue eliminado manualmente');
+            
+            // Cerrar sesión para evitar bucle infinito
+            console.log('🚪 Cerrando sesión automáticamente para evitar bucle...');
+            await firebase.auth().signOut();
             callback(null);
           }
         } catch (error) {
           console.error('❌ Error obteniendo datos de Firestore:', error);
+          console.error('Error code:', error.code);
+          console.error('Error message:', error.message);
+          
+          // Si es error de permisos, cerrar sesión
+          if (error.code === 'permission-denied') {
+            console.error('⚠️ Error de permisos de Firestore');
+            console.error('⚠️ Verifica las reglas en Firebase Console');
+            console.log('🚪 Cerrando sesión...');
+            await firebase.auth().signOut();
+          }
+          
           callback(null);
         }
       } else {
@@ -258,7 +339,6 @@ static async register(datos) {
     } catch (error) {
       console.error('❌ Error reenviando email:', error);
       
-      // Manejar error de demasiados intentos
       if (error.code === 'auth/too-many-requests') {
         throw new Error('Demasiados intentos. Espera unos minutos antes de intentar nuevamente.');
       }
