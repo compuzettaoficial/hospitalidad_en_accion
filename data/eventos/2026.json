@@ -1,0 +1,134 @@
+{
+  "año": 2026,
+  "totalEventos": 1,
+  "eventos": [
+    {
+      "id": "amip-chimbote-feb2026",
+      "slug": "convencion-amip-chimbote-2026",
+      "titulo": "Convención Nacional AMIP Perú 2026",
+      "subtitulo": "Unidos en Cristo para transformar naciones",
+      "descripcion": "Gran convención nacional de la Asociación Misionera de Iglesias Pentecostales (AMIP) del Perú. Cuatro días de conferencias, talleres y comunión fraternal con conferencistas internacionales. Un evento que reunirá a líderes cristianos de todo el país para fortalecer el ministerio y la evangelización.",
+      
+      "fechaInicio": "2026-02-20",
+      "fechaFin": "2026-02-23",
+      "año": 2026,
+      "mes": 2,
+      "mesNombre": "Febrero",
+      "duracionDias": 4,
+      
+      "ubicacion": {
+        "ciudad": "chimbote",
+        "ciudadNombre": "Nuevo Chimbote",
+        "departamento": "Áncash",
+        "region": "Costa Norte",
+        "pais": "Perú",
+        "lugar": "Auditorio Instituto Carlos Salazar Romero",
+        "direccion": "Av. Pacífico 508, Nuevo Chimbote 02804",
+        "maps": "https://maps.app.goo.gl/tC8kvqZSNaRdR98C7",
+        "coordenadas": {
+          "lat": -9.0794,
+          "lng": -78.5934
+        }
+      },
+      
+      "imagenes": {
+        "hero": "/assets/images/eventos/2026/02-febrero/amip-chimbote/hero.jpg",
+        "thumbnail": "/assets/images/eventos/2026/02-febrero/amip-chimbote/thumbnail.jpg",
+        "auditorio": "/assets/images/eventos/2026/02-febrero/amip-chimbote/auditorio.jpg",
+        "galeria": []
+      },
+      
+      "organizador": {
+        "nombre": "AMIP Perú",
+        "nombreCompleto": "Asociación Misionera de Iglesias Pentecostales del Perú",
+        "descripcion": "Organización que agrupa iglesias pentecostales en todo el Perú",
+        "website": "https://amipinstitucional.org/",
+        "logo": "/assets/images/branding/amip-logo.png",
+        "contacto": {
+          "telefono": "+51 999 888 777",
+          "email": "info@amipperu.org",
+          "whatsapp": "+51 999 888 777"
+        },
+        "redesSociales": {
+          "facebook": "",
+          "instagram": "",
+          "youtube": ""
+        }
+      },
+      
+      "programa": {
+        "definido": false,
+        "descripcion": "El programa detallado será publicado próximamente",
+        "dias": []
+      },
+      
+      "expositores": {
+        "total": 0,
+        "internacionales": 0,
+        "nacionales": 0,
+        "lista": []
+      },
+      
+      "inscripcion": {
+        "habilitada": true,
+        "tipoInscripcion": "gratuita",
+        "requiereRegistro": false,
+        "costoInscripcion": 0,
+        "moneda": "PEN",
+        "incluye": [
+          "Acceso a todas las conferencias",
+          "Material impreso",
+          "Certificado de asistencia"
+        ],
+        "noIncluye": [
+          "Hospedaje",
+          "Alimentación",
+          "Transporte"
+        ],
+        "instrucciones": "La entrada es libre. No se requiere inscripción previa."
+      },
+      
+      "capacidad": {
+        "total": 2000,
+        "inscritos": 0,
+        "disponibles": 2000,
+        "porcentajeOcupacion": 0
+      },
+      
+      "hospitalidad": {
+        "habilitada": true,
+        "visitantesPostulados": 0,
+        "anfitrionesDisponibles": 0,
+        "emparejamientos": 0
+      },
+      
+      "servicios": {
+        "hotelesDisponibles": 0,
+        "cocherasDisponibles": 0,
+        "transportePublico": true,
+        "estacionamiento": true
+      },
+      
+      "categoria": "Convención",
+      "tags": ["convencion", "amip", "pentecostal", "liderazgo", "ministerial", "chimbote"],
+      
+      "estado": "activo",
+      "destacado": true,
+      "publicado": true,
+      "visible": true,
+      
+      "seo": {
+        "metaTitle": "Convención Nacional AMIP Perú 2026 - Chimbote",
+        "metaDescription": "Únete a la Convención Nacional AMIP del 20 al 23 de febrero en Chimbote. Conferencistas internacionales, liderazgo y comunión cristiana.",
+        "keywords": ["AMIP", "convención", "Chimbote", "evento cristiano", "Perú", "2026"]
+      },
+      
+      "metadata": {
+        "creadoPor": "admin",
+        "fechaCreacion": "2025-12-13T00:00:00Z",
+        "ultimaActualizacion": "2025-12-13T00:00:00Z",
+        "version": "1.0"
+      }
+    }
+  ]
+}
