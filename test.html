@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Test - Configuración Base</title>
+</head>
+<body>
+    <h1>Test de Configuración</h1>
+    <div id="output"></div>
+    
+    <script src="assets/js/config/env.js"></script>
+    <script src="assets/js/config/constants.js"></script>
+    <script src="assets/js/config/routes.js"></script>
+    <script>
+        const output = document.getElementById('output');
+        output.innerHTML = `
+            <h2>ENV:</h2>
+            <pre>${JSON.stringify(ENV.getInfo(), null, 2)}</pre>
+            
+            <h2>Rutas de Ejemplo:</h2>
+            <pre>
+HOME: ${ROUTES.HOME()}
+EVENTOS: ${ROUTES.EVENTOS.LISTA()}
+LOGIN: ${ROUTES.AUTH.LOGIN()}
+DASHBOARD: ${ROUTES.USER.DASHBOARD()}
+            </pre>
+            
+            <h2>Constantes:</h2>
+            <pre>
+APP: ${CONSTANTS.APP.NAME}
+ROLES: ${Object.keys(CONSTANTS.ROLES).join(', ')}
+CIUDADES: ${CONSTANTS.CIUDADES.length} ciudades
+            </pre>
+        `;
+    </script>
+</body>
+</html>
