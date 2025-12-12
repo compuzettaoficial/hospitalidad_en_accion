@@ -1,0 +1,92 @@
+{
+  "version": "1.0",
+  "lastUpdate": "2025-12-13T00:00:00Z",
+  "ciudades": [
+    {
+      "id": "chimbote",
+      "nombre": "Chimbote",
+      "nombreCompleto": "Nuevo Chimbote",
+      "departamento": "Áncash",
+      "region": "Costa Norte",
+      "coordenadas": {
+        "lat": -9.0794,
+        "lng": -78.5934
+      },
+      "activo": true,
+      "tieneEventos": true,
+      "tieneHoteles": true,
+      "tieneCocheras": true
+    },
+    {
+      "id": "lima",
+      "nombre": "Lima",
+      "nombreCompleto": "Lima Metropolitana",
+      "departamento": "Lima",
+      "region": "Costa Central",
+      "coordenadas": {
+        "lat": -12.0464,
+        "lng": -77.0428
+      },
+      "activo": true,
+      "tieneEventos": false,
+      "tieneHoteles": false,
+      "tieneCocheras": false
+    },
+    {
+      "id": "arequipa",
+      "nombre": "Arequipa",
+      "nombreCompleto": "Arequipa",
+      "departamento": "Arequipa",
+      "region": "Costa Sur",
+      "coordenadas": {
+        "lat": -16.4090,
+        "lng": -71.5375
+      },
+      "activo": true,
+      "tieneEventos": false,
+      "tieneHoteles": false,
+      "tieneCocheras": false
+    },
+    {
+      "id": "trujillo",
+      "nombre": "Trujillo",
+      "nombreCompleto": "Trujillo",
+      "departamento": "La Libertad",
+      "region": "Costa Norte",
+      "coordenadas": {
+        "lat": -8.1116,
+        "lng": -79.0288
+      },
+      "activo": true,
+      "tieneEventos": false,
+      "tieneHoteles": false,
+      "tieneCocheras": false
+    },
+    {
+      "id": "cusco",
+      "nombre": "Cusco",
+      "nombreCompleto": "Cusco",
+      "departamento": "Cusco",
+      "region": "Sierra Sur",
+      "coordenadas": {
+        "lat": -13.5319,
+        "lng": -71.9675
+      },
+      "activo": true,
+      "tieneEventos": false,
+      "tieneHoteles": false,
+      "tieneCocheras": false
+    }
+  ],
+  "regiones": [
+    "Costa Norte",
+    "Costa Central",
+    "Costa Sur",
+    "Sierra Norte",
+    "Sierra Central",
+    "Sierra Sur",
+    "Selva Norte",
+    "Selva Central",
+    "Selva Sur"
+  ]
+}
