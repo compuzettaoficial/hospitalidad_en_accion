@@ -1,0 +1,45 @@
+{
+  "version": "1.0",
+  "lastUpdate": "2025-12-13T00:00:00Z",
+  "ciudades": {
+    "chimbote": {
+      "archivo": "chimbote.json",
+      "total": 0,
+      "destacados": 0,
+      "rangoPrecios": {
+        "min": 0,
+        "max": 0,
+        "moneda": "PEN"
+      }
+    },
+    "lima": {
+      "archivo": "lima.json",
+      "total": 0,
+      "destacados": 0,
+      "rangoPrecios": {
+        "min": 0,
+        "max": 0,
+        "moneda": "PEN"
+      }
+    },
+    "arequipa": {
+      "archivo": "arequipa.json",
+      "total": 0,
+      "destacados": 0,
+      "rangoPrecios": {
+        "min": 0,
+        "max": 0,
+        "moneda": "PEN"
+      }
+    }
+  },
+  "estadisticas": {
+    "totalHoteles": 0,
+    "ciudadesConHoteles": 0,
+"hotelesDestacados": 0
+},
+"cache": {
+"ttl": 1800000,
+"ultimaActualizacion": "2025-12-13T00:00:00Z"
+}
+}
