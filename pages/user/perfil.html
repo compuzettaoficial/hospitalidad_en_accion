@@ -243,7 +243,7 @@
                                 <i class="fas fa-user"></i> Nombre Completo
                             </label>
                             <div style="display: flex; gap: var(--spacing-sm);">
-                                <input type="text" id="editNombre" class="input" placeholder="Tu nombre" style="flex: 1;">
+                                <input type="text" id="editNombre" class="form-input" placeholder="Tu nombre" style="flex: 1;">
                                 <button onclick="editarNombre()" id="btnGuardarNombre" class="btn btn-primary">
                                     <i class="fas fa-save"></i> Guardar
                                 </button>
@@ -256,7 +256,7 @@
                                 <i class="fas fa-phone"></i> Teléfono
                             </label>
                             <div style="display: flex; gap: var(--spacing-sm);">
-                                <input type="tel" id="editTelefono" class="input" placeholder="+51 999 888 777" style="flex: 1;">
+                                <input type="tel" id="editTelefono" class="form-input" placeholder="+51 999 888 777" style="flex: 1;">
                                 <button onclick="editarTelefono()" id="btnGuardarTelefono" class="btn btn-primary">
                                     <i class="fas fa-save"></i> Guardar
                                 </button>
@@ -272,16 +272,16 @@
                         </h3>
                         
                         <div style="margin-bottom: var(--spacing-md);">
-                            <input type="password" id="passwordActual" class="input" placeholder="Contraseña actual">
+                            <input type="password" id="passwordActual" class="form-input" placeholder="Contraseña actual">
                         </div>
                         <div style="margin-bottom: var(--spacing-md);">
-                            <input type="password" id="passwordNueva" class="input" placeholder="Nueva contraseña (mín. 6 caracteres)">
+                            <input type="password" id="passwordNueva" class="form-input" placeholder="Nueva contraseña (mín. 6 caracteres)">
                         </div>
                         <div style="margin-bottom: var(--spacing-md);">
-                            <input type="password" id="passwordConfirm" class="input" placeholder="Confirmar nueva contraseña">
+                            <input type="password" id="passwordConfirm" class="form-input" placeholder="Confirmar nueva contraseña">
                         </div>
                         
-                        <button onclick="cambiarPassword()" id="btnCambiarPassword" class="btn btn-accent">
+                        <button onclick="cambiarPassword()" id="btnCambiarPassword" class="btn btn-primary">
                             <i class="fas fa-key"></i> Cambiar Contraseña
                         </button>
                     </div>
