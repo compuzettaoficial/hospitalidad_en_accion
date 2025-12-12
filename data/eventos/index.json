@@ -1,0 +1,36 @@
+{
+  "version": "1.0",
+  "lastUpdate": "2025-12-13T00:00:00Z",
+  "años": {
+    "2026": {
+      "archivo": "2026.json",
+      "total": 1,
+      "destacados": 1,
+      "ciudades": ["chimbote"],
+      "proximoEvento": {
+        "id": "amip-chimbote-feb2026",
+        "titulo": "Convención Nacional AMIP Perú 2026",
+        "fecha": "2026-02-20",
+        "ciudad": "chimbote"
+      }
+    },
+    "2027": {
+      "archivo": "2027.json",
+      "total": 0,
+      "destacados": 0,
+      "ciudades": [],
+      "proximoEvento": null
+    }
+  },
+  "estadisticas": {
+    "totalEventos": 1,
+    "eventosActivos": 1,
+    "eventosDestacados": 1,
+    "ciudadesConEventos": 1,
+    "añosDisponibles": 1
+  },
+  "cache": {
+    "ttl": 600000,
+    "ultimaActualizacion": "2025-12-13T00:00:00Z"
+  }
+}
