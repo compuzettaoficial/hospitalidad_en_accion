@@ -8,65 +8,53 @@ class AuthService {
   // ============================================
   // REGISTRO DE NUEVO USUARIO
   // ============================================
-  static async register(datos) {
-    try {
-      console.log('📝 Iniciando registro para:', datos.email);
-      
-      // Validaciones previas
-      if (!datos.email || !datos.password || !datos.nombre || !datos.telefono) {
-        throw new Error('Todos los campos son obligatorios');
-      }
-      
-      if (datos.password.length < 6) {
-        throw new Error('La contraseña debe tener al menos 6 caracteres');
-      }
-      
-      // Crear usuario en Firebase Auth
-      const userCredential = await firebase.auth()
-        .createUserWithEmailAndPassword(datos.email, datos.password);
-      
-      const user = userCredential.user;
-      console.log('✅ Usuario creado en Auth:', user.uid);
-      
-      // Enviar email de verificación
-      try {
-        await user.sendEmailVerification({
-          url: window.location.origin + AppConfig.PAGES.LOGIN(),
-          handleCodeInApp: false
-        });
-        console.log('📧 Email de verificación enviado a:', datos.email);
-      } catch (emailError) {
-        console.warn('⚠️ No se pudo enviar email de verificación:', emailError);
-        // No lanzar error, continuar con el registro
-      }
-      
-      // Guardar datos adicionales en Firestore
-      await firebase.firestore()
-        .collection('usuarios')
-        .doc(user.uid)
-        .set({
-          nombre: datos.nombre,
-          email: datos.email,
-          telefono: datos.telefono,
-          rol: 'usuario',
-          emailVerificado: false,
-          activo: true,
-          fechaCreacion: firebase.firestore.FieldValue.serverTimestamp(),
-          ultimaConexion: firebase.firestore.FieldValue.serverTimestamp()
-        });
-      
-      console.log('✅ Datos guardados en Firestore');
-      console.log('✅ Registro completado exitosamente');
-      
-      return user;
-      
-    } catch (error) {
-      console.error('❌ Error en registro:', error);
-      console.error('Code:', error.code);
-      console.error('Message:', error.message);
-      throw error;
+static async register(datos) {
+  try {
+    console.log('📝 Iniciando registro para:', datos.email);
+    
+    // Validaciones previas
+    if (!datos.email || !datos.password || !datos.nombre || !datos.telefono) {
+      throw new Error('Todos los campos son obligatorios');
     }
+    
+    if (datos.password.length < 6) {
+      throw new Error('La contraseña debe tener al menos 6 caracteres');
+    }
+    
+    // Crear usuario en Firebase Auth
+    const userCredential = await firebase.auth()
+      .createUserWithEmailAndPassword(datos.email, datos.password);
+    
+    const user = userCredential.user;
+    console.log('✅ Usuario creado en Auth:', user.uid);
+    
+    // ❌ NO ENVIAR EMAIL DE VERIFICACIÓN
+    // Ya no lo necesitamos
+    
+    // Guardar datos en Firestore
+    await firebase.firestore()
+      .collection('usuarios')
+      .doc(user.uid)
+      .set({
+        nombre: datos.nombre,
+        email: datos.email,
+        telefono: datos.telefono,
+        rol: 'usuario',
+        activo: true,
+        fechaCreacion: firebase.firestore.FieldValue.serverTimestamp(),
+        ultimaConexion: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    
+    console.log('✅ Datos guardados en Firestore');
+    console.log('✅ Registro completado exitosamente');
+    
+    return user;
+    
+  } catch (error) {
+    console.error('❌ Error en registro:', error);
+    throw error;
   }
+}
   
   // ============================================
   // LOGIN
