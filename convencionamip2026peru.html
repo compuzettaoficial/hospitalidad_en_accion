@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convención AMIP Chimbote 2026 - Hospedaje</title>
+    <meta name="description" content="Información de hoteles y cocheras cercanas a la Convención Nacional AMIP 2026 en Nuevo Chimbote">
+    <meta name="robots" content="noindex, follow">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --color-primary: #5B95C2;
+            --color-secondary: #56B4A0;
+            --color-accent: #507991;
+            --color-bg-light: #E1E0D6;
+            --color-bg-medium: #D9CCB3;
+            --color-success: #10B981;
+            --color-warning: #F59E0B;
+            --color-error: #EF4444;
+            --color-info: #3B82F6;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: var(--color-bg-light);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        /* Header */
+        header {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .logo-img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+        }
+        
+        .brand-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--color-primary);
+        }
+        
+        .badge {
+            display: inline-block;
+            background: rgba(91, 149, 194, 0.1);
+            border: 2px solid var(--color-primary);
+            color: var(--color-primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-primary) 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+        
+        .hero-info {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .hero-info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* Nav Tabs */
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1.5rem 0;
+            background: white;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .tab-btn {
+            padding: 0.75rem 2rem;
+            background: transparent;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .tab-btn.active {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+        
+        /* Filters */
+        .filters {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin: 2rem 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .filter-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            color: #374151;
+        }
+        
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+        }
+        
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+        }
+        
+        .card-carousel {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+            background: #e5e7eb;
+        }
+        
+        .carousel-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+        
+        .carousel-img.active {
+            display: block;
+        }
+        
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .carousel-btn.prev { left: 10px; }
+        .carousel-btn.next { right: 10px; }
+        
+        .carousel-indicators {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+        }
+        
+        .indicator.active {
+            background: white;
+        }
+        
+        .card-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--color-error);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .card-content {
+            padding: 1.25rem;
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #1f2937;
+        }
+        
+        .card-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+        
+        .card-info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .card-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin: 0.75rem 0;
+        }
+        
+        .card-price-old {
+            font-size: 1rem;
+            text-decoration: line-through;
+            color: #9ca3af;
+            margin-left: 0.5rem;
+        }
+        
+        .promo-badge {
+            display: inline-block;
+            background: var(--color-success);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+        
+        .card-services {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+        
+        .service-tag {
+            background: rgba(91, 149, 194, 0.1);
+            color: var(--color-primary);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+        }
+        
+        .card-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            text-decoration: none;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--color-accent);
+        }
+        
+        .btn-secondary {
+            background: var(--color-secondary);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #459684;
+        }
+        
+        .btn-outline {
+            background: white;
+            color: var(--color-primary);
+            border: 2px solid var(--color-primary);
+        }
+        
+        .btn-outline:hover {
+            background: rgba(91, 149, 194, 0.1);
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 1rem;
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6b7280;
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        /* Contact Form */
+        .contact-section {
+            background: var(--color-bg-medium);
+            padding: 4rem 0;
+        }
+        
+        .contact-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .contact-header h2 {
+            font-size: 2rem;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-family: inherit;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(91, 149, 194, 0.1);
+        }
+        
+        .form-disclaimer {
+            background: rgba(91, 149, 194, 0.1);
+            border: 1px solid var(--color-primary);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1.5rem;
+            font-size: 0.875rem;
+            color: var(--color-accent);
+        }
+        
+        /* Footer */
+        footer {
+            background: #1f2937;
+            color: #d1d5db;
+            padding: 3rem 0 1.5rem;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section h3 {
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 1.125rem;
+        }
+        
+        .footer-section p,
+        .footer-section a {
+            color: #9ca3af;
+            text-decoration: none;
+            line-height: 1.8;
+        }
+        
+        .footer-section a:hover {
+            color: var(--color-primary);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: #374151;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background: var(--color-primary);
+        }
+        
+        .footer-disclaimer {
+            background: #111827;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-disclaimer h4 {
+            color: var(--color-primary);
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #374151;
+            color: #6b7280;
+        }
+        
+        .brand-highlight {
+            color: var(--color-primary);
+            font-weight: 700;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 1.75rem;
+            }
+            
+            .hero-info {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .tab-btn {
+                width: 100%;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .card-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="../assets/images/branding/logo.png" alt="Logo" class="logo-img">
+                    <div>
+                        <div class="brand-name">★ HOSPITALIDAD EN ACCIÓN ★</div>
+                        <span class="badge">📋 PÁGINA DE APOYO AL EVENTO</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <h1>Convención Nacional AMIP 2026</h1>
+            <p style="font-size: 1.25rem; margin-bottom: 1rem;">Nuevo Chimbote, Perú</p>
+            <div class="hero-info">
+                <div class="hero-info-item">
+                    <i class="fas fa-calendar"></i>
+                    <span>20-23 Febrero 2026</span>
+                </div>
+                <div class="hero-info-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Auditorio Carlos Salazar Romero</span>
+                </div>
+                <div class="hero-info-item">
+                    <i class="fas fa-hotel"></i>
+                    <span>Información de Hospedaje</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nav Tabs -->
+    <div class="nav-tabs">
+        <button class="tab-btn active" data-tab="hoteles">
+            <i class="fas fa-hotel"></i> Hoteles
+        </button>
+        <button class="tab-btn" data-tab="cocheras">
+            <i class="fas fa-car"></i> Cocheras
+        </button>
+    </div>
+
+    <!-- Hoteles Section -->
+    <section id="hoteles-section" class="container">
+        <!-- Filters -->
+        <div class="filters">
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label>Precio máximo</label>
+                    <select id="filter-precio">
+                        <option value="999">Todos</option>
+                        <option value="50">Hasta S/ 50</option>
+                        <option value="100">Hasta S/ 100</option>
+                        <option value="150">Hasta S/ 150</option>
+                        <option value="200">Hasta S/ 200</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Distancia</label>
+                    <select id="filter-distancia">
+                        <option value="9999">Todas</option>
+                        <option value="500">Hasta 500m</option>
+                        <option value="1000">Hasta 1km</option>
+                        <option value="2000">Hasta 2km</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Ordenar por</label>
+                    <select id="sort-hoteles">
+                        <option value="precio-asc">Precio menor a mayor</option>
+                        <option value="precio-desc">Precio mayor a menor</option>
+                        <option value="distancia-asc">Distancia menor a mayor</option>
+                        <option value="nombre-asc">Nombre A-Z</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Filtros especiales</label>
+                    <select id="filter-especial">
+                        <option value="todos">Todos</option>
+                        <option value="destacados">Solo destacados</option>
+                        <option value="promocion">Con promoción</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cards Grid -->
+        <div class="cards-grid" id="hoteles-grid">
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i> Cargando hoteles...
+            </div>
+        </div>
+    </section>
+
+    <!-- Cocheras Section -->
+    <section id="cocheras-section" class="container hidden">
+        <!-- Filters -->
+        <div class="filters">
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label>Precio máximo/día</label>
+                    <select id="filter-precio-cochera">
+                        <option value="999">Todos</option>
+                        <option value="10">Hasta S/ 10</option>
+                        <option value="20">Hasta S/ 20</option>
+                        <option value="30">Hasta S/ 30</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Distancia</label>
+                    <select id="filter-distancia-cochera">
+                        <option value="9999">Todas</option>
+                        <option value="500">Hasta 500m</option>
+                        <option value="1000">Hasta 1km</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Ordenar por</label>
+                    <select id="sort-cocheras">
+                        <option value="precio-asc">Precio menor a mayor</option>
+                        <option value="distancia-asc">Distancia menor a mayor</option>
+                        <option value="nombre-asc">Nombre A-Z</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cards Grid -->
+        <div class="cards-grid" id="cocheras-grid">
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i> Cargando cocheras...
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contacto">
+        <div class="container">
+            <div class="contact-header">
+                <h2>💻 Contacto y Sugerencias</h2>
+                <p style="color: #6b7280;">¿Problemas técnicos, sugerencias o agradecimientos? Escríbenos</p>
+            </div>
+            
+            <div class="form-container">
+                <form action="https://formsubmit.co/compuzettaoficial@gmail.com" method="POST">
+                    <input type="hidden" name="_subject" value="[Evento Chimbote 2026] Mensaje de contacto">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="_template" value="table">
+                    
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" name="nombre" required placeholder="Tu nombre">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" required placeholder="tu@email.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Teléfono (opcional)</label>
+                        <input type="tel" name="telefono" placeholder="+51 999 999 999">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Motivo</label>
+                        <select name="motivo" required>
+                            <option value="">Seleccionar...</option>
+                            <option value="Error técnico">Error técnico en la página</option>
+                            <option value="Sugerencia">Sugerencia de mejora</option>
+                            <option value="Agradecimiento">Agradecimiento</option>
+                            <option value="Consulta">Consulta general</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Mensaje</label>
+                        <textarea name="mensaje" rows="5" required placeholder="Escribe tu mensaje aquí..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem;">
+                        Enviar Mensaje
+                    </button>
+                    
+                    <div class="form-disclaimer">
+                        <strong>ℹ️ Nota:</strong> Este formulario es para soporte técnico, sugerencias o comentarios sobre esta plataforma web. Para consultas sobre el evento, inscripciones o programa, contactar directamente con <strong>AMIP Perú</strong>.
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-disclaimer">
+                <h4>ℹ️ PÁGINA DE APOYO AL EVENTO</h4>
+                <p style="margin-bottom: 1rem;">
+                    Esta página es proporcionada por <span class="brand-highlight">★ HOSPITALIDAD EN ACCIÓN ★</span> como soporte informativo a:
+                </p>
+                <p style="font-weight: 600; color: white; margin-bottom: 1rem;">
+                    🎯 La Comisión Organizadora de la<br>
+                    CONVENCIÓN NACIONAL AMIP 2026 PERÚ
+                </p>
+                <p style="color: #ef4444; font-weight: 600;">
+                    ⚠️ IMPORTANTE: Esta NO es la página oficial de AMIP
+                </p>
+            </div>
+            
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>AMIP Perú</h3>
+                    <p style="margin-bottom: 1rem;">Asociación Misionera de Iglesias Pentecostales del Perú</p>
+                    <p><i class="fas fa-globe"></i> www.amipperu.org</p>
+                    <p><i class="fas fa-envelope"></i> info@amipperu.org</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Información</h3>
+                    <p>• Solo información de hospedaje</p>
+                    <p>• No gestionamos reservas</p>
+                    <p>• Contacte directamente con hoteles</p>
+                    <p>• Precios referenciales</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Sistema</h3>
+                    <p>Proporcionado por</p>
+                    <p style="font-weight: 700; color: var(--color-primary); margin: 0.5rem 0;">
+                        ★ HOSPITALIDAD EN ACCIÓN ★
+                    </p>
+                    <p style="font-size: 0.875rem;">Apoyando eventos cristianos en todo el Perú</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2025 <span class="brand-highlight">Hospitalidad en Acción</span> | Todos los derechos reservados</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal -->
+    <div class="modal" id="detailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title"></h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
+    </div>
+
+    <script>
+        // Data simulada
+        const hoteles = [
+            {
+                id: 'hotel_001',
+                nombre: 'Hotel Central',
+                direccion: 'Av. José Pardo 123, Nuevo Chimbote',
+                distancia: { metros: 500, lineaRecta: '500m', caminando: '8 min' },
+                contacto: { telefono: '043-123456', whatsapp: '+51999888777', email: 'info@hotelcentral.com' },
+                precios: { tipo: 'habitacion', simple: 100, doble: 150, matrimonial: 180 },
+                promocion: { tienePromocion: true, preciosEvento:
