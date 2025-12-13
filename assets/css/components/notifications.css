@@ -1,1 +1,381 @@
-aaa
+/**
+ * ============================================
+ * NOTIFICATIONS.CSS - Estilos para Notificaciones Toast
+ * ============================================
+ * Sistema moderno de notificaciones
+ * Compatible con la paleta de colores del proyecto
+ */
+
+/* ============================================
+   CONTENEDOR PRINCIPAL
+   ============================================ */
+
+.notify-container {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  max-width: 400px;
+  width: 100%;
+}
+
+/* ============================================
+   POSICIONES
+   ============================================ */
+
+.notify-top-right {
+  top: 0;
+  right: 0;
+}
+
+.notify-top-left {
+  top: 0;
+  left: 0;
+}
+
+.notify-bottom-right {
+  bottom: 0;
+  right: 0;
+}
+
+.notify-bottom-left {
+  bottom: 0;
+  left: 0;
+}
+
+.notify-top-center {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+}
+
+.notify-bottom-center {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+}
+
+/* ============================================
+   NOTIFICACIÓN INDIVIDUAL
+   ============================================ */
+
+.notify-toast {
+  pointer-events: auto;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 300px;
+  max-width: 100%;
+  position: relative;
+  overflow: hidden;
+  animation: notify-slide-in 0.3s ease-out;
+}
+
+/* ============================================
+   ANIMACIONES
+   ============================================ */
+
+@keyframes notify-slide-in {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes notify-slide-out {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+}
+
+.notify-toast.removing {
+  animation: notify-slide-out 0.3s ease-in forwards;
+}
+
+/* Animación para posición izquierda */
+.notify-top-left .notify-toast,
+.notify-bottom-left .notify-toast {
+  animation: notify-slide-in-left 0.3s ease-out;
+}
+
+@keyframes notify-slide-in-left {
+  from {
+    transform: translateX(-400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.notify-top-left .notify-toast.removing,
+.notify-bottom-left .notify-toast.removing {
+  animation: notify-slide-out-left 0.3s ease-in forwards;
+}
+
+@keyframes notify-slide-out-left {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-400px);
+    opacity: 0;
+  }
+}
+
+/* ============================================
+   ICONO
+   ============================================ */
+
+.notify-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+/* ============================================
+   CONTENIDO
+   ============================================ */
+
+.notify-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.notify-title {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #1f2937;
+}
+
+.notify-message {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #6b7280;
+}
+
+/* ============================================
+   BOTÓN CERRAR
+   ============================================ */
+
+.notify-close {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  transition: color 0.2s ease;
+  font-size: 16px;
+}
+
+.notify-close:hover {
+  color: #4b5563;
+}
+
+.notify-close:focus {
+  outline: 2px solid var(--color-primary, #5B95C2);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ============================================
+   BARRA DE PROGRESO
+   ============================================ */
+
+.notify-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: currentColor;
+  opacity: 0.3;
+  transition: width linear;
+}
+
+/* ============================================
+   TIPOS DE NOTIFICACIÓN
+   ============================================ */
+
+/* Success - Verde */
+.notify-success {
+  border-left: 4px solid var(--color-success, #10b981);
+}
+
+.notify-success .notify-icon {
+  color: var(--color-success, #10b981);
+}
+
+.notify-success .notify-progress {
+  color: var(--color-success, #10b981);
+}
+
+/* Error - Rojo */
+.notify-error {
+  border-left: 4px solid var(--color-error, #ef4444);
+}
+
+.notify-error .notify-icon {
+  color: var(--color-error, #ef4444);
+}
+
+.notify-error .notify-progress {
+  color: var(--color-error, #ef4444);
+}
+
+/* Warning - Amarillo */
+.notify-warning {
+  border-left: 4px solid var(--color-warning, #f59e0b);
+}
+
+.notify-warning .notify-icon {
+  color: var(--color-warning, #f59e0b);
+}
+
+.notify-warning .notify-progress {
+  color: var(--color-warning, #f59e0b);
+}
+
+/* Info - Azul */
+.notify-info {
+  border-left: 4px solid var(--color-info, #3b82f6);
+}
+
+.notify-info .notify-icon {
+  color: var(--color-info, #3b82f6);
+}
+
+.notify-info .notify-progress {
+  color: var(--color-info, #3b82f6);
+}
+
+/* ============================================
+   HOVER EFFECTS
+   ============================================ */
+
+.notify-toast:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 640px) {
+  .notify-container {
+    padding: 12px;
+    max-width: 100%;
+    left: 0 !important;
+    right: 0 !important;
+    transform: none !important;
+  }
+  
+  .notify-toast {
+    min-width: 0;
+    width: 100%;
+  }
+  
+  /* Ajustar animaciones en móvil */
+  @keyframes notify-slide-in {
+    from {
+      transform: translateY(-100px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes notify-slide-out {
+    from {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateY(-100px);
+      opacity: 0;
+    }
+  }
+}
+
+/* ============================================
+   DARK MODE (Opcional - para futuro)
+   ============================================ */
+
+@media (prefers-color-scheme: dark) {
+  .notify-toast {
+    background: #1f2937;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  }
+  
+  .notify-title {
+    color: #f9fafb;
+  }
+  
+  .notify-message {
+    color: #d1d5db;
+  }
+  
+  .notify-close {
+    color: #9ca3af;
+  }
+  
+  .notify-close:hover {
+    color: #f9fafb;
+  }
+}
+
+/* ============================================
+   ACCESIBILIDAD
+   ============================================ */
+
+/* Reducir movimiento para usuarios con preferencias */
+@media (prefers-reduced-motion: reduce) {
+  .notify-toast {
+    animation: none !important;
+  }
+  
+  .notify-progress {
+    transition: none !important;
+  }
+}
+
+/* Alto contraste */
+@media (prefers-contrast: high) {
+  .notify-toast {
+    border: 2px solid currentColor;
+  }
+}
