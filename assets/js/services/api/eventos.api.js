@@ -2,29 +2,25 @@
  * ============================================
  * EVENTOS.API.JS - Servicio de Eventos
  * ============================================
- * Carga eventos desde JSON (GitHub)
- * Cache inteligente para optimizar carga
  */
 
-class EventosAPI {
+const EventosAPI = {
   
-  constructor() {
-    this.cache = {
-      index: null,
-      años: {},
-      lastFetch: {}
-    };
-  }
+  // Cache
+  _cache: {
+    index: null,
+    años: {},
+    lastFetch: {}
+  },
   
   // ============================================
   // CARGAR ÍNDICE MAESTRO
   // ============================================
   async getIndex() {
     try {
-      // Si hay cache válido, usarlo
-      if (this.cache.index && this._isCacheValid('index')) {
+      if (this._cache.index && this._isCacheValid('index')) {
         console.log('📦 Cache: Usando índice de eventos cacheado');
-        return this.cache.index;
+        return this._cache.index;
       }
       
       console.log('🌐 Cargando índice de eventos...');
@@ -35,10 +31,8 @@ class EventosAPI {
       }
       
       const data = await response.json();
-      
-      // Guardar en cache
-      this.cache.index = data;
-      this.cache.lastFetch.index = Date.now();
+      this._cache.index = data;
+      this._cache.lastFetch.index = Date.now();
       
       console.log('✅ Índice de eventos cargado:', data.estadisticas.totalEventos, 'eventos');
       return data;
@@ -47,17 +41,16 @@ class EventosAPI {
       console.error('❌ Error cargando índice de eventos:', error);
       throw new Error('No se pudo cargar el índice de eventos');
     }
-  }
+  },
   
   // ============================================
   // CARGAR EVENTOS DE UN AÑO
   // ============================================
   async getEventosByYear(year) {
     try {
-      // Si hay cache válido, usarlo
-      if (this.cache.años[year] && this._isCacheValid(`año_${year}`)) {
+      if (this._cache.años[year] && this._isCacheValid(`año_${year}`)) {
         console.log(`📦 Cache: Usando eventos ${year} cacheados`);
-        return this.cache.años[year];
+        return this._cache.años[year];
       }
       
       console.log(`🌐 Cargando eventos del año ${year}...`);
@@ -72,10 +65,8 @@ class EventosAPI {
       }
       
       const data = await response.json();
-      
-      // Guardar en cache
-      this.cache.años[year] = data;
-      this.cache.lastFetch[`año_${year}`] = Date.now();
+      this._cache.años[year] = data;
+      this._cache.lastFetch[`año_${year}`] = Date.now();
       
       console.log(`✅ Eventos ${year} cargados:`, data.totalEventos, 'eventos');
       return data;
@@ -84,7 +75,7 @@ class EventosAPI {
       console.error(`❌ Error cargando eventos ${year}:`, error);
       throw new Error(`No se pudieron cargar los eventos de ${year}`);
     }
-  }
+  },
   
   // ============================================
   // OBTENER TODOS LOS EVENTOS DISPONIBLES
@@ -108,7 +99,7 @@ class EventosAPI {
       console.error('❌ Error cargando todos los eventos:', error);
       throw error;
     }
-  }
+  },
   
   // ============================================
   // BUSCAR EVENTO POR ID
@@ -132,7 +123,7 @@ class EventosAPI {
       console.error(`❌ Error buscando evento ${id}:`, error);
       throw error;
     }
-  }
+  },
   
   // ============================================
   // FILTRAR EVENTOS
@@ -141,31 +132,26 @@ class EventosAPI {
     try {
       let eventos = await this.getAllEventos();
       
-      // Filtro por ciudad
       if (filtros.ciudad) {
         eventos = eventos.filter(e => 
           e.ubicacion.ciudad === filtros.ciudad.toLowerCase()
         );
       }
       
-      // Filtro por departamento
       if (filtros.departamento) {
         eventos = eventos.filter(e => 
           e.ubicacion.departamento === filtros.departamento
         );
       }
       
-      // Filtro por estado
       if (filtros.estado) {
         eventos = eventos.filter(e => e.estado === filtros.estado);
       }
       
-      // Filtro por categoría
       if (filtros.categoria) {
         eventos = eventos.filter(e => e.categoria === filtros.categoria);
       }
       
-      // Filtro por búsqueda de texto
       if (filtros.busqueda) {
         const busqueda = filtros.busqueda.toLowerCase();
         eventos = eventos.filter(e => 
@@ -176,13 +162,11 @@ class EventosAPI {
         );
       }
       
-      // Filtro por fecha (próximos eventos)
       if (filtros.proximos) {
         const hoy = new Date();
         eventos = eventos.filter(e => new Date(e.fechaInicio) >= hoy);
       }
       
-      // Filtro por destacados
       if (filtros.destacados) {
         eventos = eventos.filter(e => e.destacado === true);
       }
@@ -194,7 +178,7 @@ class EventosAPI {
       console.error('❌ Error filtrando eventos:', error);
       throw error;
     }
-  }
+  },
   
   // ============================================
   // OBTENER EVENTOS ACTIVOS
@@ -204,7 +188,7 @@ class EventosAPI {
       estado: 'activo',
       proximos: true 
     });
-  }
+  },
   
   // ============================================
   // OBTENER EVENTOS DESTACADOS
@@ -214,7 +198,7 @@ class EventosAPI {
       destacados: true,
       estado: 'activo' 
     });
-  }
+  },
   
   // ============================================
   // OBTENER PRÓXIMO EVENTO
@@ -225,7 +209,6 @@ class EventosAPI {
       
       if (eventos.length === 0) return null;
       
-      // Ordenar por fecha más cercana
       eventos.sort((a, b) => 
         new Date(a.fechaInicio) - new Date(b.fechaInicio)
       );
@@ -236,14 +219,14 @@ class EventosAPI {
       console.error('❌ Error obteniendo próximo evento:', error);
       return null;
     }
-  }
+  },
   
   // ============================================
   // OBTENER EVENTOS POR CIUDAD
   // ============================================
   async getEventosByCiudad(ciudad) {
     return this.filtrarEventos({ ciudad: ciudad.toLowerCase() });
-  }
+  },
   
   // ============================================
   // BUSCAR EVENTOS (con paginación)
@@ -252,7 +235,6 @@ class EventosAPI {
     try {
       const eventos = await this.filtrarEventos({ busqueda: termino });
       
-      // Paginar resultados
       const porPagina = CONSTANTS.PAGINATION.EVENTOS_PER_PAGE;
       const inicio = (pagina - 1) * porPagina;
       const fin = inicio + porPagina;
@@ -269,31 +251,27 @@ class EventosAPI {
       console.error('❌ Error buscando eventos:', error);
       throw error;
     }
-  }
+  },
   
   // ============================================
   // UTILIDADES
   // ============================================
   
-  // Verificar si el cache es válido
   _isCacheValid(key) {
-    if (!this.cache.lastFetch[key]) return false;
-    
-    const elapsed = Date.now() - this.cache.lastFetch[key];
+    if (!this._cache.lastFetch[key]) return false;
+    const elapsed = Date.now() - this._cache.lastFetch[key];
     return elapsed < CONSTANTS.CACHE.TTL_EVENTOS;
-  }
+  },
   
-  // Limpiar cache
   clearCache() {
-    this.cache = {
+    this._cache = {
       index: null,
       años: {},
       lastFetch: {}
     };
     console.log('🗑️ Cache de eventos limpiado');
-  }
+  },
   
-  // Obtener estadísticas
   async getEstadisticas() {
     try {
       const index = await this.getIndex();
@@ -303,12 +281,9 @@ class EventosAPI {
       return null;
     }
   }
-}
-
-// Instancia única (Singleton)
-const eventosAPI = new EventosAPI();
+};
 
 // Exportar globalmente
-window.EventosAPI = eventosAPI;
+window.EventosAPI = EventosAPI;
 
 console.log('✅ eventos.api.js cargado correctamente');
