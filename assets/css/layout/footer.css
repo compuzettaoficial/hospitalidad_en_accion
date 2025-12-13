@@ -1,1 +1,219 @@
+/**
+ * ============================================
+ * FOOTER.CSS - Estilos del Footer
+ * ============================================
+ */
 
+/* ============================================
+   FOOTER PRINCIPAL
+   ============================================ */
+
+.footer {
+  background-color: var(--color-bg-dark);
+  color: var(--color-text-light);
+  padding: var(--spacing-3xl) 0 var(--spacing-xl);
+  margin-top: var(--spacing-3xl);
+}
+
+/* ============================================
+   FOOTER GRID
+   ============================================ */
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-2xl);
+  margin-bottom: var(--spacing-2xl);
+}
+
+@media (min-width: 640px) {
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .footer-grid {
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+  }
+}
+
+/* ============================================
+   FOOTER COLUMNAS
+   ============================================ */
+
+.footer-col h4 {
+  color: white;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-md);
+}
+
+.footer-col p {
+  color: var(--color-text-light);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: var(--spacing-md);
+}
+
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-col ul li {
+  margin-bottom: var(--spacing-sm);
+}
+
+.footer-col ul li a {
+  color: var(--color-text-light);
+  transition: color var(--transition-fast);
+  display: inline-block;
+}
+
+.footer-col ul li a:hover {
+  color: white;
+  padding-left: 4px;
+}
+
+/* ============================================
+   REDES SOCIALES
+   ============================================ */
+
+.social-links {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+}
+
+.social-links a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius-md);
+  color: var(--color-text-light);
+  font-size: var(--font-size-lg);
+  transition: all var(--transition-fast);
+}
+
+.social-links a:hover {
+  background-color: var(--color-primary);
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   INFORMACIÓN DE CONTACTO
+   ============================================ */
+
+.contact-info {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.contact-info li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text-light);
+}
+
+.contact-info li i {
+  color: var(--color-primary);
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.contact-info li a {
+  color: var(--color-text-light);
+  transition: color var(--transition-fast);
+}
+
+.contact-info li a:hover {
+  color: white;
+}
+
+/* ============================================
+   FOOTER BOTTOM
+   ============================================ */
+
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: var(--spacing-lg);
+  text-align: center;
+}
+
+.footer-bottom p {
+  color: var(--color-text-light);
+  font-size: var(--font-size-sm);
+  margin: 0;
+}
+
+.footer-bottom a {
+  color: var(--color-primary);
+  transition: color var(--transition-fast);
+}
+
+.footer-bottom a:hover {
+  color: white;
+}
+
+/* ============================================
+   NEWSLETTER (opcional)
+   ============================================ */
+
+.footer-newsletter {
+  margin-top: var(--spacing-md);
+}
+
+.footer-newsletter h5 {
+  color: white;
+  font-size: var(--font-size-base);
+  margin-bottom: var(--spacing-sm);
+}
+
+.newsletter-form {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.newsletter-form input {
+  flex: 1;
+  padding: 0.625rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius-md);
+  background-color: rgba(255, 255, 255, 0.05);
+  color: white;
+  transition: all var(--transition-fast);
+}
+
+.newsletter-form input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.newsletter-form input:focus {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: var(--color-primary);
+  outline: none;
+}
+
+.newsletter-form button {
+  padding: 0.625rem 1.5rem;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-md);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.newsletter-form button:hover {
+  background-color: var(--color-accent);
+  transform: translateY(-1px);
+}
