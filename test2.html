@@ -2,84 +2,307 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test - Servicios API</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+        }
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #5B95C2;
+            color: white;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #507991;
+            transform: translateY(-2px);
+        }
+        #output {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-top: 20px;
+            min-height: 200px;
+        }
+        pre {
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+        .success {
+            color: #10B981;
+        }
+        .error {
+            color: #EF4444;
+        }
+    </style>
 </head>
 <body>
-    <h1>Test de Servicios API</h1>
-    <button onclick="probarEventos()">Probar Eventos API</button>
-    <button onclick="probarHoteles()">Probar Hoteles API</button>
-    <button onclick="probarCocheras()">Probar Cocheras API</button>
-    <div id="output" style="margin-top: 20px; padding: 20px; background: #f5f5f5;"></div>
+    <h1>🧪 Test de Servicios API</h1>
     
-    <!-- Configuración -->
+    <div class="buttons">
+        <button onclick="probarEventos()">📅 Probar Eventos</button>
+        <button onclick="probarHoteles()">🏨 Probar Hoteles</button>
+        <button onclick="probarCocheras()">🚗 Probar Cocheras</button>
+        <button onclick="probarTodo()">✅ Probar Todo</button>
+    </div>
+    
+    <div id="output">
+        <p>👆 Haz click en algún botón para probar los servicios</p>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- SCRIPTS EN ORDEN CORRECTO -->
+    <!-- ============================================ -->
+    
+    <!-- 1. Configuración Base -->
     <script src="assets/js/config/env.js"></script>
     <script src="assets/js/config/constants.js"></script>
     <script src="assets/js/config/routes.js"></script>
     
-    <!-- Servicios API -->
+    <!-- 2. Servicios API (EN ORDEN) -->
     <script src="assets/js/services/api/eventos.api.js"></script>
     <script src="assets/js/services/api/hoteles.api.js"></script>
     <script src="assets/js/services/api/cocheras.api.js"></script>
     
+    <!-- 3. Tests -->
     <script>
         const output = document.getElementById('output');
         
+        // ============================================
+        // TEST: Eventos API
+        // ============================================
         async function probarEventos() {
             output.innerHTML = '<p>⏳ Cargando eventos...</p>';
             
             try {
+                console.log('🧪 TEST: Eventos API');
+                
+                // Verificar que EventosAPI existe
+                if (typeof EventosAPI === 'undefined') {
+                    throw new Error('EventosAPI no está definido. Verifica que eventos.api.js se cargó correctamente.');
+                }
+                
                 // Cargar todos los eventos
                 const eventos = await EventosAPI.getAllEventos();
+                console.log('✅ Eventos cargados:', eventos);
                 
                 // Buscar un evento específico
                 const evento = await EventosAPI.getEventoById('amip-chimbote-feb2026');
+                console.log('✅ Evento encontrado:', evento);
                 
                 // Eventos activos
                 const activos = await EventosAPI.getEventosActivos();
+                console.log('✅ Eventos activos:', activos);
                 
                 output.innerHTML = `
-                    <h2>✅ Eventos API</h2>
+                    <h2 class="success">✅ Eventos API - FUNCIONA</h2>
                     <p><strong>Total eventos:</strong> ${eventos.length}</p>
                     <p><strong>Eventos activos:</strong> ${activos.length}</p>
                     <p><strong>Evento encontrado:</strong> ${evento ? evento.titulo : 'No encontrado'}</p>
+                    
+                    <h3>Detalles del Evento:</h3>
                     <pre>${JSON.stringify(evento, null, 2)}</pre>
                 `;
+                
             } catch (error) {
-                output.innerHTML = `<p style="color: red;">❌ Error: ${error.message}</p>`;
+                console.error('❌ Error:', error);
+                output.innerHTML = `
+                    <h2 class="error">❌ Error en Eventos API</h2>
+                    <p><strong>Mensaje:</strong> ${error.message}</p>
+                    <pre>${error.stack}</pre>
+                `;
             }
         }
         
+        // ============================================
+        // TEST: Hoteles API
+        // ============================================
         async function probarHoteles() {
             output.innerHTML = '<p>⏳ Cargando hoteles...</p>';
             
             try {
+                console.log('🧪 TEST: Hoteles API');
+                
+                // Verificar que HotelesAPI existe
+                if (typeof HotelesAPI === 'undefined') {
+                    throw new Error('HotelesAPI no está definido. Verifica que hoteles.api.js se cargó correctamente.');
+                }
+                
+                // Verificar que EventosAPI también existe
+                if (typeof EventosAPI === 'undefined') {
+                    throw new Error('EventosAPI no está definido. HotelesAPI depende de EventosAPI.');
+                }
+                
                 const hoteles = await HotelesAPI.getHotelesByEvento('amip-chimbote-feb2026');
+                console.log('✅ Hoteles cargados:', hoteles);
                 
                 output.innerHTML = `
-                    <h2>✅ Hoteles API</h2>
+                    <h2 class="success">✅ Hoteles API - FUNCIONA</h2>
                     <p><strong>Hoteles encontrados:</strong> ${hoteles.length}</p>
-                    <pre>${JSON.stringify(hoteles, null, 2)}</pre>
+                    ${hoteles.length === 0 ? 
+                        '<p><em>No hay hoteles agregados aún (esto es normal)</em></p>' : 
+                        `<pre>${JSON.stringify(hoteles, null, 2)}</pre>`
+                    }
                 `;
+                
             } catch (error) {
-                output.innerHTML = `<p style="color: red;">❌ Error: ${error.message}</p>`;
+                console.error('❌ Error:', error);
+                output.innerHTML = `
+                    <h2 class="error">❌ Error en Hoteles API</h2>
+                    <p><strong>Mensaje:</strong> ${error.message}</p>
+                    <pre>${error.stack}</pre>
+                `;
             }
         }
         
+        // ============================================
+        // TEST: Cocheras API
+        // ============================================
         async function probarCocheras() {
             output.innerHTML = '<p>⏳ Cargando cocheras...</p>';
             
             try {
+                console.log('🧪 TEST: Cocheras API');
+                
+                // Verificar que CocherasAPI existe
+                if (typeof CocherasAPI === 'undefined') {
+                    throw new Error('CocherasAPI no está definido. Verifica que cocheras.api.js se cargó correctamente.');
+                }
+                
+                // Verificar que EventosAPI también existe
+                if (typeof EventosAPI === 'undefined') {
+                    throw new Error('EventosAPI no está definido. CocherasAPI depende de EventosAPI.');
+                }
+                
+                const cocheras = await CocherasAPI.getCocherasByEvento('amip-chimbote-feb2026');
+                console.log('✅ Cocheras cargadas:', cocheras);
+                
+                output.innerHTML = `
+                    <h2 class="success">✅ Cocheras API - FUNCIONA</h2>
+                    <p><strong>Cocheras encontradas:</strong> ${cocheras.length}</p>
+                    ${cocheras.length === 0 ? 
+                        '<p><em>No hay cocheras agregadas aún (esto es normal)</em></p>' : 
+                        `<pre>${JSON.stringify(cocheras, null, 2)}</pre>`
+                    }
+                `;
+                
+            } catch (error) {
+                console.error('❌ Error:', error);
+                output.innerHTML = `
+                    <h2 class="error">❌ Error en Cocheras API</h2>
+                    <p><strong>Mensaje:</strong> ${error.message}</p>
+                    <pre>${error.stack}</pre>
+                `;
+            }
+        }
+        
+        // ============================================
+        // TEST: TODO
+        // ============================================
+        async function probarTodo() {
+            output.innerHTML = '<p>⏳ Probando todos los servicios...</p>';
+            
+            try {
+                console.log('🧪 TEST: Todos los servicios');
+                
+                // 1. Eventos
+                const eventos = await EventosAPI.getAllEventos();
+                const evento = await EventosAPI.getEventoById('amip-chimbote-feb2026');
+                
+                // 2. Hoteles
+                const hoteles = await HotelesAPI.getHotelesByEvento('amip-chimbote-feb2026');
+                
+                // 3. Cocheras
                 const cocheras = await CocherasAPI.getCocherasByEvento('amip-chimbote-feb2026');
                 
                 output.innerHTML = `
-                    <h2>✅ Cocheras API</h2>
-                    <p><strong>Cocheras encontradas:</strong> ${cocheras.length}</p>
-                    <pre>${JSON.stringify(cocheras, null, 2)}</pre>
+                    <h2 class="success">✅ TODOS LOS SERVICIOS FUNCIONAN</h2>
+                    
+                    <h3>📅 Eventos API</h3>
+                    <p>Total eventos: ${eventos.length}</p>
+                    <p>Evento principal: ${evento ? evento.titulo : 'No encontrado'}</p>
+                    
+                    <h3>🏨 Hoteles API</h3>
+                    <p>Hoteles disponibles: ${hoteles.length}</p>
+                    
+                    <h3>🚗 Cocheras API</h3>
+                    <p>Cocheras disponibles: ${cocheras.length}</p>
+                    
+                    <hr>
+                    <p style="color: #10B981; font-weight: bold;">
+                        ✅ Bloque 2 completado exitosamente. Listo para continuar con Bloque 3.
+                    </p>
                 `;
+                
             } catch (error) {
-                output.innerHTML = `<p style="color: red;">❌ Error: ${error.message}</p>`;
+                console.error('❌ Error:', error);
+                output.innerHTML = `
+                    <h2 class="error">❌ Error en las pruebas</h2>
+                    <p><strong>Mensaje:</strong> ${error.message}</p>
+                    <pre>${error.stack}</pre>
+                `;
             }
         }
+        
+        // ============================================
+        // Verificación inicial al cargar
+        // ============================================
+        window.addEventListener('load', () => {
+            console.log('🔍 Verificando servicios cargados...');
+            console.log('ENV:', typeof ENV !== 'undefined' ? '✅' : '❌');
+            console.log('CONSTANTS:', typeof CONSTANTS !== 'undefined' ? '✅' : '❌');
+            console.log('ROUTES:', typeof ROUTES !== 'undefined' ? '✅' : '❌');
+            console.log('EventosAPI:', typeof EventosAPI !== 'undefined' ? '✅' : '❌');
+            console.log('HotelesAPI:', typeof HotelesAPI !== 'undefined' ? '✅' : '❌');
+            console.log('CocherasAPI:', typeof CocherasAPI !== 'undefined' ? '✅' : '❌');
+        });
     </script>
 </body>
 </html>
+```
+
+---
+
+## 🎯 AHORA SÍ, PRUEBA
+
+1. Guarda el `test.html` actualizado
+2. Refresca la página (Ctrl+R o Cmd+R)
+3. Abre la consola (F12) y mira los logs
+4. Click en **"✅ Probar Todo"**
+
+**Deberías ver:**
+```
+✅ TODOS LOS SERVICIOS FUNCIONAN
+
+📅 Eventos API
+Total eventos: 1
+Evento principal: Convención Nacional AMIP Perú 2026
+
+🏨 Hoteles API
+Hoteles disponibles: 0
+
+🚗 Cocheras API
+Cocheras disponibles: 0
+
+✅ Bloque 2 completado exitosamente. Listo para continuar con Bloque 3.
