@@ -7,6 +7,8 @@
  * - Error (rojo)
  * - Warning (amarillo)
  * - Info (azul)
+ * 
+ * NOTA: Requiere notifications.css incluido en el HTML
  */
 
 const Notify = {
@@ -36,14 +38,16 @@ const Notify = {
   init() {
     if (this.initialized) return;
     
+    // Verificar que el CSS esté cargado
+    if (ENV.isDev) {
+      this._checkStyles();
+    }
+    
     // Crear contenedor
     this.container = document.createElement('div');
     this.container.id = 'notify-container';
-    this.container.className = 'notify-container notify-top-right';
+    this.container.className = `notify-container notify-${this.defaults.position}`;
     document.body.appendChild(this.container);
-    
-    // Inyectar estilos
-    this._injectStyles();
     
     this.initialized = true;
     
@@ -53,201 +57,24 @@ const Notify = {
   },
   
   /**
-   * Inyectar estilos CSS
+   * Verificar que los estilos CSS estén cargados
    * @private
    */
-  _injectStyles() {
-    if (document.getElementById('notify-styles')) return;
+  _checkStyles() {
+    const testElement = document.createElement('div');
+    testElement.className = 'notify-toast';
+    testElement.style.visibility = 'hidden';
+    testElement.style.position = 'absolute';
+    document.body.appendChild(testElement);
     
-    const styles = `
-      <style id="notify-styles">
-        /* Contenedor principal */
-        .notify-container {
-          position: fixed;
-          z-index: 9999;
-          pointer-events: none;
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-          padding: 20px;
-          max-width: 400px;
-          width: 100%;
-        }
-        
-        /* Posiciones */
-        .notify-top-right { top: 0; right: 0; }
-        .notify-top-left { top: 0; left: 0; }
-        .notify-bottom-right { bottom: 0; right: 0; }
-        .notify-bottom-left { bottom: 0; left: 0; }
-        .notify-top-center { 
-          top: 0; 
-          left: 50%; 
-          transform: translateX(-50%);
-          align-items: center;
-        }
-        .notify-bottom-center { 
-          bottom: 0; 
-          left: 50%; 
-          transform: translateX(-50%);
-          align-items: center;
-        }
-        
-        /* Notificación individual */
-        .notify-toast {
-          pointer-events: auto;
-          background: white;
-          border-radius: 8px;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-          padding: 16px;
-          display: flex;
-          align-items: flex-start;
-          gap: 12px;
-          min-width: 300px;
-          max-width: 100%;
-          position: relative;
-          overflow: hidden;
-          animation: notify-slide-in 0.3s ease-out;
-        }
-        
-        /* Animaciones */
-        @keyframes notify-slide-in {
-          from {
-            transform: translateX(400px);
-            opacity: 0;
-          }
-          to {
-            transform: translateX(0);
-            opacity: 1;
-          }
-        }
-        
-        @keyframes notify-slide-out {
-          from {
-            transform: translateX(0);
-            opacity: 1;
-          }
-          to {
-            transform: translateX(400px);
-            opacity: 0;
-          }
-        }
-        
-        .notify-toast.removing {
-          animation: notify-slide-out 0.3s ease-in forwards;
-        }
-        
-        /* Icono */
-        .notify-icon {
-          flex-shrink: 0;
-          width: 24px;
-          height: 24px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 18px;
-        }
-        
-        /* Contenido */
-        .notify-content {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          gap: 4px;
-        }
-        
-        .notify-title {
-          font-weight: 600;
-          font-size: 14px;
-          line-height: 1.4;
-          color: #1f2937;
-        }
-        
-        .notify-message {
-          font-size: 13px;
-          line-height: 1.5;
-          color: #6b7280;
-        }
-        
-        /* Botón cerrar */
-        .notify-close {
-          flex-shrink: 0;
-          background: none;
-          border: none;
-          cursor: pointer;
-          padding: 0;
-          width: 20px;
-          height: 20px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #9ca3af;
-          transition: color 0.2s;
-          font-size: 16px;
-        }
-        
-        .notify-close:hover {
-          color: #4b5563;
-        }
-        
-        /* Barra de progreso */
-        .notify-progress {
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          height: 3px;
-          background: currentColor;
-          opacity: 0.3;
-          transition: width linear;
-        }
-        
-        /* Tipos de notificación */
-        .notify-success {
-          border-left: 4px solid #10b981;
-        }
-        
-        .notify-success .notify-icon {
-          color: #10b981;
-        }
-        
-        .notify-error {
-          border-left: 4px solid #ef4444;
-        }
-        
-        .notify-error .notify-icon {
-          color: #ef4444;
-        }
-        
-        .notify-warning {
-          border-left: 4px solid #f59e0b;
-        }
-        
-        .notify-warning .notify-icon {
-          color: #f59e0b;
-        }
-        
-        .notify-info {
-          border-left: 4px solid #3b82f6;
-        }
-        
-        .notify-info .notify-icon {
-          color: #3b82f6;
-        }
-        
-        /* Responsive */
-        @media (max-width: 640px) {
-          .notify-container {
-            padding: 12px;
-            max-width: 100%;
-          }
-          
-          .notify-toast {
-            min-width: 0;
-          }
-        }
-      </style>
-    `;
+    const styles = window.getComputedStyle(testElement);
+    const hasStyles = styles.display === 'flex';
     
-    document.head.insertAdjacentHTML('beforeend', styles);
+    document.body.removeChild(testElement);
+    
+    if (!hasStyles) {
+      console.warn('⚠️ Notify: CSS no detectado. Incluye notifications.css en tu HTML');
+    }
   },
   
   // ============================================
@@ -258,6 +85,7 @@ const Notify = {
    * Notificación de éxito
    * @param {string} message - Mensaje a mostrar
    * @param {Object} options - Opciones adicionales
+   * @returns {string} ID de la notificación
    */
   success(message, options = {}) {
     return this.show(message, 'success', options);
@@ -267,6 +95,7 @@ const Notify = {
    * Notificación de error
    * @param {string} message - Mensaje a mostrar
    * @param {Object} options - Opciones adicionales
+   * @returns {string} ID de la notificación
    */
   error(message, options = {}) {
     return this.show(message, 'error', options);
@@ -276,6 +105,7 @@ const Notify = {
    * Notificación de advertencia
    * @param {string} message - Mensaje a mostrar
    * @param {Object} options - Opciones adicionales
+   * @returns {string} ID de la notificación
    */
   warning(message, options = {}) {
     return this.show(message, 'warning', options);
@@ -285,6 +115,7 @@ const Notify = {
    * Notificación informativa
    * @param {string} message - Mensaje a mostrar
    * @param {Object} options - Opciones adicionales
+   * @returns {string} ID de la notificación
    */
   info(message, options = {}) {
     return this.show(message, 'info', options);
@@ -371,14 +202,6 @@ const Notify = {
       error: 'fa-times-circle',
       warning: 'fa-exclamation-triangle',
       info: 'fa-info-circle'
-    };
-    
-    // Títulos por defecto
-    const titles = {
-      success: '¡Éxito!',
-      error: 'Error',
-      warning: 'Advertencia',
-      info: 'Información'
     };
     
     // Construir HTML
@@ -530,8 +353,24 @@ const Notify = {
     this.container.className = this.container.className
       .replace(/notify-(top|bottom)-(left|right|center)/g, '');
     
-    this.container.classList.add(`notify-${position}`);
+    this.container.classList.add('notify-container', `notify-${position}`);
     this.defaults.position = position;
+  },
+  
+  /**
+   * Obtener cantidad de notificaciones activas
+   * @returns {number}
+   */
+  count() {
+    return this.notifications.length;
+  },
+  
+  /**
+   * Verificar si hay notificaciones activas
+   * @returns {boolean}
+   */
+  hasActive() {
+    return this.notifications.length > 0;
   }
 };
 
