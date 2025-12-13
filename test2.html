@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Test - Servicios API</title>
+</head>
+<body>
+    <h1>Test de Servicios API</h1>
+    <button onclick="probarEventos()">Probar Eventos API</button>
+    <button onclick="probarHoteles()">Probar Hoteles API</button>
+    <button onclick="probarCocheras()">Probar Cocheras API</button>
+    <div id="output" style="margin-top: 20px; padding: 20px; background: #f5f5f5;"></div>
+    
+    <!-- Configuración -->
+    <script src="assets/js/config/env.js"></script>
+    <script src="assets/js/config/constants.js"></script>
+    <script src="assets/js/config/routes.js"></script>
+    
+    <!-- Servicios API -->
+    <script src="assets/js/services/api/eventos.api.js"></script>
+    <script src="assets/js/services/api/hoteles.api.js"></script>
+    <script src="assets/js/services/api/cocheras.api.js"></script>
+    
+    <script>
+        const output = document.getElementById('output');
+        
+        async function probarEventos() {
+            output.innerHTML = '<p>⏳ Cargando eventos...</p>';
+            
+            try {
+                // Cargar todos los eventos
+                const eventos = await EventosAPI.getAllEventos();
+                
+                // Buscar un evento específico
+                const evento = await EventosAPI.getEventoById('amip-chimbote-feb2026');
+                
+                // Eventos activos
+                const activos = await EventosAPI.getEventosActivos();
+                
+                output.innerHTML = `
+                    <h2>✅ Eventos API</h2>
+                    <p><strong>Total eventos:</strong> ${eventos.length}</p>
+                    <p><strong>Eventos activos:</strong> ${activos.length}</p>
+                    <p><strong>Evento encontrado:</strong> ${evento ? evento.titulo : 'No encontrado'}</p>
+                    <pre>${JSON.stringify(evento, null, 2)}</pre>
+                `;
+            } catch (error) {
+                output.innerHTML = `<p style="color: red;">❌ Error: ${error.message}</p>`;
+            }
+        }
+        
+        async function probarHoteles() {
+            output.innerHTML = '<p>⏳ Cargando hoteles...</p>';
+            
+            try {
+                const hoteles = await HotelesAPI.getHotelesByEvento('amip-chimbote-feb2026');
+                
+                output.innerHTML = `
+                    <h2>✅ Hoteles API</h2>
+                    <p><strong>Hoteles encontrados:</strong> ${hoteles.length}</p>
+                    <pre>${JSON.stringify(hoteles, null, 2)}</pre>
+                `;
+            } catch (error) {
+                output.innerHTML = `<p style="color: red;">❌ Error: ${error.message}</p>`;
+            }
+        }
+        
+        async function probarCocheras() {
+            output.innerHTML = '<p>⏳ Cargando cocheras...</p>';
+            
+            try {
+                const cocheras = await CocherasAPI.getCocherasByEvento('amip-chimbote-feb2026');
+                
+                output.innerHTML = `
+                    <h2>✅ Cocheras API</h2>
+                    <p><strong>Cocheras encontradas:</strong> ${cocheras.length}</p>
+                    <pre>${JSON.stringify(cocheras, null, 2)}</pre>
+                `;
+            } catch (error) {
+                output.innerHTML = `<p style="color: red;">❌ Error: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
