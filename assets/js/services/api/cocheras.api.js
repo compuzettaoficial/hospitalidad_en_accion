@@ -2,17 +2,15 @@
  * ============================================
  * COCHERAS.API.JS - Servicio de Cocheras
  * ============================================
- * Carga cocheras desde JSON (GitHub)
  */
 
-class CocherasAPI {
+const CocherasAPI = {
   
-  constructor() {
-    this.cache = {
-      ciudades: {},
-      lastFetch: {}
-    };
-  }
+  // Cache
+  _cache: {
+    ciudades: {},
+    lastFetch: {}
+  },
   
   // ============================================
   // CARGAR COCHERAS DE UNA CIUDAD
@@ -21,9 +19,9 @@ class CocherasAPI {
     try {
       const ciudadSlug = ciudad.toLowerCase().replace(/\s+/g, '-');
       
-      if (this.cache.ciudades[ciudadSlug] && this._isCacheValid(`ciudad_${ciudadSlug}`)) {
+      if (this._cache.ciudades[ciudadSlug] && this._isCacheValid(`ciudad_${ciudadSlug}`)) {
         console.log(`📦 Cache: Usando cocheras de ${ciudad} cacheadas`);
-        return this.cache.ciudades[ciudadSlug];
+        return this._cache.ciudades[ciudadSlug];
       }
       
       console.log(`🌐 Cargando cocheras de ${ciudad}...`);
@@ -38,8 +36,8 @@ class CocherasAPI {
       }
       
       const data = await response.json();
-      this.cache.ciudades[ciudadSlug] = data;
-      this.cache.lastFetch[`ciudad_${ciudadSlug}`] = Date.now();
+      this._cache.ciudades[ciudadSlug] = data;
+      this._cache.lastFetch[`ciudad_${ciudadSlug}`] = Date.now();
       
       console.log(`✅ Cocheras de ${ciudad} cargadas:`, data.totalCocheras);
       return data;
@@ -48,7 +46,7 @@ class CocherasAPI {
       console.error(`❌ Error cargando cocheras de ${ciudad}:`, error);
       throw error;
     }
-  }
+  },
   
   // ============================================
   // OBTENER COCHERAS PARA UN EVENTO
@@ -71,7 +69,6 @@ class CocherasAPI {
         cocheras = cocheras.filter(c => c.eventoId === eventoId);
       }
       
-      // Limitar a máximo 3 cocheras
       cocheras = cocheras.slice(0, 3);
       
       console.log(`✅ Cocheras para evento ${eventoId}:`, cocheras.length);
@@ -81,7 +78,7 @@ class CocherasAPI {
       console.error(`❌ Error obteniendo cocheras para evento ${eventoId}:`, error);
       return [];
     }
-  }
+  },
   
   // ============================================
   // UTILIDADES
@@ -90,27 +87,37 @@ class CocherasAPI {
   getWhatsAppLink(numero, mensaje = '') {
     const numeroLimpio = numero.replace(/\D/g, '');
     return `https://wa.me/${numeroLimpio}?text=${encodeURIComponent(mensaje)}`;
-  }
+  },
   
   _isCacheValid(key) {
-    if (!this.cache.lastFetch[key]) return false;
-    const elapsed = Date.now() - this.cache.lastFetch[key];
+    if (!this._cache.lastFetch[key]) return false;
+    const elapsed = Date.now() - this._cache.lastFetch[key];
     return elapsed < CONSTANTS.CACHE.TTL_HOTELES;
-  }
+  },
   
   clearCache() {
-    this.cache = {
+    this._cache = {
       ciudades: {},
       lastFetch: {}
     };
     console.log('🗑️ Cache de cocheras limpiado');
   }
-}
-
-// Instancia única
-const cocherasAPI = new CocherasAPI();
+};
 
 // Exportar globalmente
-window.CocherasAPI = cocherasAPI;
+window.CocherasAPI = CocherasAPI;
 
 console.log('✅ cocheras.api.js cargado correctamente');
+```
+
+---
+
+## 📁 SOBRE LAS IMÁGENES DE EXPOSITORES
+
+Sí, lo tengo en cuenta. Actualiza tu estructura de imágenes así:
+```
+assets/images/
+├── expositores/
+│   ├── pastor-juan-perez.jpg
+│   ├── pastora-maria-gonzalez.jpg
+│   └── placeholder-speaker.jpg  (imagen genérica si no hay foto)
