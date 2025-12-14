@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Convención AMIP Chimbote 2026 - Hospedaje</title>
+    <title>Convención AMIP Chimbote 2026</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
         :root {
             --color-primary: #5B95C2;
@@ -16,11 +15,7 @@
             --color-success: #10B981;
         }
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -29,13 +24,8 @@
             background: var(--color-bg-light);
         }
         
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 0.75rem;
-        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
         
-        /* Header */
         header {
             background: white;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
@@ -46,54 +36,37 @@
         
         .header-content {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            padding: 0.75rem 0;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
+            padding: 1rem 0;
             gap: 0.5rem;
-        }
-        
-        .logo-img {
-            width: 40px;
-            height: 40px;
-            object-fit: contain;
         }
         
         .brand-name {
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 1.25rem;
             color: var(--color-primary);
         }
         
         .badge {
-            display: inline-block;
             background: rgba(91, 149, 194, 0.1);
             border: 2px solid var(--color-primary);
             color: var(--color-primary);
-            padding: 0.2rem 0.6rem;
+            padding: 0.3rem 0.75rem;
             border-radius: 9999px;
             font-size: 0.7rem;
             font-weight: 600;
-            white-space: nowrap;
         }
         
-        /* Hero */
         .hero {
             background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
                         url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200') center/cover;
             color: white;
             padding: 3rem 0;
             text-align: center;
-            min-height: 350px;
+            min-height: 300px;
             display: flex;
             align-items: center;
-            justify-content: center;
         }
         
         .hero h1 {
@@ -114,8 +87,7 @@
             justify-content: center;
             gap: 2rem;
             flex-wrap: wrap;
-            margin-top: 1.5rem;
-            font-size: 1.1rem;
+            margin-top: 1rem;
         }
         
         .hero-info-item {
@@ -128,18 +100,6 @@
             backdrop-filter: blur(10px);
         }
         
-        .hero-info-item a {
-            color: white;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        
-        .hero-info-item a:hover {
-            color: var(--color-secondary);
-            text-decoration: underline;
-        }
-        
-        /* Sección Evento */
         .evento-section {
             background: white;
             padding: 3rem 0;
@@ -172,9 +132,7 @@
             display: none;
         }
         
-        .evento-carousel img.active {
-            display: block;
-        }
+        .evento-carousel img.active { display: block; }
         
         .carousel-nav {
             position: absolute;
@@ -189,10 +147,7 @@
             transition: all 0.3s;
         }
         
-        .carousel-nav:hover {
-            background: rgba(0,0,0,0.8);
-        }
-        
+        .carousel-nav:hover { background: rgba(0,0,0,0.8); }
         .carousel-nav.prev { left: 0; }
         .carousel-nav.next { right: 0; }
         
@@ -221,18 +176,17 @@
             border-radius: 6px;
         }
         
-        /* Nav Tabs */
         .nav-tabs {
             display: flex;
             justify-content: center;
-            gap: 0.75rem;
-            padding: 1rem 0;
+            gap: 1rem;
+            padding: 1.5rem 0;
             background: white;
             border-bottom: 2px solid #e5e7eb;
         }
         
         .tab-btn {
-            padding: 0.6rem 1.5rem;
+            padding: 0.75rem 1.5rem;
             background: transparent;
             border: 2px solid #e5e7eb;
             border-radius: 0.5rem;
@@ -241,8 +195,7 @@
             transition: all 0.3s;
             display: flex;
             align-items: center;
-            gap: 0.4rem;
-            font-size: 0.9rem;
+            gap: 0.5rem;
         }
         
         .tab-btn.active {
@@ -251,43 +204,41 @@
             border-color: var(--color-primary);
         }
         
-        /* Filters */
         .filters {
             background: white;
-            padding: 1rem;
+            padding: 1.5rem;
             border-radius: 0.5rem;
-            margin: 1.5rem 0;
+            margin: 2rem 0;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
         
         .filters-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 0.75rem;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
         }
         
         .filter-group label {
             display: block;
             font-weight: 600;
-            margin-bottom: 0.4rem;
-            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
             color: #374151;
         }
         
         .filter-group select {
             width: 100%;
-            padding: 0.45rem;
+            padding: 0.5rem;
             border: 1px solid #d1d5db;
             border-radius: 0.375rem;
-            font-size: 0.85rem;
+            font-size: 0.875rem;
         }
         
-        /* Cards */
         .cards-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.25rem;
-            margin: 1.5rem 0;
+            gap: 1.5rem;
+            margin: 2rem 0;
         }
         
         .card {
@@ -299,68 +250,63 @@
             cursor: pointer;
         }
         
-        .card:hover {
-            transform: translateY(-4px);
-        }
+        .card:hover { transform: translateY(-4px); }
         
         .card-img {
             width: 100%;
-            height: 180px;
+            height: 200px;
             object-fit: cover;
             background: #e5e7eb;
         }
         
-        .card-content {
-            padding: 1rem;
-        }
+        .card-content { padding: 1.25rem; }
         
         .card-title {
-            font-size: 1.1rem;
+            font-size: 1.25rem;
             font-weight: 700;
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.5rem;
         }
         
         .card-info {
             display: flex;
             flex-direction: column;
-            gap: 0.4rem;
-            margin: 0.75rem 0;
-            font-size: 0.85rem;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            font-size: 0.875rem;
             color: #6b7280;
         }
         
         .card-info-item {
             display: flex;
             align-items: center;
-            gap: 0.4rem;
+            gap: 0.5rem;
         }
         
         .card-price {
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             font-weight: 700;
             color: var(--color-primary);
-            margin: 0.5rem 0;
+            margin: 0.75rem 0;
         }
         
         .promo-tag {
-            display: inline-block;
             background: var(--color-success);
             color: white;
-            padding: 0.2rem 0.5rem;
+            padding: 0.25rem 0.5rem;
             border-radius: 0.25rem;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             margin-left: 0.5rem;
         }
         
         .card-actions {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 0.4rem;
-            margin-top: 0.75rem;
+            gap: 0.5rem;
+            margin-top: 1rem;
         }
         
         .btn {
-            padding: 0.5rem 0.75rem;
+            padding: 0.5rem 1rem;
             border: none;
             border-radius: 0.375rem;
             font-weight: 600;
@@ -369,8 +315,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.4rem;
-            font-size: 0.8rem;
+            gap: 0.5rem;
+            font-size: 0.875rem;
             text-decoration: none;
         }
         
@@ -384,13 +330,6 @@
             color: white;
         }
         
-        .btn-outline {
-            background: white;
-            color: var(--color-primary);
-            border: 2px solid var(--color-primary);
-        }
-        
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -435,37 +374,13 @@
             color: #6b7280;
         }
         
-        .modal-body {
-            padding: 1.5rem;
-        }
-        
-        .modal-carousel {
-            position: relative;
-            margin-bottom: 1.5rem;
-            border-radius: 0.5rem;
-            overflow: hidden;
-        }
-        
-        .modal-carousel img {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-            display: none;
-        }
-        
-        .modal-carousel img.active {
-            display: block;
-        }
-        
-        .modal-info-grid {
-            display: grid;
-            gap: 1rem;
-        }
+        .modal-body { padding: 1.5rem; }
         
         .info-section {
             background: #f9fafb;
             padding: 1rem;
             border-radius: 0.5rem;
+            margin-bottom: 1rem;
         }
         
         .info-section h3 {
@@ -474,10 +389,9 @@
             font-size: 1.1rem;
         }
         
-        /* Contact */
         .contact-section {
             background: var(--color-bg-medium);
-            padding: 2.5rem 0;
+            padding: 3rem 0;
         }
         
         .contact-header {
@@ -485,51 +399,41 @@
             margin-bottom: 2rem;
         }
         
-        .contact-header h2 {
-            font-size: 1.75rem;
-            margin-bottom: 0.4rem;
-        }
-        
         .form-container {
             background: white;
-            padding: 1.5rem;
+            padding: 2rem;
             border-radius: 0.75rem;
             max-width: 600px;
             margin: 0 auto;
         }
         
-        .form-group {
-            margin-bottom: 1rem;
-        }
+        .form-group { margin-bottom: 1.25rem; }
         
         .form-group label {
             display: block;
             font-weight: 600;
-            margin-bottom: 0.4rem;
-            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
         }
         
         .form-group input,
         .form-group textarea,
         .form-group select {
             width: 100%;
-            padding: 0.6rem;
+            padding: 0.75rem;
             border: 1px solid #d1d5db;
             border-radius: 0.5rem;
             font-family: inherit;
-            font-size: 0.9rem;
         }
         
         .form-disclaimer {
             background: rgba(91, 149, 194, 0.1);
             border: 1px solid var(--color-primary);
-            padding: 0.75rem;
+            padding: 1rem;
             border-radius: 0.5rem;
-            margin-top: 1rem;
-            font-size: 0.8rem;
+            margin-top: 1.5rem;
+            font-size: 0.875rem;
         }
         
-        /* Footer */
         footer {
             background: #1f2937;
             color: #d1d5db;
@@ -538,50 +442,43 @@
         
         .footer-disclaimer {
             background: #111827;
-            padding: 1rem;
+            padding: 1.5rem;
             border-radius: 0.5rem;
-            margin-bottom: 1.5rem;
-            font-size: 0.85rem;
+            margin-bottom: 2rem;
+            font-size: 0.875rem;
         }
         
         .footer-disclaimer h4 {
             color: var(--color-primary);
             font-weight: 700;
-            margin-bottom: 0.5rem;
-            font-size: 0.95rem;
-        }
-        
-        .footer-disclaimer p {
-            margin-bottom: 0.5rem;
-            line-height: 1.5;
+            margin-bottom: 0.75rem;
         }
         
         .footer-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
+            gap: 2rem;
+            margin-bottom: 2rem;
         }
         
         .footer-section h3 {
             color: white;
-            margin-bottom: 0.75rem;
-            font-size: 1rem;
+            margin-bottom: 1rem;
         }
         
         .footer-section p {
             color: #9ca3af;
             line-height: 1.6;
-            font-size: 0.85rem;
-            margin-bottom: 0.4rem;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
         }
         
         .footer-bottom {
             text-align: center;
-            padding-top: 1.5rem;
+            padding-top: 2rem;
             border-top: 1px solid #374151;
             color: #6b7280;
-            font-size: 0.85rem;
+            font-size: 0.875rem;
         }
         
         .brand-highlight {
@@ -589,9 +486,7 @@
             font-weight: 700;
         }
         
-        .hidden {
-            display: none !important;
-        }
+        .hidden { display: none !important; }
         
         .loading {
             text-align: center;
@@ -599,29 +494,13 @@
             color: #6b7280;
         }
         
-        /* Responsive */
         @media (max-width: 768px) {
             .hero h1 { font-size: 1.75rem; }
-            .hero { padding: 2rem 0; min-height: 300px; }
-            .hero-subtitle { font-size: 1rem; }
-            .hero-info {
-                flex-direction: column;
-                gap: 0.75rem;
-                font-size: 0.95rem;
-            }
-            .nav-tabs {
-                flex-direction: column;
-                padding: 0.75rem;
-                gap: 0.5rem;
-            }
+            .nav-tabs { flex-direction: column; padding: 1rem; }
             .tab-btn { width: 100%; justify-content: center; }
             .cards-grid { grid-template-columns: 1fr; }
             .card-actions { grid-template-columns: 1fr; }
             .filters-grid { grid-template-columns: 1fr; }
-            .footer-grid { grid-template-columns: 1fr; gap: 1.25rem; }
-            .logo-img { width: 35px; height: 35px; }
-            .brand-name { font-size: 0.9rem; }
-            .badge { font-size: 0.65rem; padding: 0.15rem 0.5rem; }
             .evento-carousel img { height: 250px; }
         }
     </style>
@@ -630,13 +509,8 @@
     <header>
         <div class="container">
             <div class="header-content">
-                <div class="logo">
-                    <img src="../assets/images/branding/logo.png" alt="Hospitalidad en Acción" class="logo-img">
-                    <div>
-                        <div class="brand-name">HOSPITALIDAD EN ACCIÓN</div>
-                        <span class="badge">📋 PÁGINA DE APOYO AL EVENTO</span>
-                    </div>
-                </div>
+                <div class="brand-name">HOSPITALIDAD EN ACCIÓN</div>
+                <span class="badge">📋 APOYO AL EVENTO</span>
             </div>
         </div>
     </header>
@@ -652,9 +526,7 @@
                 </div>
                 <div class="hero-info-item">
                     <i class="fas fa-map-marker-alt"></i>
-                    <a href="https://www.google.com/maps/search/Instituto+Carlos+Salazar+Romero+Nuevo+Chimbote" target="_blank">
-                        Instituto Carlos Salazar Romero
-                    </a>
+                    <span>Instituto Carlos Salazar Romero</span>
                 </div>
             </div>
         </div>
@@ -668,9 +540,9 @@
             </div>
             
             <div class="evento-carousel">
-                <img src="../assets/images/eventos/chimbote-2026/nvo.chimbote.jpg" alt="Auditorio Interior" class="active">
-                <img src="../assets/images/eventos/chimbote-2026/auditorio.jpg">
-                <img src="../assets/images/slider/evento14.jpg" alt="Público Asistente">
+                <img src="../assets/images/eventos/chimbote-2026/nvo.chimbote.jpg" alt="Nuevo Chimbote" class="active">
+                <img src="../assets/images/eventos/chimbote-2026/auditorio.jpg" alt="Auditorio">
+                <img src="../assets/images/slider/evento14.jpg" alt="Evento">
                 
                 <button class="carousel-nav prev" onclick="cambiarSlide(-1)">
                     <i class="fas fa-chevron-left"></i>
@@ -778,12 +650,12 @@
                     
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" name="nombre" required placeholder="Tu nombre">
+                        <input type="text" name="nombre" required>
                     </div>
                     
                     <div class="form-group">
                         <label>Email</label>
-                        <input type="email" name="email" required placeholder="tu@email.com">
+                        <input type="email" name="email" required>
                     </div>
                     
                     <div class="form-group">
@@ -801,7 +673,7 @@
                         <textarea name="mensaje" rows="4" required></textarea>
                     </div>
                     
-                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem;">
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
                         Enviar Mensaje
                     </button>
                     
@@ -817,7 +689,7 @@
         <div class="container">
             <div class="footer-disclaimer">
                 <h4>PÁGINA DE APOYO AL EVENTO</h4>
-                <p>Esta página es proporcionada por <span class="brand-highlight">HOSPITALIDAD EN ACCIÓN</span> como soporte informativo a la Comisión Organizadora de la CONVENCIÓN NACIONAL AMIP 2026 PERÚ</p>
+                <p>Esta página es proporcionada por <span class="brand-highlight">HOSPITALIDAD EN ACCIÓN</span> como soporte informativo a la Convención Nacional AMIP 2026</p>
                 <p style="color: #ef4444; font-weight: 600;">⚠️ Esta NO es la página oficial de AMIP</p>
             </div>
             
@@ -825,19 +697,16 @@
                 <div class="footer-section">
                     <h3>AMIP</h3>
                     <p>Asociación Misionera de Iglesias Pentecostales</p>
-                    <p>https://amipinstitucional.org/</p>
                 </div>
                 
                 <div class="footer-section">
                     <h3>Información</h3>
                     <p>• Solo información de hospedaje</p>
                     <p>• No gestionamos reservas</p>
-                    <p>• Precios referenciales</p>
                 </div>
                 
                 <div class="footer-section">
                     <h3>Sistema web</h3>
-                    <p>Proporcionado por</p>
                     <p style="font-weight: 700; color: var(--color-primary);">HOSPITALIDAD EN ACCIÓN</p>
                 </div>
             </div>
@@ -858,25 +727,31 @@
         </div>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyBFaCbNqpd93Eirj7NDnkKtOS6Ym0rMoiA",
-            authDomain: "hospitalidad-29c5c.firebaseapp.com",
-            projectId: "hospitalidad-29c5c"
-        };
-        
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        
         let hotelesData = [];
         let cocherasData = [];
         let slideActual = 0;
-        let modalSlideActual = 0;
         
-        // Carrusel evento
+        // Cargar datos desde JSON
+        async function cargarDatos() {
+            try {
+                const hotelesRes = await fetch('../data/hoteles/chimbote.json');
+                const hotelesJson = await hotelesRes.json();
+                hotelesData = hotelesJson.hoteles || [];
+                
+                const cocherasRes = await fetch('../data/cocheras/chimbote.json');
+                const cocherasJson = await cocherasRes.json();
+                cocherasData = cocherasJson.cocheras || [];
+                
+                aplicarFiltros();
+                aplicarFiltrosCocheras();
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('hoteles-grid').innerHTML = '<p class="loading">Error al cargar datos. Verifica las rutas de los archivos JSON.</p>';
+            }
+        }
+        
+        // Carrusel
         function cambiarSlide(n) {
             const slides = document.querySelectorAll('.evento-carousel img');
             const dots = document.querySelectorAll('.carousel-dot');
@@ -918,30 +793,6 @@
             }
         }
         
-        // Cargar hoteles desde Firebase
-        async function cargarHoteles() {
-            try {
-                const snapshot = await db.collection('hoteles-chimbote-2026').get();
-                hotelesData = snapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
-                aplicarFiltros();
-            } catch (error) {
-                console.error('Error al cargar hoteles:', error);
-                document.getElementById('hoteles-grid').innerHTML = '<p class="loading">Error al cargar datos</p>';
-            }
-        }
-        
-        // Cargar cocheras desde Firebase
-        async function cargarCocheras() {
-            try {
-                const snapshot = await db.collection('cocheras-chimbote-2026').get();
-                cocherasData = snapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
-                aplicarFiltrosCocheras();
-            } catch (error) {
-                console.error('Error al cargar cocheras:', error);
-                document.getElementById('cocheras-grid').innerHTML = '<p class="loading">Error al cargar datos</p>';
-            }
-        }
-        
         // Filtros hoteles
         function aplicarFiltros() {
             let filtrados = [...hotelesData];
@@ -950,102 +801,98 @@
             const soloPromo = document.getElementById('filter-promo').value;
             const ordenar = document.getElementById('sort-hoteles').value;
             
-            if (maxPrecio < 999) {
-                filtrados = filtrados.filter(h => h.precioMin <= maxPrecio);
-            }
+            filtrados = filtrados.filter(h => {
+                const precio = h.promocion?.tienePromocion ? h.promocion.preciosEvento.simple : h.precios.simple;
+                if (precio > maxPrecio) return false;
+                if (soloPromo === 'si' && !h.promocion?.tienePromocion) return false;
+                return true;
+            });
             
-            if (soloPromo === 'si') {
-                filtrados = filtrados.filter(h => h.promocion);
-            }
-            
-            if (ordenar === 'precio-asc') {
-                filtrados.sort((a, b) => a.precioMin - b.precioMin);
-            } else if (ordenar === 'precio-desc') {
-                filtrados.sort((a, b) => b.precioMin - a.precioMin);
-            } else if (ordenar === 'nombre-asc') {
-                filtrados.sort((a, b) => a.nombre.localeCompare(b.nombre));
-            }
+            filtrados.sort((a, b) => {
+                const precioA = a.promocion?.tienePromocion ? a.promocion.preciosEvento.simple : a.precios.simple;
+                const precioB = b.promocion?.tienePromocion ? b.promocion.preciosEvento.simple : b.precios.simple;
+                
+                if (ordenar === 'precio-asc') return precioA - precioB;
+                if (ordenar === 'precio-desc') return precioB - precioA;
+                if (ordenar === 'nombre-asc') return a.nombre.localeCompare(b.nombre);
+            });
             
             renderHoteles(filtrados);
         }
         
-        // Renderizar hoteles
         function renderHoteles(hoteles) {
             const grid = document.getElementById('hoteles-grid');
             
             if (hoteles.length === 0) {
-                grid.innerHTML = '<p class="loading">No se encontraron hoteles con estos filtros</p>';
+                grid.innerHTML = '<p class="loading">No se encontraron hoteles</p>';
                 return;
             }
             
-            grid.innerHTML = hoteles.map(h => `
-                <div class="card" onclick="verDetalleHotel('${h.id}')">
-                    <img src="${h.imagen || 'https://via.placeholder.com/300x180?text=Hotel'}" alt="${h.nombre}" class="card-img">
-                    <div class="card-content">
-                        <h3 class="card-title">${h.nombre}</h3>
-                        <div class="card-info">
-                            <div class="card-info-item">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>${h.distrito}</span>
+            grid.innerHTML = hoteles.map(h => {
+                const precio = h.promocion?.tienePromocion ? h.promocion.preciosEvento.simple : h.precios.simple;
+                const precioOriginal = h.promocion?.tienePromocion ? h.precios.simple : null;
+                
+                return `
+                    <div class="card" onclick="verDetalleHotel('${h.id}')">
+                        <img src="${h.imagenes?.[0] || 'https://via.placeholder.com/300x200?text=Hotel'}" alt="${h.nombre}" class="card-img">
+                        <div class="card-content">
+                            <h3 class="card-title">${h.nombre}</h3>
+                            <div class="card-info">
+                                <div class="card-info-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>${h.direccion}</span>
+                                </div>
+                                ${h.distancia ? `<div class="card-info-item">
+                                    <i class="fas fa-walking"></i>
+                                    <span>${h.distancia.lineaRecta}</span>
+                                </div>` : ''}
                             </div>
-                            <div class="card-info-item">
-                                <i class="fas fa-phone"></i>
-                                <span>${h.telefono || 'Consultar'}</span>
+                            <div class="card-price">
+                                S/ ${precio}
+                                ${precioOriginal ? `<span style="text-decoration: line-through; color: #9ca3af; font-size: 1rem;">S/ ${precioOriginal}</span>` : ''}
+                                ${h.promocion?.tienePromocion ? '<span class="promo-tag">PROMO</span>' : ''}
                             </div>
-                            ${h.estrellas ? `<div class="card-info-item">
-                                <i class="fas fa-star" style="color: #fbbf24;"></i>
-                                <span>${h.estrellas} estrellas</span>
-                            </div>` : ''}
-                        </div>
-                        <div class="card-price">
-                            Desde S/ ${h.precioMin}
-                            ${h.promocion ? '<span class="promo-tag">PROMO</span>' : ''}
-                        </div>
-                        <div class="card-actions">
-                            <button class="btn btn-primary" onclick="event.stopPropagation(); verDetalleHotel('${h.id}')">
-                                <i class="fas fa-info-circle"></i> Ver detalles
-                            </button>
-                            ${h.telefono ? `<a href="tel:${h.telefono}" class="btn btn-secondary" onclick="event.stopPropagation()">
-                                <i class="fas fa-phone"></i> Llamar
-                            </a>` : ''}
+                            <div class="card-actions">
+                                ${h.contacto?.whatsapp ? `<a href="https://wa.me/${h.contacto.whatsapp.replace(/[^0-9]/g, '')}" class="btn btn-secondary" onclick="event.stopPropagation()" target="_blank">
+                                    <i class="fab fa-whatsapp"></i> WhatsApp
+                                </a>` : ''}
+                                ${h.contacto?.telefono ? `<a href="tel:${h.contacto.telefono}" class="btn btn-primary" onclick="event.stopPropagation()">
+                                    <i class="fas fa-phone"></i> Llamar
+                                </a>` : ''}
+                            </div>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
         
-        // Filtros cocheras
         function aplicarFiltrosCocheras() {
             let filtrados = [...cocherasData];
             
             const maxPrecio = parseInt(document.getElementById('filter-precio-cochera').value);
             const ordenar = document.getElementById('sort-cocheras').value;
             
-            if (maxPrecio < 999) {
-                filtrados = filtrados.filter(c => c.tarifaDia <= maxPrecio);
-            }
+            filtrados = filtrados.filter(c => c.precioDia <= maxPrecio);
             
-            if (ordenar === 'precio-asc') {
-                filtrados.sort((a, b) => a.tarifaDia - b.tarifaDia);
-            } else if (ordenar === 'nombre-asc') {
-                filtrados.sort((a, b) => a.nombre.localeCompare(b.nombre));
-            }
+            filtrados.sort((a, b) => {
+                if (ordenar === 'precio-asc') return a.precioDia - b.precioDia;
+                if (ordenar === 'nombre-asc') return a.nombre.localeCompare(b.nombre);
+            });
             
             renderCocheras(filtrados);
         }
         
-        // Renderizar cocheras
         function renderCocheras(cocheras) {
             const grid = document.getElementById('cocheras-grid');
             
             if (cocheras.length === 0) {
-                grid.innerHTML = '<p class="loading">No se encontraron cocheras con estos filtros</p>';
+                grid.innerHTML = '<p class="loading">No se encontraron cocheras</p>';
                 return;
             }
             
             grid.innerHTML = cocheras.map(c => `
                 <div class="card" onclick="verDetalleCochera('${c.id}')">
-                    <img src="${c.imagen || 'https://via.placeholder.com/300x180?text=Cochera'}" alt="${c.nombre}" class="card-img">
+                    <img src="${c.imagenes?.[0] || 'https://via.placeholder.com/300x200?text=Cochera'}" alt="${c.nombre}" class="card-img">
                     <div class="card-content">
                         <h3 class="card-title">${c.nombre}</h3>
                         <div class="card-info">
@@ -1054,22 +901,16 @@
                                 <span>${c.direccion}</span>
                             </div>
                             <div class="card-info-item">
-                                <i class="fas fa-clock"></i>
-                                <span>${c.horario || '24 horas'}</span>
-                            </div>
-                            ${c.capacidad ? `<div class="card-info-item">
                                 <i class="fas fa-car"></i>
-                                <span>${c.capacidad} espacios</span>
-                            </div>` : ''}
+                                <span>Capacidad: ${c.capacidad} vehículos</span>
+                            </div>
                         </div>
-                        <div class="card-price">
-                            S/ ${c.tarifaDia}/día
-                        </div>
+                        <div class="card-price">S/ ${c.precioDia}/día</div>
                         <div class="card-actions">
-                            <button class="btn btn-primary" onclick="event.stopPropagation(); verDetalleCochera('${c.id}')">
-                                <i class="fas fa-info-circle"></i> Ver detalles
-                            </button>
-                            ${c.telefono ? `<a href="tel:${c.telefono}" class="btn btn-secondary" onclick="event.stopPropagation()">
+                            ${c.whatsapp ? `<a href="https://wa.me/${c.whatsapp.replace(/[^0-9]/g, '')}" class="btn btn-secondary" onclick="event.stopPropagation()" target="_blank">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </a>` : ''}
+                            ${c.telefono ? `<a href="tel:${c.telefono}" class="btn btn-primary" onclick="event.stopPropagation()">
                                 <i class="fas fa-phone"></i> Llamar
                             </a>` : ''}
                         </div>
@@ -1078,103 +919,84 @@
             `).join('');
         }
         
-        // Ver detalle hotel
         function verDetalleHotel(id) {
             const hotel = hotelesData.find(h => h.id === id);
             if (!hotel) return;
             
+            const precio = hotel.promocion?.tienePromocion ? hotel.promocion.preciosEvento : hotel.precios;
+            
             document.getElementById('modal-title').textContent = hotel.nombre;
             document.getElementById('modal-body').innerHTML = `
-                <div class="modal-info-grid">
-                    <div class="info-section">
-                        <h3><i class="fas fa-info-circle"></i> Información General</h3>
-                        <p><strong>Dirección:</strong> ${hotel.direccion}</p>
-                        <p><strong>Distrito:</strong> ${hotel.distrito}</p>
-                        ${hotel.estrellas ? `<p><strong>Categoría:</strong> ${hotel.estrellas} estrellas</p>` : ''}
-                        <p><strong>Teléfono:</strong> ${hotel.telefono || 'Consultar'}</p>
-                        ${hotel.email ? `<p><strong>Email:</strong> ${hotel.email}</p>` : ''}
-                        ${hotel.web ? `<p><strong>Web:</strong> <a href="${hotel.web}" target="_blank">${hotel.web}</a></p>` : ''}
-                    </div>
-                    
-                    <div class="info-section">
-                        <h3><i class="fas fa-dollar-sign"></i> Tarifas</h3>
-                        <p><strong>Precio desde:</strong> S/ ${hotel.precioMin} por noche</p>
-                        ${hotel.precioMax ? `<p><strong>Precio hasta:</strong> S/ ${hotel.precioMax} por noche</p>` : ''}
-                        ${hotel.promocion ? '<p style="color: #10B981; font-weight: 600;"><i class="fas fa-tag"></i> Promoción disponible</p>' : ''}
-                    </div>
-                    
-                    ${hotel.servicios && hotel.servicios.length > 0 ? `
-                    <div class="info-section">
-                        <h3><i class="fas fa-concierge-bell"></i> Servicios</h3>
-                        <ul style="list-style: none; padding: 0;">
-                            ${hotel.servicios.map(s => `<li style="padding: 0.25rem 0;"><i class="fas fa-check" style="color: #10B981;"></i> ${s}</li>`).join('')}
-                        </ul>
-                    </div>` : ''}
-                    
-                    ${hotel.notas ? `
-                    <div class="info-section">
-                        <h3><i class="fas fa-clipboard"></i> Notas</h3>
-                        <p>${hotel.notas}</p>
-                    </div>` : ''}
+                <div class="info-section">
+                    <h3><i class="fas fa-info-circle"></i> Información</h3>
+                    <p><strong>Dirección:</strong> ${hotel.direccion}</p>
+                    ${hotel.distancia ? `<p><strong>Distancia:</strong> ${hotel.distancia.lineaRecta} (${hotel.distancia.caminando} caminando)</p>` : ''}
+                </div>
+                
+                <div class="info-section">
+                    <h3><i class="fas fa-dollar-sign"></i> Precios</h3>
+                    ${hotel.promocion?.tienePromocion ? `<p style="background: #fef3c7; padding: 0.5rem; border-radius: 0.25rem; margin-bottom: 0.5rem;"><strong>🎉 Promoción AMIP</strong> - Código: ${hotel.promocion.codigo}</p>` : ''}
+                    <p>Simple: <strong>S/ ${precio.simple}</strong></p>
+                    <p>Doble: <strong>S/ ${precio.doble}</strong></p>
+                    <p>Matrimonial: <strong>S/ ${precio.matrimonial}</strong></p>
+                </div>
+                
+                ${hotel.servicios?.length ? `
+                <div class="info-section">
+                    <h3><i class="fas fa-concierge-bell"></i> Servicios</h3>
+                    ${hotel.servicios.map(s => `<p>✓ ${s}</p>`).join('')}
+                </div>` : ''}
+                
+                <div class="info-section">
+                    <h3><i class="fas fa-phone"></i> Contacto</h3>
+                    ${hotel.contacto.telefono ? `<p>📞 ${hotel.contacto.telefono}</p>` : ''}
+                    ${hotel.contacto.whatsapp ? `<p>💬 ${hotel.contacto.whatsapp}</p>` : ''}
+                    ${hotel.contacto.email ? `<p>✉️ ${hotel.contacto.email}</p>` : ''}
                 </div>
             `;
             
             document.getElementById('detailModal').classList.add('active');
         }
         
-        // Ver detalle cochera
         function verDetalleCochera(id) {
             const cochera = cocherasData.find(c => c.id === id);
             if (!cochera) return;
             
             document.getElementById('modal-title').textContent = cochera.nombre;
             document.getElementById('modal-body').innerHTML = `
-                <div class="modal-info-grid">
-                    <div class="info-section">
-                        <h3><i class="fas fa-info-circle"></i> Información General</h3>
-                        <p><strong>Dirección:</strong> ${cochera.direccion}</p>
-                        <p><strong>Teléfono:</strong> ${cochera.telefono || 'Consultar'}</p>
-                        <p><strong>Horario:</strong> ${cochera.horario || '24 horas'}</p>
-                        ${cochera.capacidad ? `<p><strong>Capacidad:</strong> ${cochera.capacidad} vehículos</p>` : ''}
-                    </div>
-                    
-                    <div class="info-section">
-                        <h3><i class="fas fa-dollar-sign"></i> Tarifas</h3>
-                        <p><strong>Por día:</strong> S/ ${cochera.tarifaDia}</p>
-                        ${cochera.tarifaHora ? `<p><strong>Por hora:</strong> S/ ${cochera.tarifaHora}</p>` : ''}
-                        ${cochera.tarifaSemana ? `<p><strong>Por semana:</strong> S/ ${cochera.tarifaSemana}</p>` : ''}
-                    </div>
-                    
-                    ${cochera.servicios && cochera.servicios.length > 0 ? `
-                    <div class="info-section">
-                        <h3><i class="fas fa-shield-alt"></i> Servicios</h3>
-                        <ul style="list-style: none; padding: 0;">
-                            ${cochera.servicios.map(s => `<li style="padding: 0.25rem 0;"><i class="fas fa-check" style="color: #10B981;"></i> ${s}</li>`).join('')}
-                        </ul>
-                    </div>` : ''}
+                <div class="info-section">
+                    <h3><i class="fas fa-info-circle"></i> Información</h3>
+                    <p><strong>Dirección:</strong> ${cochera.direccion}</p>
+                    ${cochera.distancia ? `<p><strong>Distancia:</strong> ${cochera.distancia.lineaRecta}</p>` : ''}
+                    <p><strong>Capacidad:</strong> ${cochera.capacidad} vehículos</p>
+                </div>
+                
+                <div class="info-section">
+                    <h3><i class="fas fa-dollar-sign"></i> Tarifas</h3>
+                    <p>Por día: <strong>S/ ${cochera.precioDia}</strong></p>
+                    ${cochera.precioNoche ? `<p>Por noche: <strong>S/ ${cochera.precioNoche}</strong></p>` : ''}
+                </div>
+                
+                <div class="info-section">
+                    <h3><i class="fas fa-phone"></i> Contacto</h3>
+                    ${cochera.telefono ? `<p>📞 ${cochera.telefono}</p>` : ''}
+                    ${cochera.whatsapp ? `<p>💬 ${cochera.whatsapp}</p>` : ''}
                 </div>
             `;
             
             document.getElementById('detailModal').classList.add('active');
         }
         
-        // Cerrar modal
         function cerrarModal() {
             document.getElementById('detailModal').classList.remove('active');
         }
         
-        // Click fuera del modal para cerrar
         document.getElementById('detailModal').addEventListener('click', (e) => {
-            if (e.target.id === 'detailModal') {
-                cerrarModal();
-            }
+            if (e.target.id === 'detailModal') cerrarModal();
         });
         
-        // Inicializar
-        window.addEventListener('DOMContentLoaded', () => {
-            cargarHoteles();
-            cargarCocheras();
-        });
+        // Iniciar
+        cargarDatos();
     </script>
 </body>
 </html>
