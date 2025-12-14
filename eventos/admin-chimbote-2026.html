@@ -725,3 +725,204 @@
                 <div class="form-group">
                     <label class="checkbox-label">
                         <input type="checkbox" id="destacado" ${data.destacado ? 'checked' : ''}>
+                        <span>Marcar como destacado</span>
+                    </label>
+                </div>
+                
+                <button class="btn-save" onclick="saveCochera()">
+                    <i class="fas fa-save"></i> Guardar Cochera
+                </button>
+            `;
+        }
+        
+        function closeModal() {
+            document.getElementById('formModal').classList.remove('active');
+            editingItem = null;
+        }
+        
+        function saveHotel() {
+            const hotel = {
+                id: editingItem?.id || 'hotel_' + Date.now(),
+                nombre: document.getElementById('nombre').value,
+                direccion: document.getElementById('direccion').value,
+                coordenadas: {
+                    lat: document.getElementById('lat').value || null,
+                    lng: document.getElementById('lng').value || null,
+                    metodo: document.getElementById('lat').value ? "manual" : "automatico"
+                },
+                distancia: {
+                    metros: 0,
+                    lineaRecta: document.getElementById('distanciaManual').value || "N/A",
+                    caminando: "N/A",
+                    metodo: "manual"
+                },
+                contacto: {
+                    telefono: document.getElementById('telefono').value || null,
+                    whatsapp: document.getElementById('whatsapp').value || null,
+                    email: document.getElementById('email').value || null
+                },
+                precios: {
+                    tipo: "habitacion",
+                    simple: parseFloat(document.getElementById('precioSimple').value) || 0,
+                    doble: parseFloat(document.getElementById('precioDoble').value) || 0,
+                    matrimonial: parseFloat(document.getElementById('precioMatrimonial').value) || 0,
+                    moneda: "PEN"
+                },
+                promocion: {
+                    tienePromocion: document.getElementById('tienePromocion').checked,
+                    preciosEvento: {
+                        simple: parseFloat(document.getElementById('precioSimplePromo').value) || 0,
+                        doble: parseFloat(document.getElementById('precioDoblePromo').value) || 0,
+                        matrimonial: parseFloat(document.getElementById('precioMatrimonialPromo').value) || 0
+                    },
+                    descuento: parseFloat(document.getElementById('descuento').value) || 0,
+                    codigo: document.getElementById('codigoPromo').value || null,
+                    condiciones: "Válido del 20-23 Feb 2026"
+                },
+                servicios: document.getElementById('servicios').value.split('\n').filter(s => s.trim()),
+                imagenes: [
+                    document.getElementById('img1').value,
+                    document.getElementById('img2').value,
+                    document.getElementById('img3').value
+                ].filter(img => img),
+                destacado: document.getElementById('destacado').checked,
+                metadata: {
+                    creadoPor: currentUser.email,
+                    fechaCreacion: editingItem?.metadata?.fechaCreacion || new Date().toISOString(),
+                    editadoPor: currentUser.email,
+                    ultimaEdicion: new Date().toISOString()
+                }
+            };
+            
+            if (!hotel.nombre || !hotel.direccion) {
+                alert('Nombre y dirección son obligatorios');
+                return;
+            }
+            
+            if (editingItem) {
+                const index = hoteles.findIndex(h => h.id === editingItem.id);
+                hoteles[index] = hotel;
+            } else {
+                hoteles.push(hotel);
+            }
+            
+            renderItems();
+            closeModal();
+            alert('Hotel guardado exitosamente');
+        }
+        
+        function saveCochera() {
+            const cochera = {
+                id: editingItem?.id || 'cochera_' + Date.now(),
+                nombre: document.getElementById('nombre').value,
+                direccion: document.getElementById('direccion').value,
+                coordenadas: {
+                    lat: null,
+                    lng: null
+                },
+                distancia: {
+                    metros: 0,
+                    lineaRecta: "N/A"
+                },
+                telefono: document.getElementById('telefono').value || null,
+                whatsapp: document.getElementById('whatsapp').value || null,
+                capacidad: parseInt(document.getElementById('capacidad').value) || 0,
+                precioDia: parseFloat(document.getElementById('precioDia').value) || 0,
+                precioNoche: parseFloat(document.getElementById('precioNoche').value) || 0,
+                servicios: document.getElementById('servicios').value.split('\n').filter(s => s.trim()),
+                imagenes: [
+                    document.getElementById('img1').value,
+                    document.getElementById('img2').value
+                ].filter(img => img),
+                destacado: document.getElementById('destacado').checked,
+                metadata: {
+                    creadoPor: currentUser.email,
+                    fechaCreacion: editingItem?.metadata?.fechaCreacion || new Date().toISOString(),
+                    editadoPor: currentUser.email,
+                    ultimaEdicion: new Date().toISOString()
+                }
+            };
+            
+            if (!cochera.nombre || !cochera.direccion) {
+                alert('Nombre y dirección son obligatorios');
+                return;
+            }
+            
+            if (editingItem) {
+                const index = cocheras.findIndex(c => c.id === editingItem.id);
+                cocheras[index] = cochera;
+            } else {
+                cocheras.push(cochera);
+            }
+            
+            renderItems();
+            closeModal();
+            alert('Cochera guardada exitosamente');
+        }
+        
+        function deleteItem(id, type) {
+            if (!confirm('¿Estás seguro de eliminar este elemento?')) return;
+            
+            if (type === 'hotel') {
+                hoteles = hoteles.filter(h => h.id !== id);
+            } else {
+                cocheras = cocheras.filter(c => c.id !== id);
+            }
+            
+            renderItems();
+            alert('Eliminado exitosamente');
+        }
+        
+        function downloadJSON() {
+            const data = {
+                hoteles: {
+                    ciudad: "chimbote",
+                    ciudadNombre: "Nuevo Chimbote",
+                    departamento: "Áncash",
+                    totalHoteles: hoteles.length,
+                    ultimaActualizacion: new Date().toISOString(),
+                    hoteles: hoteles
+                },
+                cocheras: {
+                    ciudad: "chimbote",
+                    ciudadNombre: "Nuevo Chimbote",
+                    departamento: "Áncash",
+                    totalCocheras: cocheras.length,
+                    ultimaActualizacion: new Date().toISOString(),
+                    cocheras: cocheras
+                }
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `chimbote-2026-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('JSON descargado. Envía este archivo y las imágenes al administrador.');
+        }
+        
+        // Auto-login check
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                try {
+                    const userDoc = await db.collection('usuarios').doc(user.uid).get();
+                    if (userDoc.exists) {
+                        const userData = userDoc.data();
+                        if (userData.rol === 'editor' || userData.rol === 'admin') {
+                            currentUser = { ...userData, uid: user.uid, email: user.email };
+                            showAdminPanel();
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
