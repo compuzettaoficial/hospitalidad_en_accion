@@ -819,9 +819,16 @@
         // Cargar datos desde JSON
         async function cargarDatos() {
             try {
+                console.log('Iniciando carga de datos...');
+                
                 const hotelesRes = await fetch('https://raw.githubusercontent.com/compuzettaoficial/hospitalidad_en_accion/refs/heads/main/data/hoteles/chimbote.json');
+                console.log('Respuesta hoteles:', hotelesRes.status);
+                
                 const hotelesJson = await hotelesRes.json();
+                console.log('JSON hoteles parseado:', hotelesJson);
+                
                 hotelesData = Array.isArray(hotelesJson) ? hotelesJson : (hotelesJson.hoteles || []);
+                console.log('Hoteles procesados:', hotelesData.length, hotelesData);
                 
                 const cocherasRes = await fetch('https://raw.githubusercontent.com/compuzettaoficial/hospitalidad_en_accion/refs/heads/main/data/cocheras/chimbote.json');
                 const cocherasJson = await cocherasRes.json();
@@ -833,9 +840,9 @@
                 aplicarFiltros();
                 aplicarFiltrosCocheras();
             } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('hoteles-grid').innerHTML = '<p class="loading">Error al cargar datos: ' + error.message + '</p>';
-                document.getElementById('cocheras-grid').innerHTML = '<p class="loading">Error al cargar datos: ' + error.message + '</p>';
+                console.error('Error completo:', error);
+                document.getElementById('hoteles-grid').innerHTML = '<p class="loading">Error: ' + error.message + '</p>';
+                document.getElementById('cocheras-grid').innerHTML = '<p class="loading">Error: ' + error.message + '</p>';
             }
         }
         
@@ -883,18 +890,29 @@
         
         // Filtros hoteles
         function aplicarFiltros() {
+            console.log('Aplicando filtros. Total hoteles:', hotelesData.length);
+            
             let filtrados = [...hotelesData];
             
             const maxPrecio = parseInt(document.getElementById('filter-precio').value);
             const soloPromo = document.getElementById('filter-promo').value;
             const ordenar = document.getElementById('sort-hoteles').value;
             
+            console.log('Filtros:', {maxPrecio, soloPromo, ordenar});
+            
             filtrados = filtrados.filter(h => {
+                if (!h.precios || !h.precios.simple) {
+                    console.warn('Hotel sin precios:', h.nombre);
+                    return false;
+                }
+                
                 const precio = (h.promocion?.tienePromocion && h.promocion.preciosEvento) ? h.promocion.preciosEvento.simple : h.precios.simple;
                 if (precio > maxPrecio) return false;
                 if (soloPromo === 'si' && !h.promocion?.tienePromocion) return false;
                 return true;
             });
+            
+            console.log('Después de filtrar:', filtrados.length);
             
             filtrados.sort((a, b) => {
                 const precioA = (a.promocion?.tienePromocion && a.promocion.preciosEvento) ? a.promocion.preciosEvento.simple : a.precios.simple;
@@ -1044,6 +1062,8 @@
                     ${hotel.contacto.telefono ? `<p>📞 ${hotel.contacto.telefono}</p>` : ''}
                     ${hotel.contacto.whatsapp ? `<p>💬 ${hotel.contacto.whatsapp}</p>` : ''}
                     ${hotel.contacto.email ? `<p>✉️ ${hotel.contacto.email}</p>` : ''}
+                    ${hotel.contacto.facebook ? `<p>📘 <a href="${hotel.contacto.facebook}" target="_blank">Facebook</a></p>` : ''}
+                    ${hotel.contacto.web ? `<p>🌐 <a href="${hotel.contacto.web}" target="_blank">Sitio Web</a></p>` : ''}
                 </div>
             `;
             
