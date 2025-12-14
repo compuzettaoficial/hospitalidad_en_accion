@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin - Convención AMIP Chimbote 2026</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f3f4f6;
+        }
+        
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        
+        .login-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .login-header img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+        
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: #1d4ed8;
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .alert-error {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+        
+        .alert-success {
+            background: #f0fdf4;
+            color: #166534;
+            border: 1px solid #86efac;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        header {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .header-logo img {
+            width: 40px;
+            height: 40px;
+        }
+        
+        .btn-logout {
+            padding: 0.5rem 1rem;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e5e7eb;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            color: #2563eb;
+            border-bottom-color: #2563eb;
+        }
+        
+        .btn-add {
+            padding: 0.75rem 1.5rem;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .items-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+        
+        .item-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .item-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-edit, .btn-delete {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .btn-edit {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-delete {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .modal.active {
+            display: block;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 1rem;
+            max-width: 900px;
+            width: 90%;
+            margin: 2rem auto;
+            padding: 2rem;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #6b7280;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .form-section {
+            background: #f9fafb;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-section h3 {
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+        
+        .btn-save {
+            background: #2563eb;
+            color: white;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+        }
+        
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+        
+        .checkbox-label input {
+            width: auto;
+        }
+        
+        .export-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            margin-top: 3rem;
+            text-align: center;
+        }
+        
+        .export-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            max-width: 600px;
+            margin: 1.5rem auto 0;
+        }
+        
+        .btn-export {
+            padding: 1rem;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .tabs { flex-direction: column; }
+            .tab { width: 100%; text-align: center; }
+            .form-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loginScreen" class="login-container">
+        <div class="login-box">
+            <div class="login-header">
+                <img src="../assets/images/branding/logo.png" alt="Logo">
+                <h2>Panel de Administración</h2>
+                <p style="color: #6b7280; margin-top: 0.5rem;">Convención AMIP Chimbote 2026</p>
+            </div>
+            
+            <div id="loginError" class="alert alert-error hidden"></div>
+            
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="loginEmail" placeholder="tu@email.com" onkeypress="if(event.key==='Enter') login()">
+            </div>
+            
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" id="loginPassword" placeholder="••••••••" onkeypress="if(event.key==='Enter') login()">
+            </div>
+            
+            <button class="btn" onclick="login()">
+                <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+            </button>
+        </div>
+    </div>
+
+    <div id="adminPanel" class="hidden">
+        <header>
+            <div class="header-content">
+                <div class="header-logo">
+                    <img src="../assets/images/branding/logo.png" alt="Logo">
+                    <div>
+                        <h2>Panel Admin - Chimbote 2026</h2>
+                        <p id="userEmail" style="color: #6b7280; font-size: 0.875rem;"></p>
+                    </div>
+                </div>
+                <button class="btn-logout" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                </button>
+            </div>
+        </header>
+        
+        <div class="container">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('hoteles', this)">
+                    <i class="fas fa-hotel"></i> Hoteles
+                </button>
+                <button class="tab" onclick="switchTab('cocheras', this)">
+                    <i class="fas fa-car"></i> Cocheras
+                </button>
+            </div>
+            
+            <button class="btn-add" onclick="openAddModal()">
+                <i class="fas fa-plus"></i> <span id="addButtonText">Agregar Hotel</span>
+            </button>
+            
+            <div id="hotelesSection">
+                <div class="items-grid" id="hotelesGrid">
+                    <p>Cargando...</p>
+                </div>
+            </div>
+            
+            <div id="cocherasSection" class="hidden">
+                <div class="items-grid" id="cocherasGrid">
+                    <p>Cargando...</p>
+                </div>
+            </div>
+            
+            <div class="export-section">
+                <h2>📥 Exportar Datos</h2>
+                <p style="color: #6b7280; margin-top: 0.5rem;">Descarga los archivos JSON para subir a GitHub</p>
+                <div class="export-buttons">
+                    <button class="btn-export" onclick="downloadHotelesJSON()">
+                        <i class="fas fa-download"></i> Descargar Hoteles JSON
+                    </button>
+                    <button class="btn-export" onclick="downloadCocherasJSON()">
+                        <i class="fas fa-download"></i> Descargar Cocheras JSON
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="formModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Agregar Hotel</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="formContent"></div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBFaCbNqpd93Eirj7NDnkKtOS6Ym0rMoiA",
+            authDomain: "hospitalidad-29c5c.firebaseapp.com",
+            projectId: "hospitalidad-29c5c"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        
+        let currentUser = null;
+        let currentTab = 'hoteles';
+        let editingItem = null;
+        
+        async function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const errorDiv = document.getElementById('loginError');
+            
+            try {
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                
+                const userDoc = await db.collection('usuarios').doc(user.uid).get();
+                if (!userDoc.exists) {
+                    throw new Error('Usuario no autorizado');
+                }
+                
+                const userData = userDoc.data();
+                if (userData.rol !== 'editor' && userData.rol !== 'admin') {
+                    throw new Error('No tienes permisos para acceder');
+                }
+                
+                currentUser = { ...userData, uid: user.uid, email: user.email };
+                showAdminPanel();
+            } catch (error) {
+                errorDiv.textContent = error.message;
+                errorDiv.classList.remove('hidden');
+            }
+        }
+        
+        function logout() {
+            auth.signOut();
+            currentUser = null;
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('adminPanel').classList.add('hidden');
+        }
+        
+        function showAdminPanel() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('adminPanel').classList.remove('hidden');
+            document.getElementById('userEmail').textContent = `${currentUser.email} (${currentUser.rol})`;
+            loadData();
+        }
+        
+        async function loadData() {
+            try {
+                const hotelesSnap = await db.collection('hoteles-chimbote').get();
+                const cocherasSnap = await db.collection('cocheras-chimbote').get();
+                
+                const hoteles = hotelesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                const cocheras = cocherasSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                
+                renderHoteles(hoteles);
+                renderCocheras(cocheras);
+            } catch (error) {
+                console.error('Error cargando datos:', error);
+            }
+        }
+        
+        function switchTab(tab, element) {
+            currentTab = tab;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            element.classList.add('active');
+            
+            document.getElementById('hotelesSection').classList.toggle('hidden', tab !== 'hoteles');
+            document.getElementById('cocherasSection').classList.toggle('hidden', tab !== 'cocheras');
+            document.getElementById('addButtonText').textContent = tab === 'hoteles' ? 'Agregar Hotel' : 'Agregar Cochera';
+        }
+        
+        function renderHoteles(hoteles) {
+            const grid = document.getElementById('hotelesGrid');
+            
+            // Filtrar según permisos
+            let filtered = hoteles;
+            if (currentUser.rol === 'editor') {
+                filtered = hoteles.filter(h => h.metadata?.creadoPor === currentUser.email);
+            }
+            
+            if (!filtered.length) {
+                grid.innerHTML = '<p>No hay hoteles registrados</p>';
+                return;
+            }
+            
+            grid.innerHTML = filtered.map(h => `
+                <div class="item-card">
+                    <div class="item-header">
+                        <div>
+                            <h3>${h.nombre}</h3>
+                            <p style="color: #6b7280; font-size: 0.875rem;">${h.direccion}</p>
+                            <p style="color: #2563eb; font-weight: 600; margin-top: 0.5rem;">
+                                S/ ${h.promocion?.tienePromocion ? h.promocion.preciosEvento.simple : h.precios.simple}
+                                ${h.promocion?.tienePromocion ? `<span style="color: #10b981; margin-left: 0.5rem;">🎟️ ${h.promocion.codigo}</span>` : ''}
+                            </p>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn-edit" onclick='editItem("${h.id}", "hotel")'>
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-delete" onclick='deleteItem("${h.id}", "hotel")'>
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.75rem; color: #9ca3af;">
+                        Por: ${h.metadata?.creadoPor || 'N/A'} • ${h.metadata?.fechaCreacion ? new Date(h.metadata.fechaCreacion).toLocaleDateString() : 'N/A'}
+                    </p>
+                </div>
+            `).join('');
+        }
+        
+        function renderCocheras(cocheras) {
+            const grid = document.getElementById('cocherasGrid');
+            
+            let filtered = cocheras;
+            if (currentUser.rol === 'editor') {
+                filtered = cocheras.filter(c => c.metadata?.creadoPor === currentUser.email);
+            }
+            
+            if (!filtered.length) {
+                grid.innerHTML = '<p>No hay cocheras registradas</p>';
+                return;
+            }
+            
+            grid.innerHTML = filtered.map(c => `
+                <div class="item-card">
+                    <div class="item-header">
+                        <div>
+                            <h3>${c.nombre}</h3>
+                            <p style="color: #6b7280; font-size: 0.875rem;">${c.direccion}</p>
+                            <p style="color: #2563eb; font-weight: 600; margin-top: 0.5rem;">S/ ${c.precioDia}/día</p>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn-edit" onclick='editItem("${c.id}", "cochera")'>
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-delete" onclick='deleteItem("${c.id}", "cochera")'>
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.75rem; color: #9ca3af;">
+                        Por: ${c.metadata?.creadoPor || 'N/A'} • ${c.metadata?.fechaCreacion ? new Date(c.metadata.fechaCreacion).toLocaleDateString() : 'N/A'}
+                    </p>
+                </div>
+            `).join('');
+        }
+        
+        function openAddModal() {
+            editingItem = null;
+            document.getElementById('modalTitle').textContent = currentTab === 'hoteles' ? 'Agregar Hotel' : 'Agregar Cochera';
+            document.getElementById('formContent').innerHTML = currentTab === 'hoteles' ? getHotelForm() : getCocheraForm();
+            document.getElementById('formModal').classList.add('active');
+        }
+        
+        async function editItem(id, type) {
+            const collection = type === 'hotel' ? 'hoteles-chimbote' : 'cocheras-chimbote';
+            const doc = await db.collection(collection).doc(id).get();
+            editingItem = { id, ...doc.data() };
+            
+            document.getElementById('modalTitle').textContent = type === 'hotel' ? 'Editar Hotel' : 'Editar Cochera';
+            document.getElementById('formContent').innerHTML = type === 'hotel' ? getHotelForm(editingItem) : getCocheraForm(editingItem);
+            document.getElementById('formModal').classList.add('active');
+        }
+        
+        function getHotelForm(data = {}) {
+            return `
+                <div class="form-section">
+                    <h3>Información Básica</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Nombre del Hotel *</label>
+                            <input type="text" id="nombre" value="${data.nombre || ''}" placeholder="Hotel Central">
+                        </div>
+                        <div class="form-group">
+                            <label>Dirección Completa *</label>
+                            <input type="text" id="direccion" value="${data.direccion || ''}" placeholder="Av. Pacífico 123, Nuevo Chimbote">
+                        </div>
+                        <div class="form-group">
+                            <label>Distancia Aproximada</label>
+                            <input type="text" id="distanciaAproximada" value="${data.distanciaAproximada || ''}" placeholder="500m del auditorio, 8 min caminando">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>Contacto</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Teléfono</label>
+                            <input type="text" id="telefono" value="${data.contacto?.telefono || ''}" placeholder="043-123456">
+                        </div>
+                        <div class="form-group">
+                            <label>WhatsApp</label>
+                            <input type="text" id="whatsapp" value="${data.contacto?.whatsapp || ''}" placeholder="+51999888777">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="email" value="${data.contacto?.email || ''}" placeholder="info@hotel.com">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>Precios *</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Simple</label>
+                            <input type="number" id="precioSimple" value="${data.precios?.simple || ''}" placeholder="100">
+                        </div>
+                        <div class="form-group">
+                            <label>Doble</label>
+                            <input type="number" id="precioDoble" value="${data.precios?.doble || ''}" placeholder="150">
+                        </div>
+                        <div class="form-group">
+                            <label>Matrimonial</label>
+                            <input type="number" id="precioMatrimonial" value="${data.precios?.matrimonial || ''}" placeholder="180">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>Promoción (opcional)</h3>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="tienePromocion" ${data.promocion?.tienePromocion ? 'checked' : ''}>
+                            <span>Tiene promoción especial</span>
+                        </label>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Código Promocional</label>
+                            <input type="text" id="codigoPromo" value="${data.promocion?.codigo || ''}" placeholder="AMIP2026">
+                        </div>
+                        <div class="form-group">
+                            <label>Precio Simple Promo</label>
+                            <input type="number" id="precioSimplePromo" value="${data.promocion?.preciosEvento?.simple || ''}" placeholder="80">
+                        </div>
+                        <div class="form-group">
+                            <label>Precio Doble Promo</label>
+                            <input type="number" id="precioDoblePromo" value="${data.promocion?.preciosEvento?.doble || ''}" placeholder="120">
+                        </div>
+                        <div class="form-group">
+                            <label>Precio Matrimonial Promo</label>
+                            <input type="number" id="precioMatrimonialPromo" value="${data.promocion?.preciosEvento?.matrimonial || ''}" placeholder="150">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>Servicios</h3>
+                    <div class="form-group">
+                        <label>Lista de servicios (uno por línea)</label>
+                        <textarea id="servicios" rows="3" placeholder="WiFi gratis
+Desayuno incluido
+TV cable">${(data.servicios || []).join('\n')}</textarea>
+                    </div>
+                </div>
+                
+                <button class="btn-save" onclick="saveHotel()">
+                    <i class="fas fa-save"></i> Guardar Hotel
+                </button>
+            `;
+        }
+        
+        function getCocheraForm(data = {}) {
+            return `
+                <div class="form-section">
+                    <h3>Información Básica</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Nombre *</label>
+                            <input type="text" id="nombre" value="${data.nombre || ''}" placeholder="Cochera San José">
+                        </div>
+                        <div class="form-group">
+                            <label>Dirección Completa *</label>
+                            <input type="text" id="direccion" value="${data.direccion || ''}" placeholder="Jr. 28 de Julio 456, Nuevo Chimbote">
+                        </div>
+                        <div class="form-group">
+                            <label>Distancia Aproximada</label>
+                            <input type="text" id="distanciaAproximada" value="${data.distanciaAproximada || ''}" placeholder="300m del auditorio">
+                        </div>
+                        <div class="form-group">
+                            <label>Capacidad *</label>
+                            <input type="number" id="capacidad" value="${data.capacidad || ''}" placeholder="20">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>Precios *</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Precio por Día</label>
+                            <input type="number" id="precioDia" value="${data.precioDia || ''}" placeholder="10">
+                        </div>
+                        <div class="form-group">
+                            <label>Precio por Noche</label>
+                            <input type="number" id="precioNoche" value="${data.precioNoche || ''}" placeholder="15">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>Contacto</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Teléfono</label>
+                            <input type="text" id="telefono" value="${data.telefono || ''}" placeholder="043-654321">
+                        </div>
+                        <div class="form-group">
+                            <label>WhatsApp</label>
+                            <input type="text" id="whatsapp" value="${data.whatsapp
