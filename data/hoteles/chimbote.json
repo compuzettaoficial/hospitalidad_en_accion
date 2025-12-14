@@ -1,45 +1,267 @@
-{
-  "ciudad": "chimbote",
-  "ciudadNombre": "Nuevo Chimbote",
-  "departamento": "Áncash",
-  "totalHoteles": 2,
-  "ultimaActualizacion": "2025-12-13T19:30:00-05:00",
-  "hoteles": [
-    {
-      "id": "hotel_001",
-      "nombre": "Hotel Central Plaza",
-      "direccion": "Av. José Pardo 123, Nuevo Chimbote",
-      "distancia": {
-        "metros": 500,
-        "lineaRecta": "500m",
-        "caminando": "8 min"
-      },
-      "contacto": {
-        "telefono": "043-123456",
-        "whatsapp": "+51999888777",
-        "email": "info@hotelcentral.com"
-      },
-      "precios": {
-        "simple": 100,
-        "doble": 150,
-        "matrimonial": 180
-      },
-      "promocion": {
-        "tienePromocion": true,
-        "preciosEvento": {
-          "simple": 80,
-          "doble": 120,
-          "matrimonial": 150
-        }
-      },
-      "servicios": [
-        "WiFi gratis",
-        "Desayuno incluido",
-        "TV cable",
-        "Agua caliente"
-      ],
-      "imagenes": [],
-      "destacado": true
+[
+  {
+    "nombre": "Costa del Inka Hotel",
+    "direccion": "Av. Anchoveta Mz. W2 Lt. 24-25, Urbanización Miguel Grau",
+    "distanciaAproximada": "1-2 km del instituto, aprox. 15 min caminando",
+    "contacto": {
+      "telefono": "043-319657",
+      "whatsapp": "+51987893845",
+      "email": "costadelinka@gmail.com"
+    },
+    "precios": {
+      "simple": 100,
+      "doble": 120,
+      "matrimonial": 140
+    },
+    "promocion": {
+      "tienePromocion": false,
+      "codigo": "",
+      "preciosEvento": null
+    },
+    "servicios": [
+      "36 habitaciones",
+      "Desayuno incluido",
+      "WiFi gratis",
+      "Estacionamiento privado gratuito",
+      "Restaurante",
+      "Bar",
+      "Recepción 24 horas",
+      "Piscina",
+      "Servicio de habitaciones",
+      "Aire acondicionado",
+      "TV cable"
+    ],
+    "metadata": {
+      "creadoPor": "sistema",
+      "fechaCreacion": "2025-12-13T00:00:00.000Z",
+      "notas": "Hotel moderno, 3 estrellas, muy cercano al instituto con cochera segura"
     }
-  ]
-}
+  },
+  {
+    "nombre": "Hotel Sengor",
+    "direccion": "Urbanización Santo Tomás, Calle Los Claveles Mz. A Lt. 18",
+    "distanciaAproximada": "1-2 km del instituto",
+    "contacto": {
+      "telefono": "Consultar en reserva",
+      "whatsapp": "",
+      "email": ""
+    },
+    "precios": {
+      "simple": 80,
+      "doble": 90,
+      "matrimonial": 100
+    },
+    "promocion": {
+      "tienePromocion": false,
+      "codigo": "",
+      "preciosEvento": null
+    },
+    "servicios": [
+      "28 habitaciones",
+      "WiFi gratis",
+      "TV pantalla plana",
+      "Baño privado",
+      "Salón de uso común",
+      "Servicio de habitaciones"
+    ],
+    "metadata": {
+      "creadoPor": "sistema",
+      "fechaCreacion": "2025-12-13T00:00:00.000Z",
+      "notas": "Opción económica, 1 estrella, buena calificación 8.8-9.1, ideal para presupuesto ajustado"
+    }
+  },
+  {
+    "nombre": "Hotel Los Cocos",
+    "direccion": "Av. Pacífico E-1, Urb. Buenos Aires",
+    "distanciaAproximada": "500m-1km del instituto, muy cercano",
+    "contacto": {
+      "telefono": "043-312805",
+      "whatsapp": "",
+      "email": ""
+    },
+    "precios": {
+      "simple": 150,
+      "doble": 165,
+      "matrimonial": 180
+    },
+    "promocion": {
+      "tienePromocion": false,
+      "codigo": "",
+      "preciosEvento": null
+    },
+    "servicios": [
+      "29 habitaciones",
+      "WiFi gratis",
+      "Estacionamiento privado gratuito",
+      "Restaurante",
+      "Bar",
+      "Terraza",
+      "Jardín",
+      "Recepción 24 horas",
+      "Servicio de habitaciones",
+      "Aire acondicionado",
+      "TV cable con Netflix",
+      "Frigobar",
+      "Admite mascotas"
+    ],
+    "metadata": {
+      "creadoPor": "sistema",
+      "fechaCreacion": "2025-12-13T00:00:00.000Z",
+      "notas": "3 estrellas, muy cerca de Plaza Mayor de Nuevo Chimbote, buenas instalaciones"
+    }
+  },
+  {
+    "nombre": "Hotel Buenos Aires",
+    "direccion": "Jirón Huambacho 296, Urbanización Buenos Aires",
+    "distanciaAproximada": "1-2 km del instituto, 12 min del centro",
+    "contacto": {
+      "telefono": "043-310631",
+      "whatsapp": "+51998240860",
+      "email": "hotelbuenosaires.chimbote@hotmail.com"
+    },
+    "precios": {
+      "simple": 100,
+      "doble": 120,
+      "matrimonial": 140
+    },
+    "promocion": {
+      "tienePromocion": false,
+      "codigo": "",
+      "preciosEvento": null
+    },
+    "servicios": [
+      "WiFi",
+      "Estacionamiento",
+      "Desayuno buffet disponible S/ 19 adicional",
+      "Servicio de cena bajo solicitud",
+      "Zona residencial tranquila"
+    ],
+    "metadata": {
+      "creadoPor": "sistema",
+      "fechaCreacion": "2025-12-13T00:00:00.000Z",
+      "notas": "Zona residencial, cerca de Panamericana Norte. Desayuno NO incluido en precio base"
+    }
+  },
+  {
+    "nombre": "Hotel Maresta Lodge",
+    "direccion": "Jirón Samanco 320, Urbanización Buenos Aires 1ra Etapa",
+    "distanciaAproximada": "1-2 km del instituto",
+    "contacto": {
+      "telefono": "043-310055",
+      "whatsapp": "",
+      "email": ""
+    },
+    "precios": {
+      "simple": 180,
+      "doble": 200,
+      "matrimonial": 220
+    },
+    "promocion": {
+      "tienePromocion": false,
+      "codigo": "",
+      "preciosEvento": null
+    },
+    "servicios": [
+      "Jardín",
+      "Restaurante",
+      "Bar",
+      "WiFi",
+      "Estacionamiento"
+    ],
+    "metadata": {
+      "creadoPor": "sistema",
+      "fechaCreacion": "2025-12-13T00:00:00.000Z",
+      "notas": "4 estrellas, hotel de mayor categoría asociado a cadena Casa Andina"
+    }
+  },
+  {
+    "nombre": "Hospedaje Feliz",
+    "direccion": "Chimbote (ubicación exacta por confirmar)",
+    "distanciaAproximada": "Variable según ubicación",
+    "contacto": {
+      "telefono": "Consultar",
+      "whatsapp": "",
+      "email": ""
+    },
+    "precios": {
+      "simple": 70,
+      "doble": 80,
+      "matrimonial": 90
+    },
+    "promocion": {
+      "tienePromocion": false,
+      "codigo": "",
+      "preciosEvento": null
+    },
+    "servicios": [
+      "Terraza",
+      "WiFi gratis",
+      "Estacionamiento",
+      "Recepción 24 horas"
+    ],
+    "metadata": {
+      "creadoPor": "sistema",
+      "fechaCreacion": "2025-12-13T00:00:00.000Z",
+      "notas": "3 estrellas, opción popular en plataformas de reserva, buena calificación"
+    }
+  },
+  {
+    "nombre": "Hostal La Casona de Buenos Aires",
+    "direccion": "Nuevo Chimbote (dirección exacta por confirmar)",
+    "distanciaAproximada": "Variable",
+    "contacto": {
+      "telefono": "Consultar",
+      "whatsapp": "",
+      "email": ""
+    },
+    "precios": {
+      "simple": 90,
+      "doble": 100,
+      "matrimonial": 110
+    },
+    "promocion": {
+      "tienePromocion": false,
+      "codigo": "",
+      "preciosEvento": null
+    },
+    "servicios": [
+      "WiFi gratis",
+      "Admite mascotas"
+    ],
+    "metadata": {
+      "creadoPor": "sistema",
+      "fechaCreacion": "2025-12-13T00:00:00.000Z",
+      "notas": "Opción económica que acepta mascotas"
+    }
+  },
+  {
+    "nombre": "Hotel Camino Real",
+    "direccion": "Chimbote (dirección exacta por confirmar)",
+    "distanciaAproximada": "Variable",
+    "contacto": {
+      "telefono": "Consultar",
+      "whatsapp": "",
+      "email": ""
+    },
+    "precios": {
+      "simple": 90,
+      "doble": 100,
+      "matrimonial": 110
+    },
+    "promocion": {
+      "tienePromocion": false,
+      "codigo": "",
+      "preciosEvento": null
+    },
+    "servicios": [
+      "Estacionamiento",
+      "WiFi gratis",
+      "Restaurante"
+    ],
+    "metadata": {
+      "creadoPor": "sistema",
+      "fechaCreacion": "2025-12-13T00:00:00.000Z",
+      "notas": "2 estrellas, opción económica en Chimbote"
+    }
+  }
+]
