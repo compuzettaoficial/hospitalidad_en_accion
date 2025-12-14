@@ -821,7 +821,7 @@
             try {
                 console.log('Iniciando carga de datos...');
                 
-                const hotelesRes = await fetch('https://raw.githubusercontent.com/compuzettaoficial/hospitalidad_en_accion/refs/heads/main/data/hoteles/chimbote.json');
+                const hotelesRes = await fetch('../data/hoteles/chimbote.json');
                 console.log('Respuesta hoteles:', hotelesRes.status);
                 
                 const hotelesJson = await hotelesRes.json();
@@ -830,7 +830,7 @@
                 hotelesData = Array.isArray(hotelesJson) ? hotelesJson : (hotelesJson.hoteles || []);
                 console.log('Hoteles procesados:', hotelesData.length, hotelesData);
                 
-                const cocherasRes = await fetch('https://raw.githubusercontent.com/compuzettaoficial/hospitalidad_en_accion/refs/heads/main/data/cocheras/chimbote.json');
+                const cocherasRes = await fetch('../data/cocheras/chimbote.json');
                 const cocherasJson = await cocherasRes.json();
                 cocherasData = Array.isArray(cocherasJson) ? cocherasJson : (cocherasJson.cocheras || []);
                 
