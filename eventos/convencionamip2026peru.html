@@ -54,6 +54,34 @@
             object-fit: contain;
         }
         
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--color-primary);
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        
+        .quick-nav {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        
+        .quick-nav a {
+            color: #374151;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+        
+        .quick-nav a:hover {
+            color: var(--color-primary);
+        }
+        
         .brand-name {
             font-weight: 700;
             font-size: 1.25rem;
@@ -269,6 +297,10 @@
             height: 200px;
             object-fit: cover;
             background: #e5e7eb;
+        }
+        
+        .card-img.hidden {
+            display: none;
         }
         
         .card-content { padding: 1.25rem; }
@@ -514,6 +546,30 @@
             .card-actions { grid-template-columns: 1fr; }
             .filters-grid { grid-template-columns: 1fr; }
             .evento-carousel img { height: 250px; }
+            
+            .menu-toggle { display: block; }
+            
+            .quick-nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                gap: 0.5rem;
+            }
+            
+            .quick-nav.active {
+                display: flex;
+            }
+            
+            .header-content {
+                flex-wrap: nowrap;
+                justify-content: space-between;
+            }
         }
     </style>
 </head>
@@ -528,6 +584,17 @@
                         <span class="badge">📋 APOYO AL EVENTO</span>
                     </div>
                 </div>
+                
+                <button class="menu-toggle" onclick="toggleMenu()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <nav class="quick-nav" id="quickNav">
+                    <a href="#evento">Evento</a>
+                    <a href="#hoteles-section">Hoteles</a>
+                    <a href="#cocheras-section" onclick="showTab('cocheras')">Cocheras</a>
+                    <a href="#contacto">Contacto</a>
+                </nav>
             </div>
         </div>
     </header>
@@ -549,7 +616,7 @@
         </div>
     </section>
 
-    <section class="evento-section">
+    <section class="evento-section" id="evento">
         <div class="container">
             <div class="evento-header">
                 <h2>Sobre el Evento</h2>
@@ -653,7 +720,7 @@
         </div>
     </section>
 
-    <section class="contact-section">
+    <section class="contact-section" id="contacto">
         <div class="container">
             <div class="contact-header">
                 <h2>💻 Contacto y Sugerencias</h2>
@@ -852,10 +919,11 @@
             grid.innerHTML = hoteles.map(h => {
                 const precio = h.promocion?.tienePromocion ? h.promocion.preciosEvento.simple : h.precios.simple;
                 const precioOriginal = h.promocion?.tienePromocion ? h.precios.simple : null;
+                const tieneImagen = h.imagenes && h.imagenes.length > 0 && h.imagenes[0];
                 
                 return `
-                    <div class="card" onclick="verDetalleHotel('${h.id}')">
-                        <img src="${h.imagenes?.[0] || 'https://via.placeholder.com/300x200?text=Hotel'}" alt="${h.nombre}" class="card-img">
+                    <div class="card" onclick="verDetalleHotel('${h.nombre}')">
+                        ${tieneImagen ? `<img src="${h.imagenes[0]}" alt="${h.nombre}" class="card-img">` : ''}
                         <div class="card-content">
                             <h3 class="card-title">${h.nombre}</h3>
                             <div class="card-info">
@@ -911,9 +979,12 @@
                 return;
             }
             
-            grid.innerHTML = cocheras.map(c => `
-                <div class="card" onclick="verDetalleCochera('${c.id}')">
-                    <img src="${c.imagenes?.[0] || 'https://via.placeholder.com/300x200?text=Cochera'}" alt="${c.nombre}" class="card-img">
+            grid.innerHTML = cocheras.map(c => {
+                const tieneImagen = c.imagenes && c.imagenes.length > 0 && c.imagenes[0];
+                
+                return `
+                <div class="card" onclick="verDetalleCochera('${c.nombre}')">
+                    ${tieneImagen ? `<img src="${c.imagenes[0]}" alt="${c.nombre}" class="card-img">` : ''}
                     <div class="card-content">
                         <h3 class="card-title">${c.nombre}</h3>
                         <div class="card-info">
@@ -940,8 +1011,8 @@
             `).join('');
         }
         
-        function verDetalleHotel(id) {
-            const hotel = hotelesData.find(h => h.id === id);
+        function verDetalleHotel(nombre) {
+            const hotel = hotelesData.find(h => h.nombre === nombre);
             if (!hotel) return;
             
             const precio = hotel.promocion?.tienePromocion ? hotel.promocion.preciosEvento : hotel.precios;
@@ -979,8 +1050,8 @@
             document.getElementById('detailModal').classList.add('active');
         }
         
-        function verDetalleCochera(id) {
-            const cochera = cocherasData.find(c => c.id === id);
+        function verDetalleCochera(nombre) {
+            const cochera = cocherasData.find(c => c.nombre === nombre);
             if (!cochera) return;
             
             document.getElementById('modal-title').textContent = cochera.nombre;
@@ -1014,6 +1085,18 @@
         
         document.getElementById('detailModal').addEventListener('click', (e) => {
             if (e.target.id === 'detailModal') cerrarModal();
+        });
+        
+        // Toggle menu móvil
+        function toggleMenu() {
+            document.getElementById('quickNav').classList.toggle('active');
+        }
+        
+        // Cerrar menú al hacer clic en link
+        document.querySelectorAll('.quick-nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('quickNav').classList.remove('active');
+            });
         });
         
         // Iniciar
