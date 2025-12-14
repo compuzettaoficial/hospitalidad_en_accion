@@ -811,316 +811,316 @@
         </div>
     </div>
 
-    <script>
-        let hotelesData = [];
-        let cocherasData = [];
-        let slideActual = 0;
-        
-        // Cargar datos desde JSON
-        async function cargarDatos() {
-            try {
-                console.log('Iniciando carga de datos...');
-                
-                const hotelesRes = await fetch('data/hoteles/chimbote.json');
-                console.log('Respuesta hoteles:', hotelesRes.status);
-                
-                const hotelesJson = await hotelesRes.json();
-                console.log('JSON hoteles parseado:', hotelesJson);
-                
-                hotelesData = Array.isArray(hotelesJson) ? hotelesJson : (hotelesJson.hoteles || []);
-                console.log('Hoteles procesados:', hotelesData.length, hotelesData);
-                
-                const cocherasRes = await fetch('data/hoteles/chimbote.json');
-                const cocherasJson = await cocherasRes.json();
-                cocherasData = Array.isArray(cocherasJson) ? cocherasJson : (cocherasJson.cocheras || []);
-                
-                console.log('Hoteles cargados:', hotelesData.length);
-                console.log('Cocheras cargadas:', cocherasData.length);
-                
-                aplicarFiltros();
-                aplicarFiltrosCocheras();
-            } catch (error {
-                console.error('Error completo:', error);
-                document.getElementById('hoteles-grid').innerHTML = '<p class="loading">Error: ' + error.message + '</p>';
-                document.getElementById('cocheras-grid').innerHTML = '<p class="loading">Error: ' + error.message + '</p>';
-            }
+<script>
+    let hotelesData = [];
+    let cocherasData = [];
+    let slideActual = 0;
+    
+    // Cargar datos desde JSON
+    async function cargarDatos() {
+        try {
+            console.log('Iniciando carga de datos...');
+            
+            const hotelesRes = await fetch('data/hoteles/chimbote.json');
+            console.log('Respuesta hoteles:', hotelesRes.status);
+            
+            const hotelesJson = await hotelesRes.json();
+            console.log('JSON hoteles parseado:', hotelesJson);
+            
+            hotelesData = Array.isArray(hotelesJson) ? hotelesJson : (hotelesJson.hoteles || []);
+            console.log('Hoteles procesados:', hotelesData.length, hotelesData);
+            
+            const cocherasRes = await fetch('data/cocheras/chimbote.json');
+            const cocherasJson = await cocherasRes.json();
+            cocherasData = Array.isArray(cocherasJson) ? cocherasJson : (cocherasJson.cocheras || []);
+            
+            console.log('Hoteles cargados:', hotelesData.length);
+            console.log('Cocheras cargadas:', cocherasData.length);
+            
+            aplicarFiltros();
+            aplicarFiltrosCocheras();
+        } catch (error) {
+            console.error('Error completo:', error);
+            document.getElementById('hoteles-grid').innerHTML = '<p class="loading">Error: ' + error.message + '</p>';
+            document.getElementById('cocheras-grid').innerHTML = '<p class="loading">Error: ' + error.message + '</p>';
         }
+    }
+    
+    // Carrusel
+    function cambiarSlide(n) {
+        const slides = document.querySelectorAll('.evento-carousel img');
+        const dots = document.querySelectorAll('.carousel-dot');
         
-        // Carrusel
-        function cambiarSlide(n) {
-            const slides = document.querySelectorAll('.evento-carousel img');
-            const dots = document.querySelectorAll('.carousel-dot');
-            
-            slides[slideActual].classList.remove('active');
-            dots[slideActual].classList.remove('active');
-            
-            slideActual = (slideActual + n + slides.length) % slides.length;
-            
-            slides[slideActual].classList.add('active');
-            dots[slideActual].classList.add('active');
+        slides[slideActual].classList.remove('active');
+        dots[slideActual].classList.remove('active');
+        
+        slideActual = (slideActual + n + slides.length) % slides.length;
+        
+        slides[slideActual].classList.add('active');
+        dots[slideActual].classList.add('active');
+    }
+    
+    function irSlide(n) {
+        const slides = document.querySelectorAll('.evento-carousel img');
+        const dots = document.querySelectorAll('.carousel-dot');
+        
+        slides[slideActual].classList.remove('active');
+        dots[slideActual].classList.remove('active');
+        
+        slideActual = n;
+        
+        slides[slideActual].classList.add('active');
+        dots[slideActual].classList.add('active');
+    }
+    
+    // Tabs
+    function showTab(tab) {
+        const btns = document.querySelectorAll('.tab-btn');
+        btns.forEach(b => b.classList.remove('active'));
+        event.target.closest('.tab-btn').classList.add('active');
+        
+        if (tab === 'hoteles') {
+            document.getElementById('hoteles-section').classList.remove('hidden');
+            document.getElementById('cocheras-section').classList.add('hidden');
+        } else {
+            document.getElementById('hoteles-section').classList.add('hidden');
+            document.getElementById('cocheras-section').classList.remove('hidden');
         }
+    }
+    
+    // Filtros hoteles
+    function aplicarFiltros() {
+        console.log('Aplicando filtros. Total hoteles:', hotelesData.length);
         
-        function irSlide(n) {
-            const slides = document.querySelectorAll('.evento-carousel img');
-            const dots = document.querySelectorAll('.carousel-dot');
-            
-            slides[slideActual].classList.remove('active');
-            dots[slideActual].classList.remove('active');
-            
-            slideActual = n;
-            
-            slides[slideActual].classList.add('active');
-            dots[slideActual].classList.add('active');
-        }
+        let filtrados = [...hotelesData];
         
-        // Tabs
-        function showTab(tab) {
-            const btns = document.querySelectorAll('.tab-btn');
-            btns.forEach(b => b.classList.remove('active'));
-            event.target.closest('.tab-btn').classList.add('active');
-            
-            if (tab === 'hoteles') {
-                document.getElementById('hoteles-section').classList.remove('hidden');
-                document.getElementById('cocheras-section').classList.add('hidden');
-            } else {
-                document.getElementById('hoteles-section').classList.add('hidden');
-                document.getElementById('cocheras-section').classList.remove('hidden');
-            }
-        }
+        const maxPrecio = parseInt(document.getElementById('filter-precio').value);
+        const soloPromo = document.getElementById('filter-promo').value;
+        const ordenar = document.getElementById('sort-hoteles').value;
         
-        // Filtros hoteles
-        function aplicarFiltros() {
-            console.log('Aplicando filtros. Total hoteles:', hotelesData.length);
-            
-            let filtrados = [...hotelesData];
-            
-            const maxPrecio = parseInt(document.getElementById('filter-precio').value);
-            const soloPromo = document.getElementById('filter-promo').value;
-            const ordenar = document.getElementById('sort-hoteles').value;
-            
-            console.log('Filtros:', {maxPrecio, soloPromo, ordenar});
-            
-            filtrados = filtrados.filter(h => {
-                if (!h.precios || !h.precios.simple) {
-                    console.warn('Hotel sin precios:', h.nombre);
-                    return false;
-                }
-                
-                const precio = (h.promocion?.tienePromocion && h.promocion.preciosEvento) ? h.promocion.preciosEvento.simple : h.precios.simple;
-                if (precio > maxPrecio) return false;
-                if (soloPromo === 'si' && !h.promocion?.tienePromocion) return false;
-                return true;
-            });
-            
-            console.log('Después de filtrar:', filtrados.length);
-            
-            filtrados.sort((a, b) => {
-                const precioA = (a.promocion?.tienePromocion && a.promocion.preciosEvento) ? a.promocion.preciosEvento.simple : a.precios.simple;
-                const precioB = (b.promocion?.tienePromocion && b.promocion.preciosEvento) ? b.promocion.preciosEvento.simple : b.precios.simple;
-                
-                if (ordenar === 'precio-asc') return precioA - precioB;
-                if (ordenar === 'precio-desc') return precioB - precioA;
-                if (ordenar === 'nombre-asc') return a.nombre.localeCompare(b.nombre);
-            });
-            
-            renderHoteles(filtrados);
-        }
+        console.log('Filtros:', {maxPrecio, soloPromo, ordenar});
         
-        function renderHoteles(hoteles) {
-            const grid = document.getElementById('hoteles-grid');
-            
-            if (hoteles.length === 0) {
-                grid.innerHTML = '<p class="loading">No se encontraron hoteles</p>';
-                return;
+        filtrados = filtrados.filter(h => {
+            if (!h.precios || !h.precios.simple) {
+                console.warn('Hotel sin precios:', h.nombre);
+                return false;
             }
             
-            grid.innerHTML = hoteles.map(h => {
-                const precio = (h.promocion?.tienePromocion && h.promocion.preciosEvento) ? h.promocion.preciosEvento.simple : h.precios.simple;
-                const precioOriginal = (h.promocion?.tienePromocion && h.promocion.preciosEvento) ? h.precios.simple : null;
-                const tieneImagen = h.imagenes && h.imagenes.length > 0 && h.imagenes[0];
-                
-                return `
-                    <div class="card" onclick="verDetalleHotel('${h.nombre}')">
-                        ${tieneImagen ? `<img src="${h.imagenes[0]}" alt="${h.nombre}" class="card-img">` : ''}
-                        <div class="card-content">
-                            <h3 class="card-title">${h.nombre}</h3>
-                            <div class="card-info">
-                                <div class="card-info-item">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    <span>${h.direccion}</span>
-                                </div>
-                                ${h.distancia ? `<div class="card-info-item">
-                                    <i class="fas fa-walking"></i>
-                                    <span>${h.distancia.lineaRecta}</span>
-                                </div>` : ''}
-                            </div>
-                            <div class="card-price">
-                                S/ ${precio}
-                                ${precioOriginal ? `<span style="text-decoration: line-through; color: #9ca3af; font-size: 1rem;">S/ ${precioOriginal}</span>` : ''}
-                                ${h.promocion?.tienePromocion ? '<span class="promo-tag">PROMO</span>' : ''}
-                            </div>
-                            <div class="card-actions">
-                                ${h.contacto?.whatsapp ? `<a href="https://wa.me/${h.contacto.whatsapp.replace(/[^0-9]/g, '')}" class="btn btn-secondary" onclick="event.stopPropagation()" target="_blank">
-                                    <i class="fab fa-whatsapp"></i> WhatsApp
-                                </a>` : ''}
-                                ${h.contacto?.telefono ? `<a href="tel:${h.contacto.telefono}" class="btn btn-primary" onclick="event.stopPropagation()">
-                                    <i class="fas fa-phone"></i> Llamar
-                                </a>` : ''}
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
+            const precio = (h.promocion?.tienePromocion && h.promocion.preciosEvento) ? h.promocion.preciosEvento.simple : h.precios.simple;
+            if (precio > maxPrecio) return false;
+            if (soloPromo === 'si' && !h.promocion?.tienePromocion) return false;
+            return true;
+        });
+        
+        console.log('Después de filtrar:', filtrados.length);
+        
+        filtrados.sort((a, b) => {
+            const precioA = (a.promocion?.tienePromocion && a.promocion.preciosEvento) ? a.promocion.preciosEvento.simple : a.precios.simple;
+            const precioB = (b.promocion?.tienePromocion && b.promocion.preciosEvento) ? b.promocion.preciosEvento.simple : b.precios.simple;
+            
+            if (ordenar === 'precio-asc') return precioA - precioB;
+            if (ordenar === 'precio-desc') return precioB - precioA;
+            if (ordenar === 'nombre-asc') return a.nombre.localeCompare(b.nombre);
+        });
+        
+        renderHoteles(filtrados);
+    }
+    
+    function renderHoteles(hoteles) {
+        const grid = document.getElementById('hoteles-grid');
+        
+        if (hoteles.length === 0) {
+            grid.innerHTML = '<p class="loading">No se encontraron hoteles</p>';
+            return;
         }
         
-        function aplicarFiltrosCocheras() {
-            let filtrados = [...cocherasData];
+        grid.innerHTML = hoteles.map(h => {
+            const precio = (h.promocion?.tienePromocion && h.promocion.preciosEvento) ? h.promocion.preciosEvento.simple : h.precios.simple;
+            const precioOriginal = (h.promocion?.tienePromocion && h.promocion.preciosEvento) ? h.precios.simple : null;
+            const tieneImagen = h.imagenes && h.imagenes.length > 0 && h.imagenes[0];
             
-            const maxPrecio = parseInt(document.getElementById('filter-precio-cochera').value);
-            const ordenar = document.getElementById('sort-cocheras').value;
-            
-            filtrados = filtrados.filter(c => c.precioDia <= maxPrecio);
-            
-            filtrados.sort((a, b) => {
-                if (ordenar === 'precio-asc') return a.precioDia - b.precioDia;
-                if (ordenar === 'nombre-asc') return a.nombre.localeCompare(b.nombre);
-            });
-            
-            renderCocheras(filtrados);
-        }
-        
-        function renderCocheras(cocheras) {
-            const grid = document.getElementById('cocheras-grid');
-            
-            if (cocheras.length === 0) {
-                grid.innerHTML = '<p class="loading">No se encontraron cocheras</p>';
-                return;
-            }
-            
-            grid.innerHTML = cocheras.map(c => {
-                const tieneImagen = c.imagenes && c.imagenes.length > 0 && c.imagenes[0];
-                
-                return `
-                <div class="card" onclick="verDetalleCochera('${c.nombre}')">
-                    ${tieneImagen ? `<img src="${c.imagenes[0]}" alt="${c.nombre}" class="card-img">` : ''}
+            return `
+                <div class="card" onclick="verDetalleHotel('${h.nombre}')">
+                    ${tieneImagen ? `<img src="${h.imagenes[0]}" alt="${h.nombre}" class="card-img">` : ''}
                     <div class="card-content">
-                        <h3 class="card-title">${c.nombre}</h3>
+                        <h3 class="card-title">${h.nombre}</h3>
                         <div class="card-info">
                             <div class="card-info-item">
                                 <i class="fas fa-map-marker-alt"></i>
-                                <span>${c.direccion}</span>
+                                <span>${h.direccion}</span>
                             </div>
-                            <div class="card-info-item">
-                                <i class="fas fa-car"></i>
-                                <span>Capacidad: ${c.capacidad} vehículos</span>
-                            </div>
+                            ${h.distancia ? `<div class="card-info-item">
+                                <i class="fas fa-walking"></i>
+                                <span>${h.distancia.lineaRecta}</span>
+                            </div>` : ''}
                         </div>
-                        <div class="card-price">S/ ${c.precioDia}/día</div>
+                        <div class="card-price">
+                            S/ ${precio}
+                            ${precioOriginal ? `<span style="text-decoration: line-through; color: #9ca3af; font-size: 1rem;">S/ ${precioOriginal}</span>` : ''}
+                            ${h.promocion?.tienePromocion ? '<span class="promo-tag">PROMO</span>' : ''}
+                        </div>
                         <div class="card-actions">
-                            ${c.whatsapp ? `<a href="https://wa.me/${c.whatsapp.replace(/[^0-9]/g, '')}" class="btn btn-secondary" onclick="event.stopPropagation()" target="_blank">
+                            ${h.contacto?.whatsapp ? `<a href="https://wa.me/${h.contacto.whatsapp.replace(/[^0-9]/g, '')}" class="btn btn-secondary" onclick="event.stopPropagation()" target="_blank">
                                 <i class="fab fa-whatsapp"></i> WhatsApp
                             </a>` : ''}
-                            ${c.telefono ? `<a href="tel:${c.telefono}" class="btn btn-primary" onclick="event.stopPropagation()">
+                            ${h.contacto?.telefono ? `<a href="tel:${h.contacto.telefono}" class="btn btn-primary" onclick="event.stopPropagation()">
                                 <i class="fas fa-phone"></i> Llamar
                             </a>` : ''}
                         </div>
                     </div>
                 </div>
-            `).join('');
-        }
-        
-        function verDetalleHotel(nombre) {
-            const hotel = hotelesData.find(h => h.nombre === nombre);
-            if (!hotel) return;
-            
-            const precio = (hotel.promocion?.tienePromocion && hotel.promocion.preciosEvento) ? hotel.promocion.preciosEvento : hotel.precios;
-            
-            document.getElementById('modal-title').textContent = hotel.nombre;
-            document.getElementById('modal-body').innerHTML = `
-                <div class="info-section">
-                    <h3><i class="fas fa-info-circle"></i> Información</h3>
-                    <p><strong>Dirección:</strong> ${hotel.direccion}</p>
-                    ${hotel.distancia ? `<p><strong>Distancia:</strong> ${hotel.distancia.lineaRecta} (${hotel.distancia.caminando} caminando)</p>` : ''}
-                </div>
-                
-                <div class="info-section">
-                    <h3><i class="fas fa-dollar-sign"></i> Precios</h3>
-                    ${hotel.promocion?.tienePromocion ? `<p style="background: #fef3c7; padding: 0.5rem; border-radius: 0.25rem; margin-bottom: 0.5rem;"><strong>🎉 Promoción AMIP</strong> - Código: ${hotel.promocion.codigo}</p>` : ''}
-                    <p>Simple: <strong>S/ ${precio.simple}</strong></p>
-                    <p>Doble: <strong>S/ ${precio.doble}</strong></p>
-                    <p>Matrimonial: <strong>S/ ${precio.matrimonial}</strong></p>
-                </div>
-                
-                ${hotel.servicios?.length ? `
-                <div class="info-section">
-                    <h3><i class="fas fa-concierge-bell"></i> Servicios</h3>
-                    ${hotel.servicios.map(s => `<p>✓ ${s}</p>`).join('')}
-                </div>` : ''}
-                
-                <div class="info-section">
-                    <h3><i class="fas fa-phone"></i> Contacto</h3>
-                    ${hotel.contacto.telefono ? `<p>📞 ${hotel.contacto.telefono}</p>` : ''}
-                    ${hotel.contacto.whatsapp ? `<p>💬 ${hotel.contacto.whatsapp}</p>` : ''}
-                    ${hotel.contacto.email ? `<p>✉️ ${hotel.contacto.email}</p>` : ''}
-                    ${hotel.contacto.facebook ? `<p>📘 <a href="${hotel.contacto.facebook}" target="_blank">Facebook</a></p>` : ''}
-                    ${hotel.contacto.web ? `<p>🌐 <a href="${hotel.contacto.web}" target="_blank">Sitio Web</a></p>` : ''}
-                </div>
             `;
-            
-            document.getElementById('detailModal').classList.add('active');
-        }
+        }).join('');
+    }
+    
+    function aplicarFiltrosCocheras() {
+        let filtrados = [...cocherasData];
         
-        function verDetalleCochera(nombre) {
-            const cochera = cocherasData.find(c => c.nombre === nombre);
-            if (!cochera) return;
-            
-            document.getElementById('modal-title').textContent = cochera.nombre;
-            document.getElementById('modal-body').innerHTML = `
-                <div class="info-section">
-                    <h3><i class="fas fa-info-circle"></i> Información</h3>
-                    <p><strong>Dirección:</strong> ${cochera.direccion}</p>
-                    ${cochera.distancia ? `<p><strong>Distancia:</strong> ${cochera.distancia.lineaRecta}</p>` : ''}
-                    <p><strong>Capacidad:</strong> ${cochera.capacidad} vehículos</p>
-                </div>
-                
-                <div class="info-section">
-                    <h3><i class="fas fa-dollar-sign"></i> Tarifas</h3>
-                    <p>Por día: <strong>S/ ${cochera.precioDia}</strong></p>
-                    ${cochera.precioNoche ? `<p>Por noche: <strong>S/ ${cochera.precioNoche}</strong></p>` : ''}
-                </div>
-                
-                <div class="info-section">
-                    <h3><i class="fas fa-phone"></i> Contacto</h3>
-                    ${cochera.telefono ? `<p>📞 ${cochera.telefono}</p>` : ''}
-                    ${cochera.whatsapp ? `<p>💬 ${cochera.whatsapp}</p>` : ''}
-                </div>
-            `;
-            
-            document.getElementById('detailModal').classList.add('active');
-        }
+        const maxPrecio = parseInt(document.getElementById('filter-precio-cochera').value);
+        const ordenar = document.getElementById('sort-cocheras').value;
         
-        function cerrarModal() {
-            document.getElementById('detailModal').classList.remove('active');
-        }
+        filtrados = filtrados.filter(c => c.precioDia <= maxPrecio);
         
-        document.getElementById('detailModal').addEventListener('click', (e) => {
-            if (e.target.id === 'detailModal') cerrarModal();
+        filtrados.sort((a, b) => {
+            if (ordenar === 'precio-asc') return a.precioDia - b.precioDia;
+            if (ordenar === 'nombre-asc') return a.nombre.localeCompare(b.nombre);
         });
         
-        // Toggle menu móvil
-        function toggleMenu() {
-            document.getElementById('quickNav').classList.toggle('active');
+        renderCocheras(filtrados);
+    }
+    
+    function renderCocheras(cocheras) {
+        const grid = document.getElementById('cocheras-grid');
+        
+        if (cocheras.length === 0) {
+            grid.innerHTML = '<p class="loading">No se encontraron cocheras</p>';
+            return;
         }
         
-        // Cerrar menú al hacer clic en link
-        document.querySelectorAll('.quick-nav a').forEach(link => {
-            link.addEventListener('click', () => {
-                document.getElementById('quickNav').classList.remove('active');
-            });
-        });
+        grid.innerHTML = cocheras.map(c => {
+            const tieneImagen = c.imagenes && c.imagenes.length > 0 && c.imagenes[0];
+            
+            return `
+            <div class="card" onclick="verDetalleCochera('${c.nombre}')">
+                ${tieneImagen ? `<img src="${c.imagenes[0]}" alt="${c.nombre}" class="card-img">` : ''}
+                <div class="card-content">
+                    <h3 class="card-title">${c.nombre}</h3>
+                    <div class="card-info">
+                        <div class="card-info-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>${c.direccion}</span>
+                        </div>
+                        <div class="card-info-item">
+                            <i class="fas fa-car"></i>
+                            <span>Capacidad: ${c.capacidad} vehículos</span>
+                        </div>
+                    </div>
+                    <div class="card-price">S/ ${c.precioDia}/día</div>
+                    <div class="card-actions">
+                        ${c.whatsapp ? `<a href="https://wa.me/${c.whatsapp.replace(/[^0-9]/g, '')}" class="btn btn-secondary" onclick="event.stopPropagation()" target="_blank">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>` : ''}
+                        ${c.telefono ? `<a href="tel:${c.telefono}" class="btn btn-primary" onclick="event.stopPropagation()">
+                            <i class="fas fa-phone"></i> Llamar
+                        </a>` : ''}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    function verDetalleHotel(nombre) {
+        const hotel = hotelesData.find(h => h.nombre === nombre);
+        if (!hotel) return;
         
-        // Iniciar
-        cargarDatos();
-    </script>
+        const precio = (hotel.promocion?.tienePromocion && hotel.promocion.preciosEvento) ? hotel.promocion.preciosEvento : hotel.precios;
+        
+        document.getElementById('modal-title').textContent = hotel.nombre;
+        document.getElementById('modal-body').innerHTML = `
+            <div class="info-section">
+                <h3><i class="fas fa-info-circle"></i> Información</h3>
+                <p><strong>Dirección:</strong> ${hotel.direccion}</p>
+                ${hotel.distancia ? `<p><strong>Distancia:</strong> ${hotel.distancia.lineaRecta} (${hotel.distancia.caminando} caminando)</p>` : ''}
+            </div>
+            
+            <div class="info-section">
+                <h3><i class="fas fa-dollar-sign"></i> Precios</h3>
+                ${hotel.promocion?.tienePromocion ? `<p style="background: #fef3c7; padding: 0.5rem; border-radius: 0.25rem; margin-bottom: 0.5rem;"><strong>🎉 Promoción AMIP</strong> - Código: ${hotel.promocion.codigo}</p>` : ''}
+                <p>Simple: <strong>S/ ${precio.simple}</strong></p>
+                <p>Doble: <strong>S/ ${precio.doble}</strong></p>
+                <p>Matrimonial: <strong>S/ ${precio.matrimonial}</strong></p>
+            </div>
+            
+            ${hotel.servicios?.length ? `
+            <div class="info-section">
+                <h3><i class="fas fa-concierge-bell"></i> Servicios</h3>
+                ${hotel.servicios.map(s => `<p>✓ ${s}</p>`).join('')}
+            </div>` : ''}
+            
+            <div class="info-section">
+                <h3><i class="fas fa-phone"></i> Contacto</h3>
+                ${hotel.contacto.telefono ? `<p>📞 ${hotel.contacto.telefono}</p>` : ''}
+                ${hotel.contacto.whatsapp ? `<p>💬 ${hotel.contacto.whatsapp}</p>` : ''}
+                ${hotel.contacto.email ? `<p>✉️ ${hotel.contacto.email}</p>` : ''}
+                ${hotel.contacto.facebook ? `<p>📘 <a href="${hotel.contacto.facebook}" target="_blank">Facebook</a></p>` : ''}
+                ${hotel.contacto.web ? `<p>🌐 <a href="${hotel.contacto.web}" target="_blank">Sitio Web</a></p>` : ''}
+            </div>
+        `;
+        
+        document.getElementById('detailModal').classList.add('active');
+    }
+    
+    function verDetalleCochera(nombre) {
+        const cochera = cocherasData.find(c => c.nombre === nombre);
+        if (!cochera) return;
+        
+        document.getElementById('modal-title').textContent = cochera.nombre;
+        document.getElementById('modal-body').innerHTML = `
+            <div class="info-section">
+                <h3><i class="fas fa-info-circle"></i> Información</h3>
+                <p><strong>Dirección:</strong> ${cochera.direccion}</p>
+                ${cochera.distancia ? `<p><strong>Distancia:</strong> ${cochera.distancia.lineaRecta}</p>` : ''}
+                <p><strong>Capacidad:</strong> ${cochera.capacidad} vehículos</p>
+            </div>
+            
+            <div class="info-section">
+                <h3><i class="fas fa-dollar-sign"></i> Tarifas</h3>
+                <p>Por día: <strong>S/ ${cochera.precioDia}</strong></p>
+                ${cochera.precioNoche ? `<p>Por noche: <strong>S/ ${cochera.precioNoche}</strong></p>` : ''}
+            </div>
+            
+            <div class="info-section">
+                <h3><i class="fas fa-phone"></i> Contacto</h3>
+                ${cochera.telefono ? `<p>📞 ${cochera.telefono}</p>` : ''}
+                ${cochera.whatsapp ? `<p>💬 ${cochera.whatsapp}</p>` : ''}
+            </div>
+        `;
+        
+        document.getElementById('detailModal').classList.add('active');
+    }
+    
+    function cerrarModal() {
+        document.getElementById('detailModal').classList.remove('active');
+    }
+    
+    document.getElementById('detailModal').addEventListener('click', (e) => {
+        if (e.target.id === 'detailModal') cerrarModal();
+    });
+    
+    // Toggle menu móvil
+    function toggleMenu() {
+        document.getElementById('quickNav').classList.toggle('active');
+    }
+    
+    // Cerrar menú al hacer clic en link
+    document.querySelectorAll('.quick-nav a').forEach(link => {
+        link.addEventListener('click', () => {
+            document.getElementById('quickNav').classList.remove('active');
+        });
+    });
+    
+    // Iniciar
+    cargarDatos();
+</script>
 </body>
 </html>
