@@ -729,51 +729,282 @@ TV cable">${(data.servicios || []).join('\n')}</textarea>
             `;
         }
         
-        function getCocheraForm(data = {}) {
-            return `
-                <div class="form-section">
-                    <h3>Información Básica</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Nombre *</label>
-                            <input type="text" id="nombre" value="${data.nombre || ''}" placeholder="Cochera San José">
-                        </div>
-                        <div class="form-group">
-                            <label>Dirección Completa *</label>
-                            <input type="text" id="direccion" value="${data.direccion || ''}" placeholder="Jr. 28 de Julio 456, Nuevo Chimbote">
-                        </div>
-                        <div class="form-group">
-                            <label>Distancia Aproximada</label>
-                            <input type="text" id="distanciaAproximada" value="${data.distanciaAproximada || ''}" placeholder="300m del auditorio">
-                        </div>
-                        <div class="form-group">
-                            <label>Capacidad *</label>
-                            <input type="number" id="capacidad" value="${data.capacidad || ''}" placeholder="20">
-                        </div>
-                    </div>
+function getCocheraForm(data = {}) {
+    return `
+        <div class="form-section">
+            <h3>Información Básica</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Nombre *</label>
+                    <input type="text" id="nombre" value="${data.nombre || ''}" placeholder="Cochera San José">
                 </div>
-                
-                <div class="form-section">
-                    <h3>Precios *</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Precio por Día</label>
-                            <input type="number" id="precioDia" value="${data.precioDia || ''}" placeholder="10">
-                        </div>
-                        <div class="form-group">
-                            <label>Precio por Noche</label>
-                            <input type="number" id="precioNoche" value="${data.precioNoche || ''}" placeholder="15">
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <label>Dirección Completa *</label>
+                    <input type="text" id="direccion" value="${data.direccion || ''}" placeholder="Jr. 28 de Julio 456, Nuevo Chimbote">
                 </div>
-                
-                <div class="form-section">
-                    <h3>Contacto</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Teléfono</label>
-                            <input type="text" id="telefono" value="${data.telefono || ''}" placeholder="043-654321">
-                        </div>
-                        <div class="form-group">
-                            <label>WhatsApp</label>
-                            <input type="text" id="whatsapp" value="${data.whatsapp
+                <div class="form-group">
+                    <label>Distancia Aproximada</label>
+                    <input type="text" id="distanciaAproximada" value="${data.distanciaAproximada || ''}" placeholder="300m del auditorio">
+                </div>
+                <div class="form-group">
+                    <label>Capacidad *</label>
+                    <input type="number" id="capacidad" value="${data.capacidad || ''}" placeholder="20">
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <h3>Precios *</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Precio por Día</label>
+                    <input type="number" id="precioDia" value="${data.precioDia || ''}" placeholder="10">
+                </div>
+                <div class="form-group">
+                    <label>Precio por Noche</label>
+                    <input type="number" id="precioNoche" value="${data.precioNoche || ''}" placeholder="15">
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <h3>Contacto</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Teléfono</label>
+                    <input type="text" id="telefono" value="${data.telefono || ''}" placeholder="043-654321">
+                </div>
+                <div class="form-group">
+                    <label>WhatsApp</label>
+                    <input type="text" id="whatsapp" value="${data.whatsapp || ''}" placeholder="+51999888777">
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <h3>Horarios</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Horario</label>
+                    <input type="text" id="horario" value="${data.horario || ''}" placeholder="24 horas">
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <h3>Servicios</h3>
+            <div class="form-group">
+                <label>Lista de servicios (uno por línea)</label>
+                <textarea id="servicios" rows="3" placeholder="Vigilancia 24h
+Cámaras de seguridad
+Techo cubierto">${(data.servicios || []).join('\n')}</textarea>
+            </div>
+        </div>
+        
+        <button class="btn-save" onclick="saveCochera()">
+            <i class="fas fa-save"></i> Guardar Cochera
+        </button>
+    `;
+}
+
+async function saveHotel() {
+    const nombre = document.getElementById('nombre').value;
+    const direccion = document.getElementById('direccion').value;
+    const distanciaAproximada = document.getElementById('distanciaAproximada').value;
+    const telefono = document.getElementById('telefono').value;
+    const whatsapp = document.getElementById('whatsapp').value;
+    const email = document.getElementById('email').value;
+    const precioSimple = parseFloat(document.getElementById('precioSimple').value);
+    const precioDoble = parseFloat(document.getElementById('precioDoble').value);
+    const precioMatrimonial = parseFloat(document.getElementById('precioMatrimonial').value);
+    const tienePromocion = document.getElementById('tienePromocion').checked;
+    const codigoPromo = document.getElementById('codigoPromo').value;
+    const precioSimplePromo = parseFloat(document.getElementById('precioSimplePromo').value) || 0;
+    const precioDoblePromo = parseFloat(document.getElementById('precioDoblePromo').value) || 0;
+    const precioMatrimonialPromo = parseFloat(document.getElementById('precioMatrimonialPromo').value) || 0;
+    const serviciosTexto = document.getElementById('servicios').value;
+    
+    if (!nombre || !direccion || !precioSimple) {
+        alert('Por favor completa los campos obligatorios (*)');
+        return;
+    }
+    
+    const hotelData = {
+        nombre,
+        direccion,
+        distanciaAproximada,
+        contacto: {
+            telefono,
+            whatsapp,
+            email
+        },
+        precios: {
+            simple: precioSimple,
+            doble: precioDoble || precioSimple,
+            matrimonial: precioMatrimonial || precioDoble || precioSimple
+        },
+        promocion: {
+            tienePromocion,
+            codigo: tienePromocion ? codigoPromo : '',
+            preciosEvento: tienePromocion ? {
+                simple: precioSimplePromo,
+                doble: precioDoblePromo,
+                matrimonial: precioMatrimonialPromo
+            } : null
+        },
+        servicios: serviciosTexto.split('\n').filter(s => s.trim()),
+        metadata: {
+            creadoPor: currentUser.email,
+            fechaCreacion: editingItem ? editingItem.metadata?.fechaCreacion : new Date().toISOString(),
+            fechaModificacion: new Date().toISOString()
+        }
+    };
+    
+    try {
+        if (editingItem) {
+            await db.collection('hoteles-chimbote-2026').doc(editingItem.id).update(hotelData);
+            alert('Hotel actualizado exitosamente');
+        } else {
+            await db.collection('hoteles-chimbote-2026').add(hotelData);
+            alert('Hotel agregado exitosamente');
+        }
+        closeModal();
+        loadData();
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error al guardar: ' + error.message);
+    }
+}
+
+async function saveCochera() {
+    const nombre = document.getElementById('nombre').value;
+    const direccion = document.getElementById('direccion').value;
+    const distanciaAproximada = document.getElementById('distanciaAproximada').value;
+    const capacidad = parseInt(document.getElementById('capacidad').value);
+    const precioDia = parseFloat(document.getElementById('precioDia').value);
+    const precioNoche = parseFloat(document.getElementById('precioNoche').value);
+    const telefono = document.getElementById('telefono').value;
+    const whatsapp = document.getElementById('whatsapp').value;
+    const horario = document.getElementById('horario').value;
+    const serviciosTexto = document.getElementById('servicios').value;
+    
+    if (!nombre || !direccion || !capacidad || !precioDia) {
+        alert('Por favor completa los campos obligatorios (*)');
+        return;
+    }
+    
+    const cocheraData = {
+        nombre,
+        direccion,
+        distanciaAproximada,
+        capacidad,
+        precioDia,
+        precioNoche: precioNoche || precioDia,
+        telefono,
+        whatsapp,
+        horario: horario || '24 horas',
+        servicios: serviciosTexto.split('\n').filter(s => s.trim()),
+        metadata: {
+            creadoPor: currentUser.email,
+            fechaCreacion: editingItem ? editingItem.metadata?.fechaCreacion : new Date().toISOString(),
+            fechaModificacion: new Date().toISOString()
+        }
+    };
+    
+    try {
+        if (editingItem) {
+            await db.collection('cocheras-chimbote-2026').doc(editingItem.id).update(cocheraData);
+            alert('Cochera actualizada exitosamente');
+        } else {
+            await db.collection('cocheras-chimbote-2026').add(cocheraData);
+            alert('Cochera agregada exitosamente');
+        }
+        closeModal();
+        loadData();
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error al guardar: ' + error.message);
+    }
+}
+
+async function deleteItem(id, type) {
+    if (!confirm('¿Estás seguro de eliminar este elemento?')) return;
+    
+    const collection = type === 'hotel' ? 'hoteles-chimbote-2026' : 'cocheras-chimbote-2026';
+    
+    try {
+        await db.collection(collection).doc(id).delete();
+        alert('Eliminado exitosamente');
+        loadData();
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error al eliminar: ' + error.message);
+    }
+}
+
+function closeModal() {
+    document.getElementById('formModal').classList.remove('active');
+    editingItem = null;
+}
+
+async function downloadHotelesJSON() {
+    try {
+        const snapshot = await db.collection('hoteles-chimbote-2026').get();
+        const hoteles = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        
+        const dataStr = JSON.stringify(hoteles, null, 2);
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(dataBlob);
+        
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `hoteles-chimbote-2026-${new Date().toISOString().split('T')[0]}.json`;
+        link.click();
+        
+        URL.revokeObjectURL(url);
+        alert('Archivo descargado exitosamente');
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error al descargar: ' + error.message);
+    }
+}
+
+async function downloadCocherasJSON() {
+    try {
+        const snapshot = await db.collection('cocheras-chimbote-2026').get();
+        const cocheras = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        
+        const dataStr = JSON.stringify(cocheras, null, 2);
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(dataBlob);
+        
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `cocheras-chimbote-2026-${new Date().toISOString().split('T')[0]}.json`;
+        link.click();
+        
+        URL.revokeObjectURL(url);
+        alert('Archivo descargado exitosamente');
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error al descargar: ' + error.message);
+    }
+}
+
+// Detectar autenticación
+auth.onAuthStateChanged(async (user) => {
+    if (user) {
+        const userDoc = await db.collection('usuarios').doc(user.uid).get();
+        if (userDoc.exists) {
+            const userData = userDoc.data();
+            if (userData.rol === 'editor' || userData.rol === 'admin') {
+                currentUser = { ...userData, uid: user.uid, email: user.email };
+                showAdminPanel();
+            }
+        }
+    }
+});
+</script>
+
+</body>
+</html>
