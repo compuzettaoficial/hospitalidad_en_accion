@@ -86,7 +86,7 @@
         /* Hero */
         .hero {
             background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
-                        url('../assets/images/eventos/chimbote-2026/hero-background.jpg') center/cover;
+                        url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200') center/cover;
             color: white;
             padding: 3rem 0;
             text-align: center;
@@ -631,7 +631,7 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <img src="../assets/images/branding/logo.png" alt="Hospitalidad en Acción" class="logo-img">
+                    <img src="https://via.placeholder.com/40" alt="Hospitalidad en Acción" class="logo-img">
                     <div>
                         <div class="brand-name">HOSPITALIDAD EN ACCIÓN</div>
                         <span class="badge">📋 PÁGINA DE APOYO AL EVENTO</span>
@@ -652,8 +652,8 @@
                 </div>
                 <div class="hero-info-item">
                     <i class="fas fa-map-marker-alt"></i>
-                    <a href="https://www.google.com/maps/search/Auditorio+Carlos+Salazar+Romero+Nuevo+Chimbote" target="_blank">
-                        Auditorio Carlos Salazar Romero
+                    <a href="https://www.google.com/maps/search/Instituto+Carlos+Salazar+Romero+Nuevo+Chimbote" target="_blank">
+                        Instituto Carlos Salazar Romero
                     </a>
                 </div>
             </div>
@@ -668,9 +668,9 @@
             </div>
             
             <div class="evento-carousel">
-                <img src="../assets/images/eventos/chimbote-2026/auditorio-interior.jpg" alt="Auditorio Interior" class="active">
-                <img src="../assets/images/eventos/chimbote-2026/evento-expositores.jpg" alt="Expositores">
-                <img src="../assets/images/eventos/chimbote-2026/evento-publico.jpg" alt="Público Asistente">
+                <img src="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=900" alt="Auditorio Interior" class="active">
+                <img src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=900" alt="Expositores">
+                <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=900" alt="Público Asistente">
                 
                 <button class="carousel-nav prev" onclick="cambiarSlide(-1)">
                     <i class="fas fa-chevron-left"></i>
@@ -874,6 +874,7 @@
         let hotelesData = [];
         let cocherasData = [];
         let slideActual = 0;
+        let modalSlideActual = 0;
         
         // Carrusel evento
         function cambiarSlide(n) {
@@ -885,4 +886,295 @@
             
             slideActual = (slideActual + n + slides.length) % slides.length;
             
-            slides[slideActual].classList.
+            slides[slideActual].classList.add('active');
+            dots[slideActual].classList.add('active');
+        }
+        
+        function irSlide(n) {
+            const slides = document.querySelectorAll('.evento-carousel img');
+            const dots = document.querySelectorAll('.carousel-dot');
+            
+            slides[slideActual].classList.remove('active');
+            dots[slideActual].classList.remove('active');
+            
+            slideActual = n;
+            
+            slides[slideActual].classList.add('active');
+            dots[slideActual].classList.add('active');
+        }
+        
+        // Tabs
+        function showTab(tab) {
+            const btns = document.querySelectorAll('.tab-btn');
+            btns.forEach(b => b.classList.remove('active'));
+            event.target.closest('.tab-btn').classList.add('active');
+            
+            if (tab === 'hoteles') {
+                document.getElementById('hoteles-section').classList.remove('hidden');
+                document.getElementById('cocheras-section').classList.add('hidden');
+            } else {
+                document.getElementById('hoteles-section').classList.add('hidden');
+                document.getElementById('cocheras-section').classList.remove('hidden');
+            }
+        }
+        
+        // Cargar hoteles desde Firebase
+        async function cargarHoteles() {
+            try {
+                const snapshot = await db.collection('hoteles-chimbote-2026').get();
+                hotelesData = snapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
+                aplicarFiltros();
+            } catch (error) {
+                console.error('Error al cargar hoteles:', error);
+                document.getElementById('hoteles-grid').innerHTML = '<p class="loading">Error al cargar datos</p>';
+            }
+        }
+        
+        // Cargar cocheras desde Firebase
+        async function cargarCocheras() {
+            try {
+                const snapshot = await db.collection('cocheras-chimbote-2026').get();
+                cocherasData = snapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
+                aplicarFiltrosCocheras();
+            } catch (error) {
+                console.error('Error al cargar cocheras:', error);
+                document.getElementById('cocheras-grid').innerHTML = '<p class="loading">Error al cargar datos</p>';
+            }
+        }
+        
+        // Filtros hoteles
+        function aplicarFiltros() {
+            let filtrados = [...hotelesData];
+            
+            const maxPrecio = parseInt(document.getElementById('filter-precio').value);
+            const soloPromo = document.getElementById('filter-promo').value;
+            const ordenar = document.getElementById('sort-hoteles').value;
+            
+            if (maxPrecio < 999) {
+                filtrados = filtrados.filter(h => h.precioMin <= maxPrecio);
+            }
+            
+            if (soloPromo === 'si') {
+                filtrados = filtrados.filter(h => h.promocion);
+            }
+            
+            if (ordenar === 'precio-asc') {
+                filtrados.sort((a, b) => a.precioMin - b.precioMin);
+            } else if (ordenar === 'precio-desc') {
+                filtrados.sort((a, b) => b.precioMin - a.precioMin);
+            } else if (ordenar === 'nombre-asc') {
+                filtrados.sort((a, b) => a.nombre.localeCompare(b.nombre));
+            }
+            
+            renderHoteles(filtrados);
+        }
+        
+        // Renderizar hoteles
+        function renderHoteles(hoteles) {
+            const grid = document.getElementById('hoteles-grid');
+            
+            if (hoteles.length === 0) {
+                grid.innerHTML = '<p class="loading">No se encontraron hoteles con estos filtros</p>';
+                return;
+            }
+            
+            grid.innerHTML = hoteles.map(h => `
+                <div class="card" onclick="verDetalleHotel('${h.id}')">
+                    <img src="${h.imagen || 'https://via.placeholder.com/300x180?text=Hotel'}" alt="${h.nombre}" class="card-img">
+                    <div class="card-content">
+                        <h3 class="card-title">${h.nombre}</h3>
+                        <div class="card-info">
+                            <div class="card-info-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>${h.distrito}</span>
+                            </div>
+                            <div class="card-info-item">
+                                <i class="fas fa-phone"></i>
+                                <span>${h.telefono || 'Consultar'}</span>
+                            </div>
+                            ${h.estrellas ? `<div class="card-info-item">
+                                <i class="fas fa-star" style="color: #fbbf24;"></i>
+                                <span>${h.estrellas} estrellas</span>
+                            </div>` : ''}
+                        </div>
+                        <div class="card-price">
+                            Desde S/ ${h.precioMin}
+                            ${h.promocion ? '<span class="promo-tag">PROMO</span>' : ''}
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="event.stopPropagation(); verDetalleHotel('${h.id}')">
+                                <i class="fas fa-info-circle"></i> Ver detalles
+                            </button>
+                            ${h.telefono ? `<a href="tel:${h.telefono}" class="btn btn-secondary" onclick="event.stopPropagation()">
+                                <i class="fas fa-phone"></i> Llamar
+                            </a>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Filtros cocheras
+        function aplicarFiltrosCocheras() {
+            let filtrados = [...cocherasData];
+            
+            const maxPrecio = parseInt(document.getElementById('filter-precio-cochera').value);
+            const ordenar = document.getElementById('sort-cocheras').value;
+            
+            if (maxPrecio < 999) {
+                filtrados = filtrados.filter(c => c.tarifaDia <= maxPrecio);
+            }
+            
+            if (ordenar === 'precio-asc') {
+                filtrados.sort((a, b) => a.tarifaDia - b.tarifaDia);
+            } else if (ordenar === 'nombre-asc') {
+                filtrados.sort((a, b) => a.nombre.localeCompare(b.nombre));
+            }
+            
+            renderCocheras(filtrados);
+        }
+        
+        // Renderizar cocheras
+        function renderCocheras(cocheras) {
+            const grid = document.getElementById('cocheras-grid');
+            
+            if (cocheras.length === 0) {
+                grid.innerHTML = '<p class="loading">No se encontraron cocheras con estos filtros</p>';
+                return;
+            }
+            
+            grid.innerHTML = cocheras.map(c => `
+                <div class="card" onclick="verDetalleCochera('${c.id}')">
+                    <img src="${c.imagen || 'https://via.placeholder.com/300x180?text=Cochera'}" alt="${c.nombre}" class="card-img">
+                    <div class="card-content">
+                        <h3 class="card-title">${c.nombre}</h3>
+                        <div class="card-info">
+                            <div class="card-info-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>${c.direccion}</span>
+                            </div>
+                            <div class="card-info-item">
+                                <i class="fas fa-clock"></i>
+                                <span>${c.horario || '24 horas'}</span>
+                            </div>
+                            ${c.capacidad ? `<div class="card-info-item">
+                                <i class="fas fa-car"></i>
+                                <span>${c.capacidad} espacios</span>
+                            </div>` : ''}
+                        </div>
+                        <div class="card-price">
+                            S/ ${c.tarifaDia}/día
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="event.stopPropagation(); verDetalleCochera('${c.id}')">
+                                <i class="fas fa-info-circle"></i> Ver detalles
+                            </button>
+                            ${c.telefono ? `<a href="tel:${c.telefono}" class="btn btn-secondary" onclick="event.stopPropagation()">
+                                <i class="fas fa-phone"></i> Llamar
+                            </a>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Ver detalle hotel
+        function verDetalleHotel(id) {
+            const hotel = hotelesData.find(h => h.id === id);
+            if (!hotel) return;
+            
+            document.getElementById('modal-title').textContent = hotel.nombre;
+            document.getElementById('modal-body').innerHTML = `
+                <div class="modal-info-grid">
+                    <div class="info-section">
+                        <h3><i class="fas fa-info-circle"></i> Información General</h3>
+                        <p><strong>Dirección:</strong> ${hotel.direccion}</p>
+                        <p><strong>Distrito:</strong> ${hotel.distrito}</p>
+                        ${hotel.estrellas ? `<p><strong>Categoría:</strong> ${hotel.estrellas} estrellas</p>` : ''}
+                        <p><strong>Teléfono:</strong> ${hotel.telefono || 'Consultar'}</p>
+                        ${hotel.email ? `<p><strong>Email:</strong> ${hotel.email}</p>` : ''}
+                        ${hotel.web ? `<p><strong>Web:</strong> <a href="${hotel.web}" target="_blank">${hotel.web}</a></p>` : ''}
+                    </div>
+                    
+                    <div class="info-section">
+                        <h3><i class="fas fa-dollar-sign"></i> Tarifas</h3>
+                        <p><strong>Precio desde:</strong> S/ ${hotel.precioMin} por noche</p>
+                        ${hotel.precioMax ? `<p><strong>Precio hasta:</strong> S/ ${hotel.precioMax} por noche</p>` : ''}
+                        ${hotel.promocion ? '<p style="color: #10B981; font-weight: 600;"><i class="fas fa-tag"></i> Promoción disponible</p>' : ''}
+                    </div>
+                    
+                    ${hotel.servicios && hotel.servicios.length > 0 ? `
+                    <div class="info-section">
+                        <h3><i class="fas fa-concierge-bell"></i> Servicios</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            ${hotel.servicios.map(s => `<li style="padding: 0.25rem 0;"><i class="fas fa-check" style="color: #10B981;"></i> ${s}</li>`).join('')}
+                        </ul>
+                    </div>` : ''}
+                    
+                    ${hotel.notas ? `
+                    <div class="info-section">
+                        <h3><i class="fas fa-clipboard"></i> Notas</h3>
+                        <p>${hotel.notas}</p>
+                    </div>` : ''}
+                </div>
+            `;
+            
+            document.getElementById('detailModal').classList.add('active');
+        }
+        
+        // Ver detalle cochera
+        function verDetalleCochera(id) {
+            const cochera = cocherasData.find(c => c.id === id);
+            if (!cochera) return;
+            
+            document.getElementById('modal-title').textContent = cochera.nombre;
+            document.getElementById('modal-body').innerHTML = `
+                <div class="modal-info-grid">
+                    <div class="info-section">
+                        <h3><i class="fas fa-info-circle"></i> Información General</h3>
+                        <p><strong>Dirección:</strong> ${cochera.direccion}</p>
+                        <p><strong>Teléfono:</strong> ${cochera.telefono || 'Consultar'}</p>
+                        <p><strong>Horario:</strong> ${cochera.horario || '24 horas'}</p>
+                        ${cochera.capacidad ? `<p><strong>Capacidad:</strong> ${cochera.capacidad} vehículos</p>` : ''}
+                    </div>
+                    
+                    <div class="info-section">
+                        <h3><i class="fas fa-dollar-sign"></i> Tarifas</h3>
+                        <p><strong>Por día:</strong> S/ ${cochera.tarifaDia}</p>
+                        ${cochera.tarifaHora ? `<p><strong>Por hora:</strong> S/ ${cochera.tarifaHora}</p>` : ''}
+                        ${cochera.tarifaSemana ? `<p><strong>Por semana:</strong> S/ ${cochera.tarifaSemana}</p>` : ''}
+                    </div>
+                    
+                    ${cochera.servicios && cochera.servicios.length > 0 ? `
+                    <div class="info-section">
+                        <h3><i class="fas fa-shield-alt"></i> Servicios</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            ${cochera.servicios.map(s => `<li style="padding: 0.25rem 0;"><i class="fas fa-check" style="color: #10B981;"></i> ${s}</li>`).join('')}
+                        </ul>
+                    </div>` : ''}
+                </div>
+            `;
+            
+            document.getElementById('detailModal').classList.add('active');
+        }
+        
+        // Cerrar modal
+        function cerrarModal() {
+            document.getElementById('detailModal').classList.remove('active');
+        }
+        
+        // Click fuera del modal para cerrar
+        document.getElementById('detailModal').addEventListener('click', (e) => {
+            if (e.target.id === 'detailModal') {
+                cerrarModal();
+            }
+        });
+        
+        // Inicializar
+        window.addEventListener('DOMContentLoaded', () => {
+            cargarHoteles();
+            cargarCocheras();
+        });
+    </script>
+</body>
+</html>
