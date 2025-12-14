@@ -1,26 +1,108 @@
-{
-  "ciudad": "chimbote",
-  "ciudadNombre": "Nuevo Chimbote",
-  "departamento": "Áncash",
-  "totalCocheras": 1,
-  "cocheras": [
-    {
-      "id": "cochera_001",
-      "nombre": "Cochera San Miguel",
-      "direccion": "Jr. 28 de Julio 456, Nuevo Chimbote",
-      "distancia": {
-        "metros": 300,
-        "lineaRecta": "300m"
-      },
-      "whatsapp": "+51988777666",
-      "capacidad": 20,
-      "precioDia": 15,
-      "servicios": [
-        "Vigilancia 24h",
-        "Techado",
-        "Cámaras de seguridad"
-      ],
-      "imagenes": []
+[
+  {
+    "nombre": "Cochera Nuevo Chimbote",
+    "direccion": "VFFF+XWC, Nuevo Chimbote 02711",
+    "distanciaAproximada": "Ubicación céntrica en Nuevo Chimbote",
+    "capacidad": 50,
+    "precioDia": 15,
+    "precioNoche": 20,
+    "telefono": "Consultar directamente",
+    "whatsapp": "",
+    "horario": "Atención 6:00 AM - 10:00 PM, vigilancia 24/7",
+    "servicios": [
+      "Vigilancia 24 horas",
+      "Cámaras de seguridad",
+      "Personal capacitado",
+      "Acceso controlado"
+    ],
+    "metadata": {
+      "creadoPor": "sistema",
+      "fechaCreacion": "2025-12-13T00:00:00.000Z",
+      "notas": "Sistema de seguridad completo, ubicación céntrica. Código Google Maps: VFFF+XWC"
     }
-  ]
-}
+  },
+  {
+    "nombre": "Estacionamiento Hotel Costa del Inka",
+    "direccion": "Av. Anchoveta Mz. W2 Lt. 24-25, Nuevo Chimbote",
+    "distanciaAproximada": "1-2 km del instituto",
+    "capacidad": 36,
+    "precioDia": 0,
+    "precioNoche": 0,
+    "telefono": "043-319657",
+    "whatsapp": "+51987893845",
+    "horario": "24 horas para huéspedes",
+    "servicios": [
+      "Estacionamiento privado",
+      "Vigilancia",
+      "Garaje cerrado",
+      "Gratuito para huéspedes"
+    ],
+    "metadata": {
+      "creadoPor": "sistema",
+      "fechaCreacion": "2025-12-13T00:00:00.000Z",
+      "notas": "Estacionamiento del hotel, gratuito para huéspedes. Consultar disponibilidad para externos"
+    }
+  },
+  {
+    "nombre": "Estacionamiento Hotel Los Cocos",
+    "direccion": "Av. Pacífico E-1, Urb. Buenos Aires, Chimbote",
+    "distanciaAproximada": "500m-1km del instituto",
+    "capacidad": 30,
+    "precioDia": 0,
+    "precioNoche": 0,
+    "telefono": "043-312805",
+    "whatsapp": "",
+    "horario": "24 horas para huéspedes",
+    "servicios": [
+      "Estacionamiento privado gratuito",
+      "Para clientes del hotel"
+    ],
+    "metadata": {
+      "creadoPor": "sistema",
+      "fechaCreacion": "2025-12-13T00:00:00.000Z",
+      "notas": "Estacionamiento del hotel, disponible para clientes. Gratuito"
+    }
+  },
+  {
+    "nombre": "Cochera Privada Buenos Aires",
+    "direccion": "Urbanización Buenos Aires, Nuevo Chimbote",
+    "distanciaAproximada": "Cerca del instituto",
+    "capacidad": 20,
+    "precioDia": 12,
+    "precioNoche": 18,
+    "telefono": "Consultar",
+    "whatsapp": "",
+    "horario": "24 horas",
+    "servicios": [
+      "Vigilancia",
+      "Techado",
+      "Acceso controlado"
+    ],
+    "metadata": {
+      "creadoPor": "sistema",
+      "fechaCreacion": "2025-12-13T00:00:00.000Z",
+      "notas": "Cochera en zona residencial cerca del instituto"
+    }
+  },
+  {
+    "nombre": "Estacionamiento Plaza Mayor",
+    "direccion": "Plaza Mayor de Nuevo Chimbote",
+    "distanciaAproximada": "Centro de Nuevo Chimbote",
+    "capacidad": 100,
+    "precioDia": 10,
+    "precioNoche": 15,
+    "telefono": "Consultar",
+    "whatsapp": "",
+    "horario": "24 horas",
+    "servicios": [
+      "Vigilancia municipal",
+      "Amplia capacidad",
+      "Céntrico"
+    ],
+    "metadata": {
+      "creadoPor": "sistema",
+      "fechaCreacion": "2025-12-13T00:00:00.000Z",
+      "notas": "Estacionamiento público cerca de la plaza principal"
+    }
+  }
+]
