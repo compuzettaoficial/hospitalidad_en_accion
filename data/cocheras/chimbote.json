@@ -2,6 +2,25 @@
   "ciudad": "chimbote",
   "ciudadNombre": "Nuevo Chimbote",
   "departamento": "Áncash",
-  "totalCocheras": 0,
-  "cocheras": []
+  "totalCocheras": 1,
+  "cocheras": [
+    {
+      "id": "cochera_001",
+      "nombre": "Cochera San Miguel",
+      "direccion": "Jr. 28 de Julio 456, Nuevo Chimbote",
+      "distancia": {
+        "metros": 300,
+        "lineaRecta": "300m"
+      },
+      "whatsapp": "+51988777666",
+      "capacidad": 20,
+      "precioDia": 15,
+      "servicios": [
+        "Vigilancia 24h",
+        "Techado",
+        "Cámaras de seguridad"
+      ],
+      "imagenes": []
+    }
+  ]
 }
