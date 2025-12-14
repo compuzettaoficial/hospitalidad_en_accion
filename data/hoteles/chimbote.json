@@ -2,6 +2,44 @@
   "ciudad": "chimbote",
   "ciudadNombre": "Nuevo Chimbote",
   "departamento": "Áncash",
-  "totalHoteles": 0,
-  "hoteles": []
+  "totalHoteles": 2,
+  "ultimaActualizacion": "2025-12-13T19:30:00-05:00",
+  "hoteles": [
+    {
+      "id": "hotel_001",
+      "nombre": "Hotel Central Plaza",
+      "direccion": "Av. José Pardo 123, Nuevo Chimbote",
+      "distancia": {
+        "metros": 500,
+        "lineaRecta": "500m",
+        "caminando": "8 min"
+      },
+      "contacto": {
+        "telefono": "043-123456",
+        "whatsapp": "+51999888777",
+        "email": "info@hotelcentral.com"
+      },
+      "precios": {
+        "simple": 100,
+        "doble": 150,
+        "matrimonial": 180
+      },
+      "promocion": {
+        "tienePromocion": true,
+        "preciosEvento": {
+          "simple": 80,
+          "doble": 120,
+          "matrimonial": 150
+        }
+      },
+      "servicios": [
+        "WiFi gratis",
+        "Desayuno incluido",
+        "TV cable",
+        "Agua caliente"
+      ],
+      "imagenes": [],
+      "destacado": true
+    }
+  ]
 }
