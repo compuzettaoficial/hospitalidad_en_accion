@@ -7,7 +7,9 @@
     "contacto": {
       "telefono": "043-319657",
       "whatsapp": "+51987893845",
-      "email": "costadelinka@gmail.com"
+      "email": "costadelinka@gmail.com",
+      "facebook": "",
+      "web": ""
     },
     "precios": {
       "simple": 100,
@@ -22,20 +24,12 @@
     "servicios": [
       "36 habitaciones",
       "Desayuno incluido",
-      "WiFi gratis",
-      "Estacionamiento privado gratuito",
-      "Restaurante",
-      "Bar",
-      "Recepción 24 horas",
-      "Piscina",
-      "Servicio de habitaciones",
-      "Aire acondicionado",
-      "TV cable"
+      "WiFi gratis"
     ],
     "metadata": {
       "creadoPor": "sistema",
       "fechaCreacion": "2025-12-13T00:00:00.000Z",
-      "notas": "Hotel moderno, 3 estrellas, muy cercano al instituto con cochera segura"
+      "notas": "Hotel moderno"
     }
   },
   {
