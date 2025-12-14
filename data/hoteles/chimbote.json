@@ -1,6 +1,7 @@
 [
   {
     "nombre": "Costa del Inka Hotel",
+    "imagenes": ["../assets/images/eventos/chimbote-2026/hoteles/costa-del-inka.jpg"],
     "direccion": "Av. Anchoveta Mz. W2 Lt. 24-25, Urbanización Miguel Grau",
     "distanciaAproximada": "1-2 km del instituto, aprox. 15 min caminando",
     "contacto": {
@@ -39,6 +40,7 @@
   },
   {
     "nombre": "Hotel Sengor",
+    "imagenes": ["../assets/images/eventos/chimbote-2026/hoteles/sengor.jpg"],
     "direccion": "Urbanización Santo Tomás, Calle Los Claveles Mz. A Lt. 18",
     "distanciaAproximada": "1-2 km del instituto",
     "contacto": {
@@ -72,6 +74,7 @@
   },
   {
     "nombre": "Hotel Los Cocos",
+    "imagenes": ["../assets/images/eventos/chimbote-2026/hoteles/los-cocos.jpg"],
     "direccion": "Av. Pacífico E-1, Urb. Buenos Aires",
     "distanciaAproximada": "500m-1km del instituto, muy cercano",
     "contacto": {
@@ -112,6 +115,7 @@
   },
   {
     "nombre": "Hotel Buenos Aires",
+    "imagenes": ["../assets/images/eventos/chimbote-2026/hoteles/buenos-aires.jpg"],
     "direccion": "Jirón Huambacho 296, Urbanización Buenos Aires",
     "distanciaAproximada": "1-2 km del instituto, 12 min del centro",
     "contacto": {
@@ -144,6 +148,7 @@
   },
   {
     "nombre": "Hotel Maresta Lodge",
+    "imagenes": ["../assets/images/eventos/chimbote-2026/hoteles/maresta-lodge.jpg"],
     "direccion": "Jirón Samanco 320, Urbanización Buenos Aires 1ra Etapa",
     "distanciaAproximada": "1-2 km del instituto",
     "contacto": {
@@ -176,6 +181,7 @@
   },
   {
     "nombre": "Hospedaje Feliz",
+    "imagenes": ["../assets/images/eventos/chimbote-2026/hoteles/feliz.jpg"],
     "direccion": "Chimbote (ubicación exacta por confirmar)",
     "distanciaAproximada": "Variable según ubicación",
     "contacto": {
@@ -207,6 +213,7 @@
   },
   {
     "nombre": "Hostal La Casona de Buenos Aires",
+    "imagenes": ["../assets/images/eventos/chimbote-2026/hoteles/lacasona.jpg"],
     "direccion": "Nuevo Chimbote (dirección exacta por confirmar)",
     "distanciaAproximada": "Variable",
     "contacto": {
@@ -236,6 +243,7 @@
   },
   {
     "nombre": "Hotel Camino Real",
+    "imagenes": ["../assets/images/eventos/chimbote-2026/hoteles/camino-real.jpg"],
     "direccion": "Chimbote (dirección exacta por confirmar)",
     "distanciaAproximada": "Variable",
     "contacto": {
