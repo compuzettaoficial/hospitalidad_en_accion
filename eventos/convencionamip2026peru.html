@@ -890,15 +890,15 @@
             const ordenar = document.getElementById('sort-hoteles').value;
             
             filtrados = filtrados.filter(h => {
-                const precio = h.promocion?.tienePromocion ? h.promocion.preciosEvento.simple : h.precios.simple;
+                const precio = (h.promocion?.tienePromocion && h.promocion.preciosEvento) ? h.promocion.preciosEvento.simple : h.precios.simple;
                 if (precio > maxPrecio) return false;
                 if (soloPromo === 'si' && !h.promocion?.tienePromocion) return false;
                 return true;
             });
             
             filtrados.sort((a, b) => {
-                const precioA = a.promocion?.tienePromocion ? a.promocion.preciosEvento.simple : a.precios.simple;
-                const precioB = b.promocion?.tienePromocion ? b.promocion.preciosEvento.simple : b.precios.simple;
+                const precioA = (a.promocion?.tienePromocion && a.promocion.preciosEvento) ? a.promocion.preciosEvento.simple : a.precios.simple;
+                const precioB = (b.promocion?.tienePromocion && b.promocion.preciosEvento) ? b.promocion.preciosEvento.simple : b.precios.simple;
                 
                 if (ordenar === 'precio-asc') return precioA - precioB;
                 if (ordenar === 'precio-desc') return precioB - precioA;
@@ -917,8 +917,8 @@
             }
             
             grid.innerHTML = hoteles.map(h => {
-                const precio = h.promocion?.tienePromocion ? h.promocion.preciosEvento.simple : h.precios.simple;
-                const precioOriginal = h.promocion?.tienePromocion ? h.precios.simple : null;
+                const precio = (h.promocion?.tienePromocion && h.promocion.preciosEvento) ? h.promocion.preciosEvento.simple : h.precios.simple;
+                const precioOriginal = (h.promocion?.tienePromocion && h.promocion.preciosEvento) ? h.precios.simple : null;
                 const tieneImagen = h.imagenes && h.imagenes.length > 0 && h.imagenes[0];
                 
                 return `
@@ -1015,7 +1015,7 @@
             const hotel = hotelesData.find(h => h.nombre === nombre);
             if (!hotel) return;
             
-            const precio = hotel.promocion?.tienePromocion ? hotel.promocion.preciosEvento : hotel.precios;
+            const precio = (hotel.promocion?.tienePromocion && hotel.promocion.preciosEvento) ? hotel.promocion.preciosEvento : hotel.precios;
             
             document.getElementById('modal-title').textContent = hotel.nombre;
             document.getElementById('modal-body').innerHTML = `
