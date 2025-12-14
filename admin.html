@@ -534,100 +534,157 @@
             document.getElementById('addButtonText').textContent = tab === 'hoteles' ? 'Agregar Hotel' : 'Agregar Cochera';
         }
         
-        function renderHoteles(hoteles) {
-            const grid = document.getElementById('hotelesGrid');
-            
-            // Filtrar según permisos
-            let filtered = hoteles;
-            if (currentUser.rol === 'editor') {
-                filtered = hoteles.filter(h => h.metadata?.creadoPor === currentUser.email);
-            }
-            
-            if (!filtered.length) {
-                grid.innerHTML = '<p>No hay hoteles registrados</p>';
-                return;
-            }
-            
-            grid.innerHTML = filtered.map(h => `
-                <div class="item-card">
-                    <div class="item-header">
-                        <div>
-                            <h3>${h.nombre}</h3>
-                            <p style="color: #6b7280; font-size: 0.875rem;">${h.direccion}</p>
-                            <p style="color: #2563eb; font-weight: 600; margin-top: 0.5rem;">
-                                S/ ${h.promocion?.tienePromocion ? h.promocion.preciosEvento.simple : h.precios.simple}
-                                ${h.promocion?.tienePromocion ? `<span style="color: #10b981; margin-left: 0.5rem;">🎟️ ${h.promocion.codigo}</span>` : ''}
-                            </p>
-                        </div>
-                        <div class="item-actions">
+// REEMPLAZA ESTAS FUNCIONES EN TU PANEL ADMIN
+// Para que los editores vean todo pero solo editen lo suyo
+
+function renderHoteles(hoteles) {
+    const grid = document.getElementById('hotelesGrid');
+    
+    // OPCIÓN 1: Editores ven TODO pero solo editan lo suyo
+    let filtered = hoteles;
+    
+    // OPCIÓN 2: Editores solo ven lo suyo (código actual)
+    // if (currentUser.rol === 'editor') {
+    //     filtered = hoteles.filter(h => h.metadata?.creadoPor === currentUser.email);
+    // }
+    
+    if (!filtered.length) {
+        grid.innerHTML = '<p>No hay hoteles registrados</p>';
+        return;
+    }
+    
+    grid.innerHTML = filtered.map(h => {
+        // Verificar si el usuario puede editar este item
+        const puedeEditar = currentUser.rol === 'admin' || h.metadata?.creadoPor === currentUser.email;
+        
+        return `
+            <div class="item-card">
+                <div class="item-header">
+                    <div>
+                        <h3>${h.nombre}</h3>
+                        <p style="color: #6b7280; font-size: 0.875rem;">${h.direccion}</p>
+                        <p style="color: #2563eb; font-weight: 600; margin-top: 0.5rem;">
+                            S/ ${h.promocion?.tienePromocion ? h.promocion.preciosEvento.simple : h.precios.simple}
+                            ${h.promocion?.tienePromocion ? `<span style="color: #10b981; margin-left: 0.5rem;">🎟️ ${h.promocion.codigo}</span>` : ''}
+                        </p>
+                    </div>
+                    <div class="item-actions">
+                        ${puedeEditar ? `
                             <button class="btn-edit" onclick='editItem("${h.id}", "hotel")'>
                                 <i class="fas fa-edit"></i>
                             </button>
                             <button class="btn-delete" onclick='deleteItem("${h.id}", "hotel")'>
                                 <i class="fas fa-trash"></i>
                             </button>
-                        </div>
+                        ` : `
+                            <button class="btn-edit" disabled style="opacity: 0.5; cursor: not-allowed;" title="No puedes editar items de otros">
+                                <i class="fas fa-lock"></i>
+                            </button>
+                        `}
                     </div>
-                    <p style="font-size: 0.75rem; color: #9ca3af;">
-                        Por: ${h.metadata?.creadoPor || 'N/A'} • ${h.metadata?.fechaCreacion ? new Date(h.metadata.fechaCreacion).toLocaleDateString() : 'N/A'}
-                    </p>
                 </div>
-            `).join('');
-        }
+                <p style="font-size: 0.75rem; color: #9ca3af;">
+                    Por: ${h.metadata?.creadoPor || 'N/A'} • ${h.metadata?.fechaCreacion ? new Date(h.metadata.fechaCreacion).toLocaleDateString() : 'N/A'}
+                    ${!puedeEditar ? '<span style="color: #ef4444; margin-left: 10px;">🔒 Solo lectura</span>' : ''}
+                </p>
+            </div>
+        `;
+    }).join('');
+}
+
+function renderCocheras(cocheras) {
+    const grid = document.getElementById('cocherasGrid');
+    
+    // OPCIÓN 1: Editores ven TODO pero solo editan lo suyo
+    let filtered = cocheras;
+    
+    // OPCIÓN 2: Editores solo ven lo suyo (código actual)
+    // if (currentUser.rol === 'editor') {
+    //     filtered = cocheras.filter(c => c.metadata?.creadoPor === currentUser.email);
+    // }
+    
+    if (!filtered.length) {
+        grid.innerHTML = '<p>No hay cocheras registradas</p>';
+        return;
+    }
+    
+    grid.innerHTML = filtered.map(c => {
+        // Verificar si el usuario puede editar este item
+        const puedeEditar = currentUser.rol === 'admin' || c.metadata?.creadoPor === currentUser.email;
         
-        function renderCocheras(cocheras) {
-            const grid = document.getElementById('cocherasGrid');
-            
-            let filtered = cocheras;
-            if (currentUser.rol === 'editor') {
-                filtered = cocheras.filter(c => c.metadata?.creadoPor === currentUser.email);
-            }
-            
-            if (!filtered.length) {
-                grid.innerHTML = '<p>No hay cocheras registradas</p>';
-                return;
-            }
-            
-            grid.innerHTML = filtered.map(c => `
-                <div class="item-card">
-                    <div class="item-header">
-                        <div>
-                            <h3>${c.nombre}</h3>
-                            <p style="color: #6b7280; font-size: 0.875rem;">${c.direccion}</p>
-                            <p style="color: #2563eb; font-weight: 600; margin-top: 0.5rem;">S/ ${c.precioDia}/día</p>
-                        </div>
-                        <div class="item-actions">
+        return `
+            <div class="item-card">
+                <div class="item-header">
+                    <div>
+                        <h3>${c.nombre}</h3>
+                        <p style="color: #6b7280; font-size: 0.875rem;">${c.direccion}</p>
+                        <p style="color: #2563eb; font-weight: 600; margin-top: 0.5rem;">S/ ${c.precioDia}/día</p>
+                    </div>
+                    <div class="item-actions">
+                        ${puedeEditar ? `
                             <button class="btn-edit" onclick='editItem("${c.id}", "cochera")'>
                                 <i class="fas fa-edit"></i>
                             </button>
                             <button class="btn-delete" onclick='deleteItem("${c.id}", "cochera")'>
                                 <i class="fas fa-trash"></i>
                             </button>
-                        </div>
+                        ` : `
+                            <button class="btn-edit" disabled style="opacity: 0.5; cursor: not-allowed;" title="No puedes editar items de otros">
+                                <i class="fas fa-lock"></i>
+                            </button>
+                        `}
                     </div>
-                    <p style="font-size: 0.75rem; color: #9ca3af;">
-                        Por: ${c.metadata?.creadoPor || 'N/A'} • ${c.metadata?.fechaCreacion ? new Date(c.metadata.fechaCreacion).toLocaleDateString() : 'N/A'}
-                    </p>
                 </div>
-            `).join('');
-        }
-        
-        function openAddModal() {
-            editingItem = null;
-            document.getElementById('modalTitle').textContent = currentTab === 'hoteles' ? 'Agregar Hotel' : 'Agregar Cochera';
-            document.getElementById('formContent').innerHTML = currentTab === 'hoteles' ? getHotelForm() : getCocheraForm();
-            document.getElementById('formModal').classList.add('active');
-        }
-        
-        async function editItem(id, type) {
-            const collection = type === 'hotel' ? 'hoteles-chimbote' : 'cocheras-chimbote';
-            const doc = await db.collection(collection).doc(id).get();
-            editingItem = { id, ...doc.data() };
-            
-            document.getElementById('modalTitle').textContent = type === 'hotel' ? 'Editar Hotel' : 'Editar Cochera';
-            document.getElementById('formContent').innerHTML = type === 'hotel' ? getHotelForm(editingItem) : getCocheraForm(editingItem);
-            document.getElementById('formModal').classList.add('active');
-        }
+                <p style="font-size: 0.75rem; color: #9ca3af;">
+                    Por: ${c.metadata?.creadoPor || 'N/A'} • ${c.metadata?.fechaCreacion ? new Date(c.metadata.fechaCreacion).toLocaleDateString() : 'N/A'}
+                    ${!puedeEditar ? '<span style="color: #ef4444; margin-left: 10px;">🔒 Solo lectura</span>' : ''}
+                </p>
+            </div>
+        `;
+    }).join('');
+}
+
+async function deleteItem(id, type) {
+    const collection = type === 'hotel' ? 'hoteles-chimbote-2026' : 'cocheras-chimbote-2026';
+    
+    // Verificar permisos antes de eliminar
+    const doc = await db.collection(collection).doc(id).get();
+    const data = doc.data();
+    
+    if (currentUser.rol !== 'admin' && data.metadata?.creadoPor !== currentUser.email) {
+        alert('❌ No tienes permisos para eliminar este item');
+        return;
+    }
+    
+    if (!confirm('¿Estás seguro de eliminar este elemento?')) return;
+    
+    try {
+        await db.collection(collection).doc(id).delete();
+        alert('✅ Eliminado exitosamente');
+        loadData();
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error al eliminar: ' + error.message);
+    }
+}
+
+async function editItem(id, type) {
+    const collection = type === 'hotel' ? 'hoteles-chimbote-2026' : 'cocheras-chimbote-2026';
+    const doc = await db.collection(collection).doc(id).get();
+    const data = doc.data();
+    
+    // Verificar permisos antes de editar
+    if (currentUser.rol !== 'admin' && data.metadata?.creadoPor !== currentUser.email) {
+        alert('❌ No tienes permisos para editar este item');
+        return;
+    }
+    
+    editingItem = { id, ...data };
+    
+    document.getElementById('modalTitle').textContent = type === 'hotel' ? 'Editar Hotel' : 'Editar Cochera';
+    document.getElementById('formContent').innerHTML = type === 'hotel' ? getHotelForm(editingItem) : getCocheraForm(editingItem);
+    document.getElementById('formModal').classList.add('active');
+}
         
         function getHotelForm(data = {}) {
             return `
