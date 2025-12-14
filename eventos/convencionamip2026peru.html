@@ -39,7 +39,19 @@
             justify-content: center;
             align-items: center;
             padding: 1rem 0;
-            gap: 0.5rem;
+            gap: 0.75rem;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .logo-img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
         }
         
         .brand-name {
@@ -509,8 +521,13 @@
     <header>
         <div class="container">
             <div class="header-content">
-                <div class="brand-name">HOSPITALIDAD EN ACCIÓN</div>
-                <span class="badge">📋 APOYO AL EVENTO</span>
+                <div class="logo">
+                    <img src="../assets/images/branding/logo.png" alt="Hospitalidad en Acción" class="logo-img">
+                    <div>
+                        <div class="brand-name">HOSPITALIDAD EN ACCIÓN</div>
+                        <span class="badge">📋 APOYO AL EVENTO</span>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -735,11 +752,11 @@
         // Cargar datos desde JSON
         async function cargarDatos() {
             try {
-                const hotelesRes = await fetch('../data/hoteles/chimbote.json');
+                const hotelesRes = await fetch('https://raw.githubusercontent.com/compuzettaoficial/hospitalidad_en_accion/refs/heads/main/data/hoteles/chimbote.json');
                 const hotelesJson = await hotelesRes.json();
                 hotelesData = hotelesJson.hoteles || [];
                 
-                const cocherasRes = await fetch('../data/cocheras/chimbote.json');
+                const cocherasRes = await fetch('https://raw.githubusercontent.com/compuzettaoficial/hospitalidad_en_accion/refs/heads/main/data/cocheras/chimbote.json');
                 const cocherasJson = await cocherasRes.json();
                 cocherasData = cocherasJson.cocheras || [];
                 
