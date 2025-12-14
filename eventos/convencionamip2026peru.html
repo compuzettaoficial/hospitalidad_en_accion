@@ -754,17 +754,21 @@
             try {
                 const hotelesRes = await fetch('https://raw.githubusercontent.com/compuzettaoficial/hospitalidad_en_accion/refs/heads/main/data/hoteles/chimbote.json');
                 const hotelesJson = await hotelesRes.json();
-                hotelesData = hotelesJson.hoteles || [];
+                hotelesData = Array.isArray(hotelesJson) ? hotelesJson : (hotelesJson.hoteles || []);
                 
                 const cocherasRes = await fetch('https://raw.githubusercontent.com/compuzettaoficial/hospitalidad_en_accion/refs/heads/main/data/cocheras/chimbote.json');
                 const cocherasJson = await cocherasRes.json();
-                cocherasData = cocherasJson.cocheras || [];
+                cocherasData = Array.isArray(cocherasJson) ? cocherasJson : (cocherasJson.cocheras || []);
+                
+                console.log('Hoteles cargados:', hotelesData.length);
+                console.log('Cocheras cargadas:', cocherasData.length);
                 
                 aplicarFiltros();
                 aplicarFiltrosCocheras();
             } catch (error) {
                 console.error('Error:', error);
-                document.getElementById('hoteles-grid').innerHTML = '<p class="loading">Error al cargar datos. Verifica las rutas de los archivos JSON.</p>';
+                document.getElementById('hoteles-grid').innerHTML = '<p class="loading">Error al cargar datos: ' + error.message + '</p>';
+                document.getElementById('cocheras-grid').innerHTML = '<p class="loading">Error al cargar datos: ' + error.message + '</p>';
             }
         }
         
@@ -1015,5 +1019,5 @@
         // Iniciar
         cargarDatos();
     </script>
-</body> 
+</body>
 </html>
