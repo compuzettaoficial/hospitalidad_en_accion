@@ -1,1 +1,448 @@
+/**
+ * ============================================
+ * EVENTOS.CSS - Estilos para Lista y Detalle de Eventos
+ * ============================================
+ */
 
+/* ============================================
+   LISTA DE EVENTOS
+   ============================================ */
+
+.eventos-page {
+  padding: var(--spacing-2xl) 0;
+  background-color: var(--color-bg-light);
+  min-height: calc(100vh - var(--header-height));
+}
+
+.page-header {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.page-title {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.page-subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+}
+
+/* ============================================
+   FILTROS Y BÚSQUEDA
+   ============================================ */
+
+.eventos-filters {
+  background-color: white;
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+  box-shadow: var(--shadow-md);
+}
+
+.filter-search {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.filter-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.filter-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.filter-active {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+}
+
+.filter-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: 0.375rem 0.75rem;
+  background-color: var(--color-primary);
+  color: white;
+  border-radius: var(--border-radius-full);
+  font-size: var(--font-size-sm);
+}
+
+.filter-tag button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 0;
+  margin-left: var(--spacing-xs);
+}
+
+/* ============================================
+   DETALLE DE EVENTO
+   ============================================ */
+
+.evento-detalle {
+  padding: var(--spacing-2xl) 0;
+  background-color: var(--color-bg-light);
+}
+
+.evento-hero {
+  position: relative;
+  height: 400px;
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  margin-bottom: var(--spacing-2xl);
+  background-size: cover;
+  background-position: center;
+}
+
+.evento-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  display: flex;
+  align-items: flex-end;
+  padding: var(--spacing-2xl);
+}
+
+.evento-hero-content {
+  color: white;
+  max-width: 800px;
+}
+
+.evento-category {
+  display: inline-block;
+  padding: 0.375rem 1rem;
+  background-color: var(--color-primary);
+  border-radius: var(--border-radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  margin-bottom: var(--spacing-md);
+}
+
+.evento-hero h1 {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-md);
+  color: white;
+}
+
+.evento-meta-hero {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-lg);
+  font-size: var(--font-size-base);
+}
+
+.evento-meta-hero span {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.evento-meta-hero i {
+  color: var(--color-primary);
+}
+
+/* ============================================
+   EVENTO CONTENT
+   ============================================ */
+
+.evento-content-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: var(--spacing-xl);
+}
+
+.evento-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.evento-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+/* ============================================
+   EVENTO SECTIONS
+   ============================================ */
+
+.evento-section {
+  background-color: white;
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-md);
+}
+
+.evento-section h2 {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 2px solid var(--color-border-light);
+}
+
+.evento-section h3 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+/* ============================================
+   EVENTO INFO (sidebar)
+   ============================================ */
+
+.evento-info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) 0;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.evento-info-item:last-child {
+  border-bottom: none;
+}
+
+.evento-info-icon {
+  width: 40px;
+  height: 40px;
+  background-color: rgba(91, 149, 194, 0.1);
+  border-radius: var(--border-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.evento-info-content {
+  flex: 1;
+}
+
+.evento-info-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+  margin-bottom: 4px;
+}
+
+.evento-info-value {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   ORGANIZADOR
+   ============================================ */
+
+.organizador-card {
+  text-align: center;
+}
+
+.organizador-logo {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto var(--spacing-md);
+  border-radius: var(--border-radius-lg);
+  object-fit: contain;
+  background-color: var(--color-bg-light);
+  padding: var(--spacing-sm);
+}
+
+.organizador-name {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-xs);
+}
+
+.organizador-links {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+}
+
+.organizador-links a {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-bg-light);
+  border-radius: var(--border-radius-md);
+  color: var(--color-text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.organizador-links a:hover {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+/* ============================================
+   EXPOSITORES
+   ============================================ */
+
+.expositores-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.expositor-card {
+  text-align: center;
+}
+
+.expositor-foto {
+  width: 120px;
+  height: 120px;
+  border-radius: var(--border-radius-full);
+  object-fit: cover;
+  margin: 0 auto var(--spacing-md);
+  border: 3px solid var(--color-border-light);
+}
+
+.expositor-nombre {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: 4px;
+}
+
+.expositor-pais {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+/* ============================================
+   HOTELES Y COCHERAS
+   ============================================ */
+
+.hoteles-grid,
+.cocheras-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+/* ============================================
+   TABS
+   ============================================ */
+
+.evento-tabs {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+  border-bottom: 2px solid var(--color-border-light);
+}
+
+.evento-tab {
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  position: relative;
+  transition: color var(--transition-fast);
+}
+
+.evento-tab:hover {
+  color: var(--color-primary);
+}
+
+.evento-tab.active {
+  color: var(--color-primary);
+}
+
+.evento-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--color-primary);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 1024px) {
+  .evento-content-wrapper {
+    grid-template-columns: 1fr;
+  }
+  
+  .evento-sidebar {
+    order: -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .evento-hero {
+    height: 300px;
+  }
+  
+  .evento-hero h1 {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .evento-meta-hero {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .filter-search {
+    grid-template-columns: 1fr;
+  }
+  
+  .filter-options {
+    grid-template-columns: 1fr;
+  }
+  
+  .expositores-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+  
+  .hoteles-grid,
+  .cocheras-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .evento-tabs {
+    overflow-x: auto;
+  }
+}
