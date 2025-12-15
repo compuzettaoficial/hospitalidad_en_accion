@@ -1,0 +1,247 @@
+/**
+ * ============================================
+ * MAIN.CSS - Archivo Principal de Estilos
+ * ============================================
+ * Importa todos los módulos CSS del proyecto
+ * Orden de carga: Core → Layout → Components → Pages
+ */
+
+/* ============================================
+   CORE - Fundamentos
+   ============================================ */
+@import 'core/variables.css';
+@import 'core/reset.css';
+@import 'core/utilities.css';
+
+/* ============================================
+   LAYOUT - Estructura
+   ============================================ */
+@import 'layout/header.css';
+@import 'layout/footer.css';
+@import 'layout/sidebar.css';
+
+/* ============================================
+   COMPONENTS - Componentes Reutilizables
+   ============================================ */
+@import 'components/buttons.css';
+@import 'components/cards.css';
+@import 'components/forms.css';
+@import 'components/modals.css';
+@import 'components/tables.css';
+@import 'components/notifications.css';
+
+/* ============================================
+   PAGES - Páginas Específicas
+   ============================================ */
+@import 'pages/home.css';
+@import 'pages/eventos.css';
+@import 'pages/perfil.css';
+@import 'pages/admin.css';
+
+/* ============================================
+   ESTILOS GLOBALES ADICIONALES
+   ============================================ */
+
+/* Smooth scroll para toda la página */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Asegurar altura mínima */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Main content area */
+main {
+  flex: 1;
+}
+
+/* Print styles */
+@media print {
+  .header,
+  .footer,
+  .sidebar,
+  .btn,
+  .navbar-toggle,
+  .modal-backdrop {
+    display: none !important;
+  }
+  
+  body {
+    background-color: white;
+  }
+  
+  .container {
+    max-width: 100%;
+  }
+}
+
+/* ============================================
+   ANIMACIONES GLOBALES
+   ============================================ */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Clases de animación reutilizables */
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown 0.6s ease-out;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.5s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.5s ease-out;
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* ============================================
+   CLASES DE TRANSICIÓN
+   ============================================ */
+
+.transition-all {
+  transition: all var(--transition-base);
+}
+
+.transition-colors {
+  transition: color var(--transition-fast), background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.transition-transform {
+  transition: transform var(--transition-fast);
+}
+
+.transition-opacity {
+  transition: opacity var(--transition-fast);
+}
+
+/* ============================================
+   FOCUS VISIBLE (accesibilidad)
+   ============================================ */
+
+*:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--border-radius-sm);
+}
+
+/* ============================================
+   REDUCCIÓN DE MOVIMIENTO (accesibilidad)
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================
+   MODO OSCURO (preparado para futuro)
+   ============================================ */
+
+@media (prefers-color-scheme: dark) {
+  /* Los estilos dark mode se definieron en variables.css */
+  /* Aquí se pueden agregar estilos específicos adicionales */
+}
+
+/* ============================================
+   DEBUG MODE (solo en desarrollo)
+   ============================================ */
+
+body.debug-mode * {
+  outline: 1px solid rgba(255, 0, 0, 0.1);
+}
+
+body.debug-mode *:hover {
+  outline: 1px solid rgba(255, 0, 0, 0.5);
+}
+
+/* ============================================
+   FIN DEL ARCHIVO
+   ============================================ */
