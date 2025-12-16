@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Bloque 3 - Utilidades y Helpers</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .test-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .test-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .test-group {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .test-group h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .test-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 8px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .test-item label {
+            flex: 1;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        .test-item .result {
+            flex: 2;
+            padding: 8px 12px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        
+        .test-item .result.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .test-item .result.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        
+        .status.loading {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .input-test {
+            display: grid;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .input-group input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .input-group button {
+            padding: 10px 20px;
+        }
+        
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #e83e8c;
+        }
+        
+        .icon {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test Bloque 3 - Utilidades y Helpers</h1>
+        
+        <div id="status" class="status loading">
+            ⏳ Esperando pruebas...
+        </div>
+        
+        <div class="button-group">
+            <button onclick="testValidators()">
+                <span class="icon">✓</span> Probar Validators
+            </button>
+            <button onclick="testFormatters()">
+                <span class="icon">📝</span> Probar Formatters
+            </button>
+            <button onclick="testHelpers()">
+                <span class="icon">🔧</span> Probar Helpers
+            </button>
+            <button onclick="testNotifications()">
+                <span class="icon">🔔</span> Probar Notificaciones
+            </button>
+            <button onclick="testAll()" style="background: #28a745;">
+                <span class="icon">✅</span> Probar Todo
+            </button>
+            <button onclick="clearResults()" style="background: #dc3545;">
+                <span class="icon">🗑️</span> Limpiar
+            </button>
+        </div>
+        
+        <!-- VALIDATORS -->
+        <div class="test-section" id="validators-section" style="display:none;">
+            <h2>✓ Validators</h2>
+            
+            <div class="test-group">
+                <h3>📧 Validación de Emails</h3>
+                <div class="input-test">
+                    <div class="input-group">
+                        <input type="text" id="email-input" placeholder="Ingresa un email para validar" value="test@example.com">
+                        <button onclick="testSingleEmail()">Validar</button>
+                    </div>
+                </div>
+                <div id="email-results"></div>
+            </div>
+            
+            <div class="test-group">
+                <h3>📱 Validación de Teléfonos</h3>
+                <div class="input-test">
+                    <div class="input-group">
+                        <input type="text" id="phone-input" placeholder="Ingresa un teléfono para validar" value="987654321">
+                        <button onclick="testSinglePhone()">Validar</button>
+                    </div>
+                </div>
+                <div id="phone-results"></div>
+            </div>
+            
+            <div class="test-group">
+                <h3>🔒 Validación de Contraseñas</h3>
+                <div class="input-test">
+                    <div class="input-group">
+                        <input type="password" id="password-input" placeholder="Ingresa una contraseña para validar" value="Test123">
+                        <button onclick="testSinglePassword()">Validar</button>
+                    </div>
+                </div>
+                <div id="password-results"></div>
+            </div>
+            
+            <div class="test-group">
+                <h3>📅 Validación de Fechas</h3>
+                <div id="date-results"></div>
+            </div>
+        </div>
+        
+        <!-- FORMATTERS -->
+        <div class="test-section" id="formatters-section" style="display:none;">
+            <h2>📝 Formatters</h2>
+            
+            <div class="test-group">
+                <h3>📅 Formato de Fechas</h3>
+                <div id="date-format-results"></div>
+            </div>
+            
+            <div class="test-group">
+                <h3>💰 Formato de Moneda</h3>
+                <div id="currency-results"></div>
+            </div>
+            
+            <div class="test-group">
+                <h3>📏 Formato de Distancia</h3>
+                <div id="distance-results"></div>
+            </div>
+            
+            <div class="test-group">
+                <h3>🔤 Formato de Texto</h3>
+                <div id="text-results"></div>
+            </div>
+        </div>
+        
+        <!-- HELPERS -->
+        <div class="test-section" id="helpers-section" style="display:none;">
+            <h2>🔧 Helpers</h2>
+            
+            <div class="test-group">
+                <h3>🔗 URL Helpers</h3>
+                <div id="url-results"></div>
+            </div>
+            
+            <div class="test-group">
+                <h3>📦 Storage Helpers</h3>
+                <div id="storage-results"></div>
+            </div>
+            
+            <div class="test-group">
+                <h3>🔢 Number Helpers</h3>
+                <div id="number-results"></div>
+            </div>
+        </div>
+        
+        <!-- NOTIFICATIONS -->
+        <div class="test-section" id="notifications-section" style="display:none;">
+            <h2>🔔 Notificaciones</h2>
+            
+            <div class="button-group">
+                <button onclick="showSuccessNotif()" style="background: #28a745;">
+                    ✅ Success
+                </button>
+                <button onclick="showErrorNotif()" style="background: #dc3545;">
+                    ❌ Error
+                </button>
+                <button onclick="showWarningNotif()" style="background: #ffc107; color: #333;">
+                    ⚠️ Warning
+                </button>
+                <button onclick="showInfoNotif()" style="background: #17a2b8;">
+                    ℹ️ Info
+                </button>
+            </div>
+            
+            <div id="notification-results"></div>
+        </div>
+    </div>
+    
+    <!-- Configuración -->
+    <script src="assets/js/config/env.js"></script>
+    <script src="assets/js/config/constants.js"></script>
+    <script src="assets/js/config/routes.js"></script>
+    
+    <!-- Utilidades del BLOQUE 3 -->
+    <script src="assets/js/utils/validators.js"></script>
+    <script src="assets/js/utils/formatters.js"></script>
+    <script src="assets/js/utils/helpers.js"></script>
+    <script src="assets/js/utils/notifications.js"></script>
+    
+    <script>
+        const status = document.getElementById('status');
+        
+        function updateStatus(message, type = 'loading') {
+            status.textContent = message;
+            status.className = `status ${type}`;
+        }
+        
+        function clearResults() {
+            document.querySelectorAll('.test-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.querySelectorAll('[id$="-results"]').forEach(div => {
+                div.innerHTML = '';
+            });
+            updateStatus('⏳ Esperando pruebas...', 'loading');
+        }
+        
+        function createTestItem(label, result, isValid = true) {
+            return `
+                <div class="test-item">
+                    <label>${label}</label>
+                    <div class="result ${isValid ? 'success' : 'error'}">${result}</div>
+                </div>
+            `;
+        }
+        
+        // ==========================================
+        // VALIDATORS
+        // ==========================================
+        function testValidators() {
+            document.getElementById('validators-section').style.display = 'block';
+            updateStatus('✓ Probando Validators...', 'loading');
+            
+            // Emails
+            const emailTests = [
+                { email: 'test@example.com', expected: true },
+                { email: 'invalid-email', expected: false },
+                { email: 'user@domain.co', expected: true },
+                { email: '@nodomain.com', expected: false }
+            ];
+            
+            let emailHtml = '<h4 style="margin: 15px 0 10px 0;">Pruebas automáticas:</h4>';
+            emailTests.forEach(test => {
+                const isValid = window.Validators?.isValidEmail(test.email);
+                emailHtml += createTestItem(
+                    `<code>${test.email}</code>`,
+                    isValid ? '✓ Válido' : '✗ Inválido',
+                    isValid === test.expected
+                );
+            });
+            document.getElementById('email-results').innerHTML = emailHtml;
+            
+            // Teléfonos
+            const phoneTests = [
+                { phone: '987654321', expected: true },
+                { phone: '+51987654321', expected: true },
+                { phone: '12345', expected: false },
+                { phone: 'abc123', expected: false }
+            ];
+            
+            let phoneHtml = '<h4 style="margin: 15px 0 10px 0;">Pruebas automáticas:</h4>';
+            phoneTests.forEach(test => {
+                const isValid = window.Validators?.isValidPhone(test.phone);
+                phoneHtml += createTestItem(
+                    `<code>${test.phone}</code>`,
+                    isValid ? '✓ Válido' : '✗ Inválido',
+                    isValid === test.expected
+                );
+            });
+            document.getElementById('phone-results').innerHTML = phoneHtml;
+            
+            // Contraseñas
+            const passwordTests = [
+                { password: 'Test123', minLength: 6 },
+                { password: '12345', minLength: 6 },
+                { password: 'Secure@Pass123', minLength: 8 }
+            ];
+            
+            let passwordHtml = '<h4 style="margin: 15px 0 10px 0;">Pruebas automáticas:</h4>';
+            passwordTests.forEach(test => {
+                const isValid = window.Validators?.isValidPassword(test.password, test.minLength);
+                passwordHtml += createTestItem(
+                    `<code>${'*'.repeat(test.password.length)}</code> (min: ${test.minLength})`,
+                    isValid ? '✓ Válida' : '✗ Muy corta',
+                    isValid
+                );
+            });
+            document.getElementById('password-results').innerHTML = passwordHtml;
+            
+            // Fechas
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+            
+            let dateHtml = '';
+            dateHtml += createTestItem(
+                'Fecha de mañana (futura)',
+                window.Validators?.isFutureDate(tomorrow) ? '✓ Es futura' : '✗ No es futura',
+                true
+            );
+            dateHtml += createTestItem(
+                'Fecha de ayer (pasada)',
+                window.Validators?.isPastDate(yesterday) ? '✓ Es pasada' : '✗ No es pasada',
+                true
+            );
+            document.getElementById('date-results').innerHTML = dateHtml;
+            
+            updateStatus('✅ Validators probados correctamente', 'success');
+        }
+        
+        function testSingleEmail() {
+            const input = document.getElementById('email-input');
+            const email = input.value.trim();
+            const isValid = window.Validators?.isValidEmail(email);
+            
+            const resultHtml = createTestItem(
+                'Resultado',
+                isValid ? '✓ Email válido' : '✗ Email inválido',
+                isValid
+            );
+            
+            document.getElementById('email-results').innerHTML = resultHtml;
+        }
+        
+        function testSinglePhone() {
+            const input = document.getElementById('phone-input');
+            const phone = input.value.trim();
+            const isValid = window.Validators?.isValidPhone(phone);
+            
+            const resultHtml = createTestItem(
+                'Resultado',
+                isValid ? '✓ Teléfono válido' : '✗ Teléfono inválido',
+                isValid
+            );
+            
+            document.getElementById('phone-results').innerHTML = resultHtml;
+        }
+        
+        function testSinglePassword() {
+            const input = document.getElementById('password-input');
+            const password = input.value;
+            const isValid = window.Validators?.isValidPassword(password, 6);
+            
+            const resultHtml = createTestItem(
+                'Resultado',
+                isValid ? '✓ Contraseña válida (min 6 caracteres)' : '✗ Contraseña muy corta',
+                isValid
+            );
+            
+            document.getElementById('password-results').innerHTML = resultHtml;
+        }
+        
+        // ==========================================
+        // FORMATTERS
+        // ==========================================
+        function testFormatters() {
+            document.getElementById('formatters-section').style.display = 'block';
+            updateStatus('📝 Probando Formatters...', 'loading');
+            
+            // Fechas
+            const testDate = new Date('2026-02-20');
+            let dateHtml = '';
+            dateHtml += createTestItem(
+                'Fecha larga',
+                window.Formatters?.formatDate(testDate, 'long') || 'N/A'
+            );
+            dateHtml += createTestItem(
+                'Fecha corta',
+                window.Formatters?.formatDate(testDate, 'short') || 'N/A'
+            );
+            dateHtml += createTestItem(
+                'Fecha numérica',
+                window.Formatters?.formatDate(testDate, 'numeric') || 'N/A'
+            );
+            document.getElementById('date-format-results').innerHTML = dateHtml;
+            
+            // Moneda
+            let currencyHtml = '';
+            currencyHtml += createTestItem('150.50 PEN', window.Formatters?.formatCurrency(150.50) || 'N/A');
+            currencyHtml += createTestItem('1250 PEN', window.Formatters?.formatCurrency(1250) || 'N/A');
+            currencyHtml += createTestItem('0.99 PEN', window.Formatters?.formatCurrency(0.99) || 'N/A');
+            document.getElementById('currency-results').innerHTML = currencyHtml;
+            
+            // Distancia
+            let distanceHtml = '';
+            distanceHtml += createTestItem('500 metros', window.Formatters?.formatDistance(500) || 'N/A');
+            distanceHtml += createTestItem('1500 metros', window.Formatters?.formatDistance(1500) || 'N/A');
+            distanceHtml += createTestItem('5000 metros', window.Formatters?.formatDistance(5000) || 'N/A');
+            document.getElementById('distance-results').innerHTML = distanceHtml;
+            
+            // Texto
+            let textHtml = '';
+            textHtml += createTestItem(
+                'Capitalizar: "hola mundo"',
+                window.Formatters?.capitalize('hola mundo') || 'N/A'
+            );
+            textHtml += createTestItem(
+                'Slug: "Convención AMIP 2026"',
+                window.Formatters?.slugify('Convención AMIP 2026') || 'N/A'
+            );
+            textHtml += createTestItem(
+                'Truncar: "Texto muy largo para mostrar completo" (20)',
+                window.Formatters?.truncate('Texto muy largo para mostrar completo', 20) || 'N/A'
+            );
+            document.getElementById('text-results').innerHTML = textHtml;
+            
+            updateStatus('✅ Formatters probados correctamente', 'success');
+        }
+        
+        // ==========================================
+        // HELPERS
+        // ==========================================
+        function testHelpers() {
+            document.getElementById('helpers-section').style.display = 'block';
+            updateStatus('🔧 Probando Helpers...', 'loading');
+            
+            // URL
+            let urlHtml = '';
+            const params = { nombre: 'Juan', edad: 25 };
+            urlHtml += createTestItem(
+                'buildQueryString',
+                window.Helpers?.buildQueryString(params) || 'N/A'
+            );
+            document.getElementById('url-results').innerHTML = urlHtml;
+            
+            // Numbers
+            let numberHtml = '';
+            numberHtml += createTestItem('Random 1-100', window.Helpers?.randomNumber(1, 100)?.toString() || 'N/A');
+            numberHtml += createTestItem('Clamp(150, 0, 100)', window.Helpers?.clamp(150, 0, 100)?.toString() || 'N/A');
+            document.getElementById('number-results').innerHTML = numberHtml;
+            
+            updateStatus('✅ Helpers probados correctamente', 'success');
+        }
+        
+        // ==========================================
+        // NOTIFICATIONS
+        // ==========================================
+        function testNotifications() {
+            document.getElementById('notifications-section').style.display = 'block';
+            updateStatus('🔔 Sistema de notificaciones listo', 'success');
+            
+            document.getElementById('notification-results').innerHTML = `
+                <div style="padding: 15px; background: #f8f9fa; border-radius: 8px; margin-top: 15px;">
+                    <p style="margin-bottom: 10px;"><strong>Instrucciones:</strong></p>
+                    <p>Haz clic en los botones de arriba para probar cada tipo de notificación.</p>
+                    <p style="margin-top: 10px; color: #666;">Las notificaciones aparecerán en la esquina superior derecha de la pantalla.</p>
+                </div>
+            `;
+        }
+        
+        function showSuccessNotif() {
+            if (window.Notifications) {
+                window.Notifications.success('¡Operación exitosa!', 'Los datos se guardaron correctamente.');
+            } else {
+                alert('Notifications no está cargado');
+            }
+        }
+        
+        function showErrorNotif() {
+            if (window.Notifications) {
+                window.Notifications.error('Error al procesar', 'No se pudo completar la operación.');
+            } else {
+                alert('Notifications no está cargado');
+            }
+        }
+        
+        function showWarningNotif() {
+            if (window.Notifications) {
+                window.Notifications.warning('Advertencia', 'Verifica los datos antes de continuar.');
+            } else {
+                alert('Notifications no está cargado');
+            }
+        }
+        
+        function showInfoNotif() {
+            if (window.Notifications) {
+                window.Notifications.info('Información', 'Tienes 3 nuevas notificaciones.');
+            } else {
+                alert('Notifications no está cargado');
+            }
+        }
+        
+        // ==========================================
+        // PROBAR TODO
+        // ==========================================
+        async function testAll() {
+            clearResults();
+            updateStatus('⏳ Ejecutando todas las pruebas...', 'loading');
+            
+            await new Promise(r => setTimeout(r, 300));
+            testValidators();
+            
+            await new Promise(r => setTimeout(r, 300));
+            testFormatters();
+            
+            await new Promise(r => setTimeout(r, 300));
+            testHelpers();
+            
+            await new Promise(r => setTimeout(r, 300));
+            testNotifications();
+            
+            updateStatus('✅ Todas las pruebas completadas exitosamente', 'success');
+        }
+        
+        // Verificar carga de archivos
+        window.addEventListener('load', () => {
+            console.log('🧪 Test Bloque 3 cargado');
+            console.log('Validators:', typeof window.Validators);
+            console.log('Formatters:', typeof window.Formatters);
+            console.log('Helpers:', typeof window.Helpers);
+            console.log('Notifications:', typeof window.Notifications);
+        });
+    </script>
+</body>
+</html>
