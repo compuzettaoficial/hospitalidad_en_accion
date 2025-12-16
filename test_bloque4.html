@@ -713,59 +713,48 @@
             alert('🎯 Cálculo de Score\n\nEsta función se usa internamente.\nPrueba "Ver Sugerencias Matching" para ver el algoritmo en acción.');
         }
 
-        // ============================================
-        // TEST COMPLETO
-        // ============================================
-        async function runAllTests() {
-            if (!confirm('Esto ejecutará todos los tests. ¿Continuar?')) return;
-            
-            status.textContent = '⏳ Ejecutando todos los tests...';
-            status.className = 'status loading';
-            
-            try {
-                await checkAuthStatus();
-                await new Promise(r => setTimeout(r, 500));
-                
-                await testFirestoreRead();
-                await new Promise(r => setTimeout(r, 500));
-                
-                await testGetAllUsuarios();
-                await new Promise(r => setTimeout(r, 500));
-                
-                await testGetPostulacionesEvento();
-                await new Promise(r => setTimeout(r, 500));
-                
-                await testGetInfoEvento();
-                await new Promise(r => setTimeout(r, 500));
-                
-                await testGetSugerencias();
-                
-                status.textContent = '✅ Todos los tests completados';
-                status.className = 'status success';
-            } catch (error) {
-                status.textContent = '❌ Error en los tests: ' + error.message;
-                status.className = 'status error';
-
-
-
-
-<function_calls>
-<invoke name="artifacts">
-<parameter name="command">update</parameter>
-<parameter name="id">test_bloque4</parameter>
-<parameter name="old_str">                status.textContent = '❌ Error en los tests: ' + error.message;
-status.className = 'status error';</parameter>
-<parameter name="new_str">                status.textContent = '❌ Error en los tests: ' + error.message;
-status.className = 'status error';
-}
-}
-    function clearAll() {
-        document.querySelectorAll('.output').forEach(el => {
-            el.innerHTML = '';
-        });
-        status.textContent = '⏳ Esperando tests...';
-        status.className = 'status loading';
+// ============================================
+// TEST COMPLETO
+// ============================================
+async function runAllTests() {
+    if (!confirm('Esto ejecutará todos los tests. ¿Continuar?')) return;
+    
+    status.textContent = '⏳ Ejecutando todos los tests...';
+    status.className = 'status loading';
+    
+    try {
+        await checkAuthStatus();
+        await new Promise(r => setTimeout(r, 500));
+        
+        await testFirestoreRead();
+        await new Promise(r => setTimeout(r, 500));
+        
+        await testGetAllUsuarios();
+        await new Promise(r => setTimeout(r, 500));
+        
+        await testGetPostulacionesEvento();
+        await new Promise(r => setTimeout(r, 500));
+        
+        await testGetInfoEvento();
+        await new Promise(r => setTimeout(r, 500));
+        
+        await testGetSugerencias();
+        
+        status.textContent = '✅ Todos los tests completados';
+        status.className = 'status success';
+    } catch (error) {
+        status.textContent = '❌ Error en los tests: ' + error.message;
+        status.className = 'status error';
     }
+}
+
+function clearAll() {
+    document.querySelectorAll('.output').forEach(el => {
+        el.innerHTML = '';
+    });
+    status.textContent = '⏳ Esperando tests...';
+    status.className = 'status loading';
+}
 </script>
 </body>
-</html></parameter>
+</html>
