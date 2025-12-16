@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del Evento - Hospitalidad en Acción</title>
+    
+    <!-- SEO -->
+    <meta name="description" content="Información completa del evento cristiano">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="../../assets/images/branding/favicon.ico">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    
+    <!-- HEADER -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="navbar-brand">
+                    <img src="../../assets/images/branding/logo.png" alt="Logo" class="logo">
+                    <span class="brand-name">Hospitalidad en Acción</span>
+                </div>
+                
+                <button class="navbar-toggle" id="navbarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <ul class="navbar-menu" id="navbarMenu">
+                    <li><a href="../../index.html">Inicio</a></li>
+                    <li><a href="lista.html">Eventos</a></li>
+                    <li><a href="../../index.html#como-funciona">Cómo Funciona</a></li>
+                    <li><a href="../../index.html#contacto">Contacto</a></li>
+                    <li><a href="../auth/login.html" class="btn-login" id="btnAuth">Iniciar Sesión</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- LOADING -->
+    <div id="pageLoading" style="display: flex; justify-content: center; align-items: center; min-height: 50vh;">
+        <div class="loading">
+            <i class="fas fa-spinner fa-spin"></i> Cargando evento...
+        </div>
+    </div>
+
+    <!-- CONTENIDO DEL EVENTO -->
+    <main class="evento-detalle" id="eventoContent" style="display: none;">
+        
+        <!-- Hero con imagen -->
+        <div class="evento-hero" id="eventoHero">
+            <div class="evento-hero-overlay">
+                <div class="container">
+                    <div class="evento-hero-content">
+                        <span class="evento-category" id="eventoCategoria">Convención</span>
+                        <h1 id="eventoTitulo">Cargando...</h1>
+                        <div class="evento-meta-hero" id="eventoMetaHero">
+                            <!-- Se llena dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="evento-content-wrapper">
+                
+                <!-- Contenido Principal -->
+                <div class="evento-main">
+                    
+                    <!-- Descripción -->
+                    <div class="evento-section" id="seccionDescripcion">
+                        <h2>Descripción</h2>
+                        <p id="eventoDescripcion"></p>
+                    </div>
+
+                    <!-- Programa (si existe) -->
+                    <div class="evento-section" id="seccionPrograma" style="display: none;">
+                        <h2>Programa</h2>
+                        <div id="eventoPrograma"></div>
+                    </div>
+
+                    <!-- Expositores (si existen) -->
+                    <div class="evento-section" id="seccionExpositores" style="display: none;">
+                        <h2>Expositores</h2>
+                        <div class="expositores-grid" id="eventosExpositores"></div>
+                    </div>
+
+                    <!-- Hoteles Cercanos -->
+                    <div class="evento-section" id="seccionHoteles">
+                        <h2><i class="fas fa-hotel"></i> Hoteles Cercanos</h2>
+                        <div class="hoteles-grid" id="eventoHoteles">
+                            <div class="loading">
+                                <i class="fas fa-spinner fa-spin"></i> Cargando hoteles...
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cocheras (si existen) -->
+                    <div class="evento-section" id="seccionCocheras">
+                        <h2><i class="fas fa-parking"></i> Estacionamientos Cercanos</h2>
+                        <div class="cocheras-grid" id="eventoCocheras">
+                            <div class="loading">
+                                <i class="fas fa-spinner fa-spin"></i> Cargando cocheras...
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Sidebar -->
+                <div class="evento-sidebar">
+                    
+                    <!-- Card de Información -->
+                    <div class="evento-section">
+                        <h2>Información del Evento</h2>
+                        <div id="eventoInfo">
+                            <!-- Se llena dinámicamente -->
+                        </div>
+                    </div>
+
+                    <!-- Card de Hospitalidad -->
+                    <div class="evento-section" id="seccionHospitalidad" style="display: none;">
+                        <h2>Hospitalidad</h2>
+                        <p style="font-size: 0.875rem; color: var(--color-text-secondary); margin-bottom: 1rem;">
+                            ¿Necesitas hospedaje o quieres ofrecer tu hogar?
+                        </p>
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <button class="btn btn-primary btn-block" id="btnPostularVisitante">
+                                <i class="fas fa-hand-holding-heart"></i> Necesito Hospedaje
+                            </button>
+                            <button class="btn btn-secondary btn-block" id="btnPostularAnfitrion">
+                                <i class="fas fa-home"></i> Ofrecer mi Casa
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Card del Organizador -->
+                    <div class="evento-section organizador-card" id="seccionOrganizador">
+                        <h2>Organizador</h2>
+                        <div id="eventoOrganizador">
+                            <!-- Se llena dinámicamente -->
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Hospitalidad en Acción</h4>
+                    <p>Conectando corazones a través de la hospitalidad cristiana en eventos por todo el Perú.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Enlaces Rápidos</h4>
+                    <ul>
+                        <li><a href="lista.html">Eventos</a></li>
+                        <li><a href="../auth/register.html">Registrarse</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contacto</h4>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:info@hospitalidadenaccion.pe">info@hospitalidadenaccion.pe</a></li>
+                        <li><i class="fas fa-phone"></i> <a href="tel:+51999888777">+51 999 888 777</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Hospitalidad en Acción. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    
+    <!-- Config -->
+    <script src="../../assets/js/config/firebase-config.js"></script>
+    <script src="../../assets/js/config/env.js"></script>
+    <script src="../../assets/js/config/routes.js"></script>
+    <script src="../../assets/js/config/constants.js"></script>
+    
+    <!-- Utils -->
+    <script src="../../assets/js/utils/formatters.js"></script>
+    <script src="../../assets/js/utils/validators.js"></script>
+    <script src="../../assets/js/utils/helpers.js"></script>
+    <script src="../../assets/js/utils/notifications.js"></script>
+    
+    <!-- Services -->
+    <script src="../../assets/js/services/api/eventos.api.js"></script>
+    <script src="../../assets/js/services/api/hoteles.api.js"></script>
+    <script src="../../assets/js/services/api/cocheras.api.js"></script>
+    <script src="../../assets/js/services/firebase/auth.service.js"></script>
+    <script src="../../assets/js/services/firebase/firestore.service.js"></script>
+    <script src="../../assets/js/services/ui/navigation.service.js"></script>
+    
+    <!-- Page Script -->
+    <script src="../../assets/js/pages/evento-detalle.js"></script>
+</body>
+</html>
