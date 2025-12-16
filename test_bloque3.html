@@ -389,10 +389,11 @@
             
             let emailHtml = '<h4 style="margin: 15px 0 10px 0;">Pruebas automáticas:</h4>';
             emailTests.forEach(test => {
-                const isValid = window.Validators?.isValidEmail(test.email);
+                const result = window.Validators?.email(test.email);
+                const isValid = result?.valid || false;
                 emailHtml += createTestItem(
                     `<code>${test.email}</code>`,
-                    isValid ? '✓ Válido' : '✗ Inválido',
+                    isValid ? `✓ Válido` : `✗ ${result?.message || 'Inválido'}`,
                     isValid === test.expected
                 );
             });
@@ -408,10 +409,11 @@
             
             let phoneHtml = '<h4 style="margin: 15px 0 10px 0;">Pruebas automáticas:</h4>';
             phoneTests.forEach(test => {
-                const isValid = window.Validators?.isValidPhone(test.phone);
+                const result = window.Validators?.telefono(test.phone);
+                const isValid = result?.valid || false;
                 phoneHtml += createTestItem(
                     `<code>${test.phone}</code>`,
-                    isValid ? '✓ Válido' : '✗ Inválido',
+                    isValid ? `✓ Válido` : `✗ ${result?.message || 'Inválido'}`,
                     isValid === test.expected
                 );
             });
@@ -426,10 +428,11 @@
             
             let passwordHtml = '<h4 style="margin: 15px 0 10px 0;">Pruebas automáticas:</h4>';
             passwordTests.forEach(test => {
-                const isValid = window.Validators?.isValidPassword(test.password, test.minLength);
+                const result = window.Validators?.password(test.password);
+                const isValid = result?.valid || false;
                 passwordHtml += createTestItem(
                     `<code>${'*'.repeat(test.password.length)}</code> (min: ${test.minLength})`,
-                    isValid ? '✓ Válida' : '✗ Muy corta',
+                    isValid ? `✓ Válida` : `✗ ${result?.message || 'Inválida'}`,
                     isValid
                 );
             });
@@ -443,15 +446,18 @@
             yesterday.setDate(yesterday.getDate() - 1);
             
             let dateHtml = '';
+            const resultFuture = window.Validators?.fechaFutura(tomorrow);
             dateHtml += createTestItem(
                 'Fecha de mañana (futura)',
-                window.Validators?.isFutureDate(tomorrow) ? '✓ Es futura' : '✗ No es futura',
-                true
+                resultFuture?.valid ? '✓ Es futura' : `✗ ${resultFuture?.message || 'No válida'}`,
+                resultFuture?.valid
             );
+            
+            const resultPast = window.Validators?.fecha(yesterday);
             dateHtml += createTestItem(
-                'Fecha de ayer (pasada)',
-                window.Validators?.isPastDate(yesterday) ? '✓ Es pasada' : '✗ No es pasada',
-                true
+                'Fecha de ayer (válida)',
+                resultPast?.valid ? '✓ Es válida' : `✗ ${resultPast?.message || 'No válida'}`,
+                resultPast?.valid
             );
             document.getElementById('date-results').innerHTML = dateHtml;
             
@@ -461,12 +467,12 @@
         function testSingleEmail() {
             const input = document.getElementById('email-input');
             const email = input.value.trim();
-            const isValid = window.Validators?.isValidEmail(email);
+            const result = window.Validators?.email(email);
             
             const resultHtml = createTestItem(
                 'Resultado',
-                isValid ? '✓ Email válido' : '✗ Email inválido',
-                isValid
+                result?.valid ? '✓ Email válido' : `✗ ${result?.message || 'Email inválido'}`,
+                result?.valid
             );
             
             document.getElementById('email-results').innerHTML = resultHtml;
@@ -475,12 +481,12 @@
         function testSinglePhone() {
             const input = document.getElementById('phone-input');
             const phone = input.value.trim();
-            const isValid = window.Validators?.isValidPhone(phone);
+            const result = window.Validators?.telefono(phone);
             
             const resultHtml = createTestItem(
                 'Resultado',
-                isValid ? '✓ Teléfono válido' : '✗ Teléfono inválido',
-                isValid
+                result?.valid ? '✓ Teléfono válido' : `✗ ${result?.message || 'Teléfono inválido'}`,
+                result?.valid
             );
             
             document.getElementById('phone-results').innerHTML = resultHtml;
@@ -489,12 +495,12 @@
         function testSinglePassword() {
             const input = document.getElementById('password-input');
             const password = input.value;
-            const isValid = window.Validators?.isValidPassword(password, 6);
+            const result = window.Validators?.password(password);
             
             const resultHtml = createTestItem(
                 'Resultado',
-                isValid ? '✓ Contraseña válida (min 6 caracteres)' : '✗ Contraseña muy corta',
-                isValid
+                result?.valid ? '✓ Contraseña válida (min 6 caracteres)' : `✗ ${result?.message || 'Contraseña inválida'}`,
+                result?.valid
             );
             
             document.getElementById('password-results').innerHTML = resultHtml;
@@ -512,45 +518,45 @@
             let dateHtml = '';
             dateHtml += createTestItem(
                 'Fecha larga',
-                window.Formatters?.formatDate(testDate, 'long') || 'N/A'
+                window.Formatters?.fecha(testDate, 'largo') || 'N/A'
             );
             dateHtml += createTestItem(
                 'Fecha corta',
-                window.Formatters?.formatDate(testDate, 'short') || 'N/A'
+                window.Formatters?.fecha(testDate, 'corto') || 'N/A'
             );
             dateHtml += createTestItem(
-                'Fecha numérica',
-                window.Formatters?.formatDate(testDate, 'numeric') || 'N/A'
+                'Fecha completa',
+                window.Formatters?.fecha(testDate, 'completo') || 'N/A'
             );
             document.getElementById('date-format-results').innerHTML = dateHtml;
             
             // Moneda
             let currencyHtml = '';
-            currencyHtml += createTestItem('150.50 PEN', window.Formatters?.formatCurrency(150.50) || 'N/A');
-            currencyHtml += createTestItem('1250 PEN', window.Formatters?.formatCurrency(1250) || 'N/A');
-            currencyHtml += createTestItem('0.99 PEN', window.Formatters?.formatCurrency(0.99) || 'N/A');
+            currencyHtml += createTestItem('150.50 PEN', window.Formatters?.moneda(150.50) || 'N/A');
+            currencyHtml += createTestItem('1250 PEN', window.Formatters?.moneda(1250) || 'N/A');
+            currencyHtml += createTestItem('0.99 PEN', window.Formatters?.moneda(0.99) || 'N/A');
             document.getElementById('currency-results').innerHTML = currencyHtml;
             
             // Distancia
             let distanceHtml = '';
-            distanceHtml += createTestItem('500 metros', window.Formatters?.formatDistance(500) || 'N/A');
-            distanceHtml += createTestItem('1500 metros', window.Formatters?.formatDistance(1500) || 'N/A');
-            distanceHtml += createTestItem('5000 metros', window.Formatters?.formatDistance(5000) || 'N/A');
+            distanceHtml += createTestItem('500 metros', window.Formatters?.distancia(500) || 'N/A');
+            distanceHtml += createTestItem('1500 metros', window.Formatters?.distancia(1500) || 'N/A');
+            distanceHtml += createTestItem('5000 metros', window.Formatters?.distancia(5000) || 'N/A');
             document.getElementById('distance-results').innerHTML = distanceHtml;
             
             // Texto
             let textHtml = '';
             textHtml += createTestItem(
                 'Capitalizar: "hola mundo"',
-                window.Formatters?.capitalize('hola mundo') || 'N/A'
+                window.Formatters?.capitalizar('hola mundo') || 'N/A'
             );
             textHtml += createTestItem(
                 'Slug: "Convención AMIP 2026"',
-                window.Formatters?.slugify('Convención AMIP 2026') || 'N/A'
+                window.Formatters?.slug('Convención AMIP 2026') || 'N/A'
             );
             textHtml += createTestItem(
                 'Truncar: "Texto muy largo para mostrar completo" (20)',
-                window.Formatters?.truncate('Texto muy largo para mostrar completo', 20) || 'N/A'
+                window.Formatters?.truncar('Texto muy largo para mostrar completo', 20) || 'N/A'
             );
             document.getElementById('text-results').innerHTML = textHtml;
             
@@ -567,16 +573,18 @@
             // URL
             let urlHtml = '';
             const params = { nombre: 'Juan', edad: 25 };
+            const queryString = window.Helpers?.getURLParams ? 'Método disponible ✓' : 'N/A';
             urlHtml += createTestItem(
-                'buildQueryString',
-                window.Helpers?.buildQueryString(params) || 'N/A'
+                'getURLParams disponible',
+                queryString
             );
             document.getElementById('url-results').innerHTML = urlHtml;
             
             // Numbers
             let numberHtml = '';
-            numberHtml += createTestItem('Random 1-100', window.Helpers?.randomNumber(1, 100)?.toString() || 'N/A');
-            numberHtml += createTestItem('Clamp(150, 0, 100)', window.Helpers?.clamp(150, 0, 100)?.toString() || 'N/A');
+            const randomNum = window.Helpers?.generateId ? window.Helpers.generateId() : 'N/A';
+            numberHtml += createTestItem('Generar ID único', randomNum);
+            numberHtml += createTestItem('Truncar texto', window.Helpers?.truncate('Texto de prueba muy largo', 10) || 'N/A');
             document.getElementById('number-results').innerHTML = numberHtml;
             
             updateStatus('✅ Helpers probados correctamente', 'success');
@@ -599,34 +607,34 @@
         }
         
         function showSuccessNotif() {
-            if (window.Notifications) {
-                window.Notifications.success('¡Operación exitosa!', 'Los datos se guardaron correctamente.');
+            if (window.Notify) {
+                window.Notify.success('¡Operación exitosa!', { title: 'Éxito' });
             } else {
-                alert('Notifications no está cargado');
+                alert('Notify no está cargado');
             }
         }
         
         function showErrorNotif() {
-            if (window.Notifications) {
-                window.Notifications.error('Error al procesar', 'No se pudo completar la operación.');
+            if (window.Notify) {
+                window.Notify.error('Error al procesar', { title: 'Error' });
             } else {
-                alert('Notifications no está cargado');
+                alert('Notify no está cargado');
             }
         }
         
         function showWarningNotif() {
-            if (window.Notifications) {
-                window.Notifications.warning('Advertencia', 'Verifica los datos antes de continuar.');
+            if (window.Notify) {
+                window.Notify.warning('Verifica los datos antes de continuar', { title: 'Advertencia' });
             } else {
-                alert('Notifications no está cargado');
+                alert('Notify no está cargado');
             }
         }
         
         function showInfoNotif() {
-            if (window.Notifications) {
-                window.Notifications.info('Información', 'Tienes 3 nuevas notificaciones.');
+            if (window.Notify) {
+                window.Notify.info('Tienes 3 nuevas notificaciones', { title: 'Información' });
             } else {
-                alert('Notifications no está cargado');
+                alert('Notify no está cargado');
             }
         }
         
@@ -658,7 +666,7 @@
             console.log('Validators:', typeof window.Validators);
             console.log('Formatters:', typeof window.Formatters);
             console.log('Helpers:', typeof window.Helpers);
-            console.log('Notifications:', typeof window.Notifications);
+            console.log('Notify:', typeof window.Notify);
         });
     </script>
 </body>
