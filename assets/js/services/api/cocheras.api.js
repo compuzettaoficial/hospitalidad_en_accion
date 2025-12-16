@@ -108,16 +108,3 @@ const CocherasAPI = {
 window.CocherasAPI = CocherasAPI;
 
 console.log('✅ cocheras.api.js cargado correctamente');
-```
-
----
-
-## 📁 SOBRE LAS IMÁGENES DE EXPOSITORES
-
-Sí, lo tengo en cuenta. Actualiza tu estructura de imágenes así:
-```
-assets/images/
-├── expositores/
-│   ├── pastor-juan-perez.jpg
-│   ├── pastora-maria-gonzalez.jpg
-│   └── placeholder-speaker.jpg  (imagen genérica si no hay foto)
