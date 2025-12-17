@@ -348,7 +348,7 @@
                 console.log('✅ Usuario ya logueado:', user.email);
                 console.log('🔄 Redirigiendo a perfil...');
                 // Usar ruta relativa si no existe AppConfig
-                window.location.href = '../perfil.html';
+                window.location.href = '../user/perfil.html';
             } else {
                 console.log('👤 No hay usuario logueado, mostrando formulario');
             }
@@ -412,7 +412,7 @@
                 // Esperar 1 segundo antes de redirigir
                 setTimeout(() => {
                     console.log('🔄 Redirigiendo...');
-                    window.location.href = '../perfil.html';
+                    window.location.href = '../user/perfil.html';
                 }, 1000);
                 
             } catch (error) {
