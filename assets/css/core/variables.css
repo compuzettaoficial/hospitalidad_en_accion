@@ -14,6 +14,34 @@
   --color-primary: #5B95C2;      /* Azul acero */
   --color-secondary: #56B4A0;    /* Verde azulado */
   --color-accent: #507991;       /* Gris azulado oscuro */
+
+
+  --color-danger: #DC2626;           /* Rojo fuerte para botones/alertas */
+  --color-danger-light: #FEE2E2;     /* Rojo claro para fondos */
+  --color-danger-dark: #991B1B;      /* Rojo oscuro para hover */
+  
+  --color-red: #EF4444;              /* Rojo principal alternativo */
+  --color-red-light: #FCA5A5;        /* Rojo suave */
+  --color-red-dark: #B91C1C;         /* Rojo intenso */
+
+/* ============================================
+   USO RECOMENDADO:
+   ============================================
+   
+   Botones de acción crítica:
+   background: var(--color-danger);
+   
+   Botones de eliminar/cancelar:
+   background: var(--color-red);
+   
+   Alertas de error:
+   background: var(--color-danger-light);
+   color: var(--color-danger-dark);
+   
+   Hover en botones rojos:
+   background: var(--color-danger-dark);
+   
+   ============================================ */
   
   /* ============================================
      COLORES DE FONDO
