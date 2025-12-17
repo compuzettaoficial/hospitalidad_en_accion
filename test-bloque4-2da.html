@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Datos de Prueba - Hospitalidad</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: monospace; }
+        body { background: #1a1a1a; color: #0f0; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 { color: #0f0; margin-bottom: 20px; }
+        button { 
+            background: #0f0; 
+            color: #000; 
+            border: none; 
+            padding: 15px 30px; 
+            margin: 10px 5px; 
+            cursor: pointer; 
+            font-weight: bold;
+            font-size: 14px;
+        }
+        button:hover { background: #0d0; }
+        button:disabled { background: #555; cursor: not-allowed; }
+        .log { 
+            background: #000; 
+            border: 2px solid #0f0; 
+            padding: 20px; 
+            margin: 20px 0; 
+            height: 400px; 
+            overflow-y: auto; 
+            white-space: pre-wrap;
+        }
+        .success { color: #0f0; }
+        .error { color: #f00; }
+        .warning { color: #ff0; }
+        .info { color: #0af; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚡ CREADOR RÁPIDO DE DATOS</h1>
+        
+        <div>
+            <button onclick="crearVisitante()">➕ Crear Visitante</button>
+            <button onclick="crearAnfitrion()">🏠 Crear Anfitrión</button>
+            <button onclick="crearAmbos()">🔥 Crear Ambos (Visitante + Anfitrión)</button>
+            <button onclick="limpiarLog()">🗑️ Limpiar Log</button>
+        </div>
+
+        <div class="log" id="log">Esperando acciones...</div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Config Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBFaCbNqpd93Eirj7NDnkKtOS6Ym0rMoiA",
+            authDomain: "hospitalidad-29c5c.firebaseapp.com",
+            projectId: "hospitalidad-29c5c",
+            storageBucket: "hospitalidad-29c5c.appspot.com",
+            messagingSenderId: "1061561367897",
+            appId: "1:1061561367897:web:57921b5aa3eb7bc3132048"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        const eventoId = 'amip-chimbote-feb2026';
+
+        function log(msg, type = 'info') {
+            const logEl = document.getElementById('log');
+            const time = new Date().toLocaleTimeString();
+            logEl.innerHTML += `<span class="${type}">[${time}] ${msg}</span>\n`;
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+
+        function limpiarLog() {
+            document.getElementById('log').innerHTML = 'Log limpiado.\n';
+        }
+
+        async function crearVisitante() {
+            try {
+                const user = firebase.auth().currentUser;
+                if (!user) {
+                    log('❌ ERROR: Debes iniciar sesión primero', 'error');
+                    return;
+                }
+
+                log('📝 Creando postulación de VISITANTE...', 'info');
+
+                const visitante = {
+                    tipo: 'visitante',
+                    eventoId: eventoId,
+                    usuarioId: user.uid,
+                    estado: 'aprobado',
+                    
+                    numPersonas: 2,
+                    edades: [30, 28],
+                    genero: 'mixto',
+                    fechaLlegada: '2026-02-19',
+                    fechaSalida: '2026-02-24',
+                    
+                    necesidades: 'Transporte desde terminal',
+                    preferencias: {
+                        aceptaNinos: false,
+                        tieneMascotas: false
+                    },
+                    
+                    fechaPostulacion: firebase.firestore.FieldValue.serverTimestamp(),
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+
+                const docRef = await db.collection('postulaciones').add(visitante);
+                
+                log(`✅ VISITANTE CREADO: ${docRef.id}`, 'success');
+                log(`   - Personas: ${visitante.numPersonas}`, 'success');
+                log(`   - Estado: ${visitante.estado}`, 'success');
+
+            } catch (error) {
+                log(`❌ ERROR: ${error.message}`, 'error');
+                console.error(error);
+            }
+        }
+
+        async function crearAnfitrion() {
+            try {
+                const user = firebase.auth().currentUser;
+                if (!user) {
+                    log('❌ ERROR: Debes iniciar sesión primero', 'error');
+                    return;
+                }
+
+                log('🏠 Creando postulación de ANFITRIÓN...', 'info');
+
+                const anfitrion = {
+                    tipo: 'anfitrion',
+                    eventoId: eventoId,
+                    usuarioId: user.uid,
+                    estado: 'aprobado',
+                    
+                    capacidad: 4,
+                    capacidadDisponible: 4,
+                    direccion: 'Av. Pacifico 123, Nuevo Chimbote',
+                    referencia: 'Cerca del mercado central',
+                    distanciaEvento: {
+                        metros: 1200,
+                        texto: '1.2 km'
+                    },
+                    
+                    generoAcepta: 'ambos',
+                    aceptaNinos: true,
+                    aceptaMascotas: false,
+                    
+                    comodidades: ['WiFi', 'Desayuno', 'Baño privado', 'Estacionamiento'],
+                    restricciones: 'No fumar dentro de la casa',
+                    
+                    fechaDisponibleDesde: '2026-02-19',
+                    fechaDisponibleHasta: '2026-02-25',
+                    
+                    fechaPostulacion: firebase.firestore.FieldValue.serverTimestamp(),
+                    visitantesAsignados: [],
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+
+                const docRef = await db.collection('postulaciones').add(anfitrion);
+                
+                log(`✅ ANFITRIÓN CREADO: ${docRef.id}`, 'success');
+                log(`   - Capacidad: ${anfitrion.capacidad} personas`, 'success');
+                log(`   - Distancia: ${anfitrion.distanciaEvento.texto}`, 'success');
+
+            } catch (error) {
+                log(`❌ ERROR: ${error.message}`, 'error');
+                console.error(error);
+            }
+        }
+
+        async function crearAmbos() {
+            log('🔥 Creando VISITANTE y ANFITRIÓN...', 'warning');
+            await crearVisitante();
+            await new Promise(r => setTimeout(r, 1000));
+            await crearAnfitrion();
+            log('✅ PROCESO COMPLETADO', 'success');
+            log('💡 Ahora vuelve al test y prueba el Matching', 'info');
+        }
+
+        // Verificar auth al cargar
+        window.addEventListener('load', () => {
+            firebase.auth().onAuthStateChanged(user => {
+                if (user) {
+                    log(`✅ Usuario autenticado: ${user.email}`, 'success');
+                    log(`📍 UID: ${user.uid}`, 'info');
+                    log('', 'info');
+                    log('📋 INSTRUCCIONES:', 'warning');
+                    log('1. Click en "Crear Ambos" para crear visitante + anfitrión', 'info');
+                    log('2. Espera 5 segundos', 'info');
+                    log('3. Vuelve al test-bloque4.html', 'info');
+                    log('4. Prueba "Ver Sugerencias Matching"', 'info');
+                    log('', 'info');
+                } else {
+                    log('❌ NO HAY USUARIO AUTENTICADO', 'error');
+                    log('👉 Ve a /pages/auth/login.html primero', 'warning');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
