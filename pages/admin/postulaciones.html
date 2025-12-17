@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Postulaciones - Admin</title>
+    
+    <link rel="icon" href="../../assets/images/branding/favicon.ico">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/components.css">
+    <link rel="stylesheet" href="../../assets/css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .admin-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+            padding-top: 70px;
+        }
+        
+        .admin-sidebar {
+            background: var(--color-accent);
+            color: white;
+            padding: var(--spacing-lg);
+            position: fixed;
+            left: 0;
+            top: 70px;
+            bottom: 0;
+            width: 250px;
+            overflow-y: auto;
+        }
+        
+        .sidebar-menu-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-md);
+            color: rgba(255,255,255,0.8);
+            border-radius: var(--border-radius-md);
+            margin-bottom: var(--spacing-xs);
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+        
+        .sidebar-menu-item:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+        
+        .sidebar-menu-item.active {
+            background: var(--color-primary);
+            color: white;
+        }
+        
+        .admin-main {
+            margin-left: 250px;
+            padding: var(--spacing-xl);
+            background: var(--color-bg-light);
+            min-height: calc(100vh - 70px);
+        }
+        
+        .filter-tabs {
+            display: flex;
+            gap: var(--spacing-xs);
+            background: white;
+            padding: var(--spacing-xs);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: var(--spacing-lg);
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            padding: var(--spacing-sm) var(--spacing-lg);
+            border: none;
+            background: transparent;
+            color: var(--color-text-dark);
+            font-weight: 600;
+            border-radius: var(--border-radius-md);
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+        
+        .tab-btn:hover {
+            background: var(--color-bg-light);
+        }
+        
+        .tab-btn.active {
+            background: var(--color-primary);
+            color: white;
+        }
+        
+        .postulacion-card {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
+            box-shadow: var(--shadow-md);
+            border-left: 4px solid var(--color-primary);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: var(--spacing-md);
+            gap: var(--spacing-md);
+        }
+        
+        .card-body {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .info-label {
+            font-size: 0.85rem;
+            color: var(--color-text-light);
+        }
+        
+        .info-value {
+            font-weight: 600;
+            color: var(--color-text-dark);
+        }
+        
+        .card-footer {
+            display: flex;
+            gap: var(--spacing-sm);
+            padding-top: var(--spacing-md);
+            border-top: 2px solid var(--color-bg-light);
+            flex-wrap: wrap;
+        }
+        
+        .estado-badge {
+            padding: 0.5rem var(--spacing-md);
+            border-radius: var(--border-radius-lg);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .estado-pendiente { background: rgba(245, 158, 11, 0.1); color: var(--color-warning); }
+        .estado-aprobado { background: rgba(16, 185, 129, 0.1); color: var(--color-success); }
+        .estado-rechazado { background: rgba(239, 68, 68, 0.1); color: var(--color-error); }
+        
+        .tipo-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: 0.3rem var(--spacing-sm);
+            border-radius: var(--border-radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .tipo-visitante { background: rgba(91, 149, 194, 0.1); color: var(--color-primary); }
+        .tipo-anfitrion { background: rgba(86, 180, 160, 0.1); color: var(--color-secondary); }
+        
+        @media (max-width: 768px) {
+            .admin-layout { grid-template-columns: 1fr; }
+            .admin-sidebar { position: static; width: 100%; }
+            .admin-main { margin-left: 0; }
+            .card-header { flex-direction: column; }
+            .card-body { grid-template-columns: 1fr; }
+            .card-footer { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="navbar-brand">
+                    <img src="../../assets/images/branding/logo.png" alt="Logo" class="logo">
+                    <span class="brand-name">Admin Panel</span>
+                </div>
+                <ul class="navbar-menu">
+                    <li><a href="../../index.html">Ver Sitio</a></li>
+                    <li><a href="#" id="logoutBtn" class="btn-login">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="admin-layout">
+        
+        <aside class="admin-sidebar">
+            <div style="font-size: 1.2rem; font-weight: 700; margin-bottom: var(--spacing-lg); padding-bottom: var(--spacing-md); border-bottom: 2px solid rgba(255,255,255,0.2);">
+                <i class="fas fa-shield-alt"></i> Panel Admin
+            </div>
+            
+            <a href="dashboard.html" class="sidebar-menu-item">
+                <i class="fas fa-chart-line"></i><span>Dashboard</span>
+            </a>
+            <a href="agregar-evento.html" class="sidebar-menu-item">
+                <i class="fas fa-calendar-plus"></i><span>Agregar Evento</span>
+            </a>
+            <a href="agregar-hotel.html" class="sidebar-menu-item">
+                <i class="fas fa-hotel"></i><span>Agregar Hotel</span>
+            </a>
+            <a href="postulaciones.html" class="sidebar-menu-item active">
+                <i class="fas fa-clipboard-list"></i><span>Postulaciones</span>
+            </a>
+        </aside>
+        
+        <main class="admin-main">
+            
+            <div style="margin-bottom: var(--spacing-xl);">
+                <h1 style="font-size: 2rem; color: var(--color-accent); margin-bottom: var(--spacing-xs);">
+                    <i class="fas fa-clipboard-list"></i> Gestionar Postulaciones
+                </h1>
+                <p>Revisa, aprueba o rechaza las postulaciones de visitantes y anfitriones</p>
+            </div>
+            
+            <!-- Filtros -->
+            <div class="filter-tabs">
+                <button class="tab-btn active" data-filter="todas">Todas</button>
+                <button class="tab-btn" data-filter="pendiente">Pendientes</button>
+                <button class="tab-btn" data-filter="aprobado">Aprobadas</button>
+                <button class="tab-btn" data-filter="rechazado">Rechazadas</button>
+                <button class="tab-btn" data-filter="visitante">Visitantes</button>
+                <button class="tab-btn" data-filter="anfitrion">Anfitriones</button>
+            </div>
+            
+            <!-- Loading -->
+            <div id="loadingContainer" class="loading">
+                <i class="fas fa-spinner fa-spin"></i> Cargando postulaciones...
+            </div>
+            
+            <!-- Postulaciones Container -->
+            <div id="postulacionesContainer" style="display: none;"></div>
+            
+            <!-- Empty State -->
+            <div id="emptyState" style="display: none; text-align: center; padding: var(--spacing-xl); background: white; border-radius: var(--border-radius-lg);">
+                <i class="fas fa-inbox" style="font-size: 3rem; color: var(--color-text-light); margin-bottom: var(--spacing-md);"></i>
+                <h3>No hay postulaciones</h3>
+                <p style="color: var(--color-text-light);">No se encontraron postulaciones con los filtros seleccionados</p>
+            </div>
+            
+        </main>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="../../assets/js/config/firebase-config.js"></script>
+    <script src="../../assets/js/services/auth.service.js"></script>
+    <script src="../../assets/js/services/eventos.service.js"></script>
+    <script src="../../assets/js/services/hospitalidad.service.js"></script>
+    
+    <script>
+        AuthService.protectPage('../auth/login.html');
+        
+        let todasPostulaciones = [];
+        let filtroActual = 'todas';
+        
+        // Verificar admin
+        async function verificarAdmin() {
+            const isAdmin = await AuthService.isAdmin();
+            if (!isAdmin) {
+                alert('No tienes permisos de administrador');
+                window.location.href = '../user/perfil.html';
+            }
+        }
+        
+        // Cargar postulaciones
+        async function cargarPostulaciones() {
+            try {
+                const snapshot = await db.collection('postulaciones')
+                    .where('activo', '==', true)
+                    .orderBy('fechaPostulacion', 'desc')
+                    .get();
+                
+                todasPostulaciones = [];
+                snapshot.forEach(doc => {
+                    todasPostulaciones.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+                
+                if (todasPostulaciones.length === 0) {
+                    document.getElementById('loadingContainer').style.display = 'none';
+                    document.getElementById('emptyState').style.display = 'block';
+                    return;
+                }
+                
+                mostrarPostulaciones();
+                document.getElementById('loadingContainer').style.display = 'none';
+                document.getElementById('postulacionesContainer').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('loadingContainer').innerHTML = 
+                    '<p class="text-center text-error">Error al cargar postulaciones</p>';
+            }
+        }
+        
+        // Mostrar postulaciones
+        async function mostrarPostulaciones() {
+            let filtradas = todasPostulaciones;
+            
+            if (filtroActual === 'pendiente' || filtroActual === 'aprobado' || filtroActual === 'rechazado') {
+                filtradas = todasPostulaciones.filter(p => p.estado === filtroActual);
+            } else if (filtroActual === 'visitante' || filtroActual === 'anfitrion') {
+                filtradas = todasPostulaciones.filter(p => p.tipo === filtroActual);
+            }
+            
+            if (filtradas.length === 0) {
+                document.getElementById('postulacionesContainer').style.display = 'none';
+                document.getElementById('emptyState').style.display = 'block';
+                return;
+            }
+            
+            document.getElementById('postulacionesContainer').style.display = 'block';
+            document.getElementById('emptyState').style.display = 'none';
+            
+            const container = document.getElementById('postulacionesContainer');
+            container.innerHTML = '';
+            
+            for (const post of filtradas) {
+                const card = await crearCard(post);
+                container.innerHTML += card;
+            }
+            
+            // Event listeners
+            document.querySelectorAll('.btn-aprobar').forEach(btn => {
+                btn.addEventListener('click', () => cambiarEstado(btn.dataset.id, 'aprobado'));
+            });
+            
+            document.querySelectorAll('.btn-rechazar').forEach(btn => {
+                btn.addEventListener('click', () => cambiarEstado(btn.dataset.id, 'rechazado'));
+            });
+        }
+        
+        // Crear card
+        async function crearCard(post) {
+            const evento = await EventosService.getEventoById(post.eventoId);
+            const eventoNombre = evento ? evento.titulo : 'Evento no encontrado';
+            
+            let detallesHTML = '';
+            
+            if (post.tipo === 'visitante') {
+                const noches = HospitalidadService.calcularNoches(post.fechaLlegada, post.fechaSalida);
+                detallesHTML = `
+                    <div class="info-item">
+                        <span class="info-label">Llegada</span>
+                        <span class="info-value">${new Date(post.fechaLlegada).toLocaleDateString('es-PE')}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Salida</span>
+                        <span class="info-value">${new Date(post.fechaSalida).toLocaleDateString('es-PE')}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Noches</span>
+                        <span class="info-value">${noches}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Personas</span>
+                        <span class="info-value">${post.numeroPersonas}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Origen</span>
+                        <span class="info-value">${post.ciudadOrigen}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Género</span>
+                        <span class="info-value">${post.genero}</span>
+                    </div>
+                `;
+            } else {
+                detallesHTML = `
+                    <div class="info-item">
+                        <span class="info-label">Capacidad</span>
+                        <span class="info-value">${post.capacidad} personas</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Habitaciones</span>
+                        <span class="info-value">${post.habitacionesDisponibles}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Dirección</span>
+                        <span class="info-value">${post.direccion}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Distrito</span>
+                        <span class="info-value">${post.distrito}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Servicios</span>
+                        <span class="info-value">${post.servicios.length} disponibles</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Preferencia</span>
+                        <span class="info-value">${post.generoPreferencia}</span>
+                    </div>
+                `;
+            }
+            
+            const fecha = HospitalidadService.formatearFecha(post.fechaPostulacion);
+            
+            return `
+                <div class="postulacion-card">
+                    <div class="card-header">
+                        <div>
+                            <span class="tipo-badge tipo-${post.tipo}">
+                                <i class="fas fa-${post.tipo === 'visitante' ? 'hand-holding-heart' : 'home'}"></i>
+                                ${post.tipo === 'visitante' ? 'Visitante' : 'Anfitrión'}
+                            </span>
+                            <h3 style="margin: var(--spacing-sm) 0;">${post.nombre}</h3>
+                            <p style="color: var(--color-text-light); font-size: 0.9rem;">
+                                ${eventoNombre} • ${fecha}
+                            </p>
+                        </div>
+                        <span class="estado-badge estado-${post.estado}">
+                            ${post.estado.toUpperCase()}
+                        </span>
+                    </div>
+                    
+                    <div class="card-body">
+                        ${detallesHTML}
+                        <div class="info-item">
+                            <span class="info-label">Email</span>
+                            <span class="info-value">${post.email}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Teléfono</span>
+                            <span class="info-value">${post.telefono}</span>
+                        </div>
+                    </div>
+                    
+                    ${post.comentarios ? `
+                        <div style="background: var(--color-bg-light); padding: var(--spacing-md); border-radius: var(--border-radius-md); margin-bottom: var(--spacing-md);">
+                            <strong>Comentarios:</strong><br>
+                            ${post.comentarios}
+                        </div>
+                    ` : ''}
+                    
+                    <div class="card-footer">
+                        ${post.estado === 'pendiente' ? `
+                            <button class="btn btn-primary btn-aprobar" data-id="${post.id}">
+                                <i class="fas fa-check"></i> Aprobar
+                            </button>
+                            <button class="btn btn-outline btn-rechazar" data-id="${post.id}" 
+                                    style="border-color: var(--color-error); color: var(--color-error);">
+                                <i class="fas fa-times"></i> Rechazar
+                            </button>
+                        ` : ''}
+                        <a href="mailto:${post.email}" class="btn btn-outline">
+                            <i class="fas fa-envelope"></i> Email
+                        </a>
+                        <a href="tel:${post.telefono}" class="btn btn-outline">
+                            <i class="fas fa-phone"></i> Llamar
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Cambiar estado
+        async function cambiarEstado(postulacionId, nuevoEstado) {
+            const confirmar = confirm(`¿Seguro que quieres ${nuevoEstado === 'aprobado' ? 'aprobar' : 'rechazar'} esta postulación?`);
+            
+            if (!confirmar) return;
+            
+            try {
+                await db.collection('postulaciones').doc(postulacionId).update({
+                    estado: nuevoEstado,
+                    ultimaActualizacion: firebase.firestore.FieldValue.serverTimestamp(),
+                    revisadoPor: firebase.auth().currentUser.uid
+                });
+                
+                alert('Estado actualizado correctamente');
+                cargarPostulaciones();
+                
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al actualizar el estado');
+            }
+        }
+        
+        // Filtros
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                filtroActual = btn.dataset.filter;
+                mostrarPostulaciones();
+            });
+        });
+        
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            await AuthService.logout();
+            window.location.href = '../../index.html';
+        });
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', async () => {
+            await verificarAdmin();
+            await cargarPostulaciones();
+        });
+    </script>
+</body>
+</html>
