@@ -100,12 +100,20 @@ const MatchingService = {
    * @param {string} eventoId - ID del evento
    * @returns {Promise<Array>}
    */
-  async getSugerenciasEvento(eventoId) {
-    try {
-      const { visitantes, anfitriones } = await PostulacionesService.getPendientesByEvento(eventoId);
-      
-      const aprobadosVisitantes = visitantes.filter(v => v.estado === CONSTANTS.ESTADOS.APROBADO);
-      const aprobadosAnfitriones = anfitriones.filter(a => a.estado === CONSTANTS.ESTADOS.APROBADO);
+async getSugerenciasEvento(eventoId) {
+  try {
+    // Obtener TODAS las postulaciones del evento
+    const postulaciones = await PostulacionesService.getByEvento(eventoId);
+    
+    // Filtrar aprobados
+    const aprobadosVisitantes = postulaciones.filter(p => 
+      p.tipo === CONSTANTS.TIPOS_POSTULACION.VISITANTE && 
+      p.estado === CONSTANTS.ESTADOS.APROBADO
+    );
+    const aprobadosAnfitriones = postulaciones.filter(p => 
+      p.tipo === CONSTANTS.TIPOS_POSTULACION.ANFITRION && 
+      p.estado === CONSTANTS.ESTADOS.APROBADO
+    );
       
       const sugerencias = [];
       
