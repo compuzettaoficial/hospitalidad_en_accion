@@ -5,13 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Perfil - Hospitalidad en Acción</title>
     
+    <!-- Favicon -->
     <link rel="icon" href="../../assets/images/branding/favicon.ico">
+    
+    <!-- CSS -->
     <link rel="stylesheet" href="../../assets/css/main.css">
-    <link rel="stylesheet" href="../../assets/css/components.css">
-    <link rel="stylesheet" href="../../assets/css/responsive.css">
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        /* ============================================
+           PROFILE HEADER
+           ============================================ */
         .profile-header {
             background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
             padding: var(--spacing-xl) 0;
@@ -32,19 +38,28 @@
             font-size: 3rem;
         }
         
+        /* ============================================
+           STATS
+           ============================================ */
         .profile-stats {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: var(--spacing-lg);
             margin: var(--spacing-xl) 0;
         }
         
         .stat-card {
-            background: var(--color-white);
+            background: var(--color-bg-white);
             padding: var(--spacing-lg);
             border-radius: var(--border-radius-lg);
             text-align: center;
             box-shadow: var(--shadow-md);
+            transition: var(--transition-base);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
         }
         
         .stat-icon {
@@ -55,15 +70,37 @@
         
         .stat-number {
             font-size: 2rem;
-            font-weight: 700;
+            font-weight: var(--font-weight-bold);
             color: var(--color-accent);
         }
         
+        .stat-label {
+            color: var(--color-text-secondary);
+            margin-top: var(--spacing-xs);
+            font-size: var(--font-size-sm);
+        }
+        
+        /* ============================================
+           LAYOUT
+           ============================================ */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-xl);
+        }
+        
+        /* ============================================
+           SIDEBAR
+           ============================================ */
         .sidebar {
-            background: var(--color-white);
+            background: var(--color-bg-white);
             border-radius: var(--border-radius-lg);
             padding: var(--spacing-lg);
             box-shadow: var(--shadow-md);
+            height: fit-content;
+            position: sticky;
+            top: var(--spacing-lg);
         }
         
         .sidebar-menu {
@@ -80,48 +117,244 @@
             gap: var(--spacing-sm);
             padding: var(--spacing-md);
             border-radius: var(--border-radius-md);
-            color: var(--color-text-dark);
-            transition: all var(--transition-base);
+            color: var(--color-text-primary);
+            text-decoration: none;
+            transition: var(--transition-fast);
+            font-weight: var(--font-weight-medium);
         }
         
-        .sidebar-menu a:hover,
+        .sidebar-menu a:hover {
+            background: var(--color-bg-light);
+            color: var(--color-primary);
+        }
+        
         .sidebar-menu a.active {
             background: var(--color-primary);
             color: white;
         }
         
-        .content-grid {
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: var(--spacing-lg);
-            margin-top: var(--spacing-xl);
-        }
-        
+        /* ============================================
+           INFO CARDS
+           ============================================ */
         .info-card {
-            background: var(--color-white);
+            background: var(--color-bg-white);
             border-radius: var(--border-radius-lg);
             padding: var(--spacing-lg);
             box-shadow: var(--shadow-md);
             margin-bottom: var(--spacing-lg);
         }
         
+        .info-card h3 {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
+            color: var(--color-text-primary);
+            font-size: var(--font-size-xl);
+        }
+        
         .info-row {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             padding: var(--spacing-sm) 0;
-            border-bottom: 1px solid var(--color-bg-light);
+            border-bottom: 1px solid var(--color-border-light);
         }
         
         .info-row:last-child {
             border-bottom: none;
         }
         
+        .info-row strong {
+            color: var(--color-text-primary);
+        }
+        
+        .info-row span {
+            color: var(--color-text-secondary);
+        }
+        
+        /* ============================================
+           QUICK ACTIONS
+           ============================================ */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+        }
+        
+        .action-card {
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition-base);
+        }
+        
+        .action-card:hover {
+            transform: translateY(-4px);
+        }
+        
+        .action-icon {
+            font-size: 3rem;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .action-card h3 {
+            margin-bottom: var(--spacing-xs);
+            color: var(--color-text-primary);
+        }
+        
+        .action-card p {
+            color: var(--color-text-secondary);
+            font-size: var(--font-size-sm);
+        }
+        
+        /* ============================================
+           FORM ELEMENTS
+           ============================================ */
+        .form-group {
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: var(--spacing-xs);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-text-primary);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: var(--input-padding-y) var(--input-padding-x);
+            border: 2px solid var(--color-border-medium);
+            border-radius: var(--input-border-radius);
+            font-size: var(--font-size-base);
+            transition: var(--transition-fast);
+            background: var(--input-bg);
+            color: var(--color-text-primary);
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--input-focus-border-color);
+            box-shadow: 0 0 0 3px rgba(91, 149, 194, 0.1);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+        
+        .form-row .form-input {
+            flex: 1;
+        }
+        
+        /* ============================================
+           BUTTONS
+           ============================================ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            padding: var(--button-padding-y) var(--button-padding-x);
+            border: none;
+            border-radius: var(--button-border-radius);
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-semibold);
+            cursor: pointer;
+            transition: var(--transition-base);
+            text-decoration: none;
+        }
+        
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            background: var(--color-secondary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-primary:disabled {
+            background: var(--color-text-light);
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-danger {
+            background: var(--color-danger);
+            color: white;
+        }
+        
+        .btn-danger:hover:not(:disabled) {
+            background: var(--color-danger-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        /* ============================================
+           ALERTS
+           ============================================ */
+        .alert {
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            margin-bottom: var(--spacing-md);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            font-size: var(--font-size-sm);
+            animation: fadeInDown 0.3s ease;
+        }
+        
+        .alert-success {
+            background: var(--color-success);
+            color: white;
+        }
+        
+        .alert-error {
+            background: var(--color-error);
+            color: white;
+        }
+        
+        .alert-info {
+            background: var(--color-info);
+            color: white;
+        }
+        
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
         @media (max-width: 768px) {
             .content-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .sidebar {
+                position: static;
+            }
+            
             .profile-stats {
                 grid-template-columns: 1fr;
+            }
+            
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* ============================================
+           ANIMATIONS
+           ============================================ */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
     </style>
@@ -133,16 +366,18 @@
         <div class="container">
             <nav class="navbar">
                 <div class="navbar-brand">
-                    <img src="../../assets/images/branding/logo.png" alt="Logo" class="logo">
+                    <img src="../../assets/images/branding/logo.png" alt="Logo Hospitalidad en Acción" class="logo">
                     <span class="brand-name">Hospitalidad en Acción</span>
                 </div>
                 <ul class="navbar-menu">
-                    <li><a href="/hospitalidad_en_accion/index.html">Inicio</a></li>
-                    <li><a href="/hospitalidad_en_accion/pages/eventos.html">Eventos</a></li>
+                    <li><a href="../../index.html">Inicio</a></li>
+                    <li><a href="../eventos/lista.html">Eventos</a></li>
                     <li><a href="#" class="active">Mi Cuenta</a></li>
-                    <li><button onclick="handleLogout()" class="btn-login">
-                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-                    </button></li>
+                    <li>
+                        <button onclick="handleLogout()" class="btn-login">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </button>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -157,7 +392,6 @@
             <h1 id="userName">Cargando...</h1>
             <p id="userEmail">...</p>
             <p id="userPhone">...</p>
-            <p id="userEmailVerified">...</p>
         </div>
     </section>
 
@@ -168,147 +402,186 @@
                 <div class="stat-card">
                     <div class="stat-icon"><i class="fas fa-hand-holding-heart"></i></div>
                     <div class="stat-number" id="statPostulaciones">0</div>
-                    <div style="color: var(--color-text-light); margin-top: var(--spacing-xs);">Postulaciones</div>
+                    <div class="stat-label">Postulaciones</div>
                 </div>
                 
                 <div class="stat-card">
                     <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
                     <div class="stat-number" id="statEventos">0</div>
-                    <div style="color: var(--color-text-light); margin-top: var(--spacing-xs);">Eventos Asistidos</div>
+                    <div class="stat-label">Eventos Asistidos</div>
                 </div>
                 
                 <div class="stat-card">
                     <div class="stat-icon"><i class="fas fa-home"></i></div>
                     <div class="stat-number" id="statHospedajes">0</div>
-                    <div style="color: var(--color-text-light); margin-top: var(--spacing-xs);">Hospedajes Dados</div>
+                    <div class="stat-label">Hospedajes Dados</div>
                 </div>
             </div>
 
-            <!-- CONTENT -->
+            <!-- CONTENT GRID -->
             <div class="content-grid">
                 <!-- SIDEBAR -->
                 <aside class="sidebar">
                     <ul class="sidebar-menu">
-                        <li><a href="#" class="active"><i class="fas fa-home"></i> Inicio</a></li>
-                        <li><a href="#"><i class="fas fa-user-edit"></i> Editar Perfil</a></li>
-                        <li><a href="#"><i class="fas fa-clipboard-list"></i> Mis Postulaciones</a></li>
-                        <li><a href="#"><i class="fas fa-shield-alt"></i> Seguridad</a></li>
-                        <li><a href="#"><i class="fas fa-bell"></i> Notificaciones</a></li>
+                        <li><a href="#inicio" class="active" data-section="inicio">
+                            <i class="fas fa-home"></i> Inicio
+                        </a></li>
+                        <li><a href="#editar" data-section="editar">
+                            <i class="fas fa-user-edit"></i> Editar Perfil
+                        </a></li>
+                        <li><a href="#seguridad" data-section="seguridad">
+                            <i class="fas fa-shield-alt"></i> Seguridad
+                        </a></li>
+                        <li><a href="#postulaciones" data-section="postulaciones">
+                            <i class="fas fa-clipboard-list"></i> Mis Postulaciones
+                        </a></li>
                     </ul>
                 </aside>
 
                 <!-- MAIN CONTENT -->
                 <div>
-                    <h2 style="margin-bottom: var(--spacing-lg); color: var(--color-accent);">
-                        <i class="fas fa-home"></i> Panel de Inicio
-                    </h2>
+                    <!-- Alert Container -->
+                    <div id="alertContainer"></div>
 
-                    <!-- Cards de Acciones Rápidas -->
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-lg); margin-bottom: var(--spacing-xl);">
-                        <div class="info-card" style="text-align: center; cursor: pointer;" onclick="window.location.href='/hospitalidad_en_accion/pages/eventos.html'">
-                            <div style="font-size: 3rem; color: var(--color-primary); margin-bottom: var(--spacing-sm);">
-                                <i class="fas fa-calendar"></i>
+                    <!-- SECCIÓN: INICIO -->
+                    <div id="section-inicio" class="content-section">
+                        <h2 style="margin-bottom: var(--spacing-lg); color: var(--color-accent);">
+                            <i class="fas fa-home"></i> Panel de Inicio
+                        </h2>
+
+                        <!-- Quick Actions -->
+                        <div class="quick-actions">
+                            <div class="info-card action-card" onclick="window.location.href='../eventos/lista.html'">
+                                <div class="action-icon" style="color: var(--color-primary);">
+                                    <i class="fas fa-calendar"></i>
+                                </div>
+                                <h3>Ver Eventos</h3>
+                                <p>Explora próximas convenciones</p>
                             </div>
-                            <h3>Ver Eventos</h3>
-                            <p style="color: var(--color-text-light);">Explora próximas convenciones</p>
-                        </div>
 
-                        <div class="info-card" style="text-align: center; cursor: pointer;">
-                            <div style="font-size: 3rem; color: var(--color-secondary); margin-bottom: var(--spacing-sm);">
-                                <i class="fas fa-hand-holding-heart"></i>
+                            <div class="info-card action-card">
+                                <div class="action-icon" style="color: var(--color-secondary);">
+                                    <i class="fas fa-hand-holding-heart"></i>
+                                </div>
+                                <h3>Postular</h3>
+                                <p>Solicitar u ofrecer hospitalidad</p>
                             </div>
-                            <h3>Postular</h3>
-                            <p style="color: var(--color-text-light);">Solicitar u ofrecer hospitalidad</p>
-                        </div>
 
-                        <div class="info-card" style="text-align: center; cursor: pointer;">
-                            <div style="font-size: 3rem; color: var(--color-accent); margin-bottom: var(--spacing-sm);">
-                                <i class="fas fa-user-edit"></i>
-                            </div>
-                            <h3>Mi Perfil</h3>
-                            <p style="color: var(--color-text-light);">Actualizar mis datos</p>
-                        </div>
-                    </div>
-
-                    <!-- EDITAR PERFIL -->
-                    <div class="info-card">
-                        <h3 style="margin-bottom: var(--spacing-md);">
-                            <i class="fas fa-user-edit" style="color: var(--color-primary);"></i>
-                            Editar Información
-                        </h3>
-                        
-                        <!-- Editar Nombre -->
-                        <div style="margin-bottom: var(--spacing-lg);">
-                            <label style="display: block; margin-bottom: var(--spacing-xs); font-weight: 600;">
-                                <i class="fas fa-user"></i> Nombre Completo
-                            </label>
-                            <div style="display: flex; gap: var(--spacing-sm);">
-                                <input type="text" id="editNombre" class="form-input" placeholder="Tu nombre" style="flex: 1;">
-                                <button onclick="editarNombre()" id="btnGuardarNombre" class="btn btn-primary">
-                                    <i class="fas fa-save"></i> Guardar
-                                </button>
+                            <div class="info-card action-card" onclick="showSection('editar')">
+                                <div class="action-icon" style="color: var(--color-accent);">
+                                    <i class="fas fa-user-edit"></i>
+                                </div>
+                                <h3>Mi Perfil</h3>
+                                <p>Actualizar mis datos</p>
                             </div>
                         </div>
-                        
-                        <!-- Editar Teléfono -->
-                        <div style="margin-bottom: var(--spacing-lg);">
-                            <label style="display: block; margin-bottom: var(--spacing-xs); font-weight: 600;">
-                                <i class="fas fa-phone"></i> Teléfono
-                            </label>
-                            <div style="display: flex; gap: var(--spacing-sm);">
-                                <input type="tel" id="editTelefono" class="form-input" placeholder="+51 999 888 777" style="flex: 1;">
-                                <button onclick="editarTelefono()" id="btnGuardarTelefono" class="btn btn-primary">
-                                    <i class="fas fa-save"></i> Guardar
-                                </button>
+
+                        <!-- Información de Cuenta -->
+                        <div class="info-card">
+                            <h3>
+                                <i class="fas fa-info-circle" style="color: var(--color-primary);"></i>
+                                Información de Cuenta
+                            </h3>
+                            
+                            <div class="info-row">
+                                <strong>Fecha de Registro:</strong>
+                                <span id="fechaRegistro">No disponible</span>
+                            </div>
+                            <div class="info-row">
+                                <strong>Última Conexión:</strong>
+                                <span id="ultimaConexion">Ahora</span>
+                            </div>
+                            <div class="info-row">
+                                <strong>Estado de Email:</strong>
+                                <span id="estadoEmail">
+                                    <span style="color: var(--color-success);">
+                                        <i class="fas fa-check-circle"></i> Activo
+                                    </span>
+                                </span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- CAMBIAR CONTRASEÑA -->
-                    <div class="info-card">
-                        <h3 style="margin-bottom: var(--spacing-md);">
-                            <i class="fas fa-lock" style="color: var(--color-accent);"></i>
-                            Cambiar Contraseña
-                        </h3>
-                        
-                        <div style="margin-bottom: var(--spacing-md);">
-                            <input type="password" id="passwordActual" class="form-input" placeholder="Contraseña actual">
+                    <!-- SECCIÓN: EDITAR PERFIL -->
+                    <div id="section-editar" class="content-section" style="display: none;">
+                        <h2 style="margin-bottom: var(--spacing-lg); color: var(--color-accent);">
+                            <i class="fas fa-user-edit"></i> Editar Perfil
+                        </h2>
+
+                        <div class="info-card">
+                            <!-- Editar Nombre -->
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-user"></i> Nombre Completo
+                                </label>
+                                <div class="form-row">
+                                    <input type="text" id="editNombre" class="form-input" placeholder="Tu nombre completo">
+                                    <button onclick="editarNombre()" id="btnGuardarNombre" class="btn btn-primary">
+                                        <i class="fas fa-save"></i> Guardar
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Editar Teléfono -->
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-phone"></i> Teléfono
+                                </label>
+                                <div class="form-row">
+                                    <input type="tel" id="editTelefono" class="form-input" placeholder="+51 999 888 777">
+                                    <button onclick="editarTelefono()" id="btnGuardarTelefono" class="btn btn-primary">
+                                        <i class="fas fa-save"></i> Guardar
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <div style="margin-bottom: var(--spacing-md);">
-                            <input type="password" id="passwordNueva" class="form-input" placeholder="Nueva contraseña (mín. 6 caracteres)">
-                        </div>
-                        <div style="margin-bottom: var(--spacing-md);">
-                            <input type="password" id="passwordConfirm" class="form-input" placeholder="Confirmar nueva contraseña">
-                        </div>
-                        
-                        <button onclick="cambiarPassword()" id="btnCambiarPassword" class="btn btn-primary">
-                            <i class="fas fa-key"></i> Cambiar Contraseña
-                        </button>
                     </div>
 
-                    <!-- Información de Cuenta -->
-                    <div class="info-card">
-                        <h3 style="margin-bottom: var(--spacing-md); display: flex; align-items: center; gap: var(--spacing-sm);">
-                            <i class="fas fa-info-circle" style="color: var(--color-primary);"></i>
-                            Información de Cuenta
-                        </h3>
-                        
-                        <div class="info-row">
-                            <strong>Fecha de Registro:</strong>
-                            <span id="fechaRegistro">No disponible</span>
+                    <!-- SECCIÓN: SEGURIDAD -->
+                    <div id="section-seguridad" class="content-section" style="display: none;">
+                        <h2 style="margin-bottom: var(--spacing-lg); color: var(--color-accent);">
+                            <i class="fas fa-shield-alt"></i> Seguridad
+                        </h2>
+
+                        <div class="info-card">
+                            <h3>
+                                <i class="fas fa-lock" style="color: var(--color-accent);"></i>
+                                Cambiar Contraseña
+                            </h3>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Contraseña Actual</label>
+                                <input type="password" id="passwordActual" class="form-input" placeholder="Tu contraseña actual">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Nueva Contraseña</label>
+                                <input type="password" id="passwordNueva" class="form-input" placeholder="Mínimo 6 caracteres">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Confirmar Nueva Contraseña</label>
+                                <input type="password" id="passwordConfirm" class="form-input" placeholder="Repite la nueva contraseña">
+                            </div>
+                            
+                            <button onclick="cambiarPassword()" id="btnCambiarPassword" class="btn btn-primary">
+                                <i class="fas fa-key"></i> Cambiar Contraseña
+                            </button>
                         </div>
-                        <div class="info-row">
-                            <strong>Última Conexión:</strong>
-                            <span id="ultimaConexion">Ahora</span>
+                    </div>
+
+                    <!-- SECCIÓN: POSTULACIONES -->
+                    <div id="section-postulaciones" class="content-section" style="display: none;">
+                        <h2 style="margin-bottom: var(--spacing-lg); color: var(--color-accent);">
+                            <i class="fas fa-clipboard-list"></i> Mis Postulaciones
+                        </h2>
+
+                        <div class="info-card">
+                            <p style="text-align: center; color: var(--color-text-secondary); padding: var(--spacing-xl);">
+                                <i class="fas fa-inbox" style="font-size: 3rem; display: block; margin-bottom: var(--spacing-md); opacity: 0.3;"></i>
+                                No tienes postulaciones aún
+                            </p>
                         </div>
-                        <div class="info-row">
-                            <strong>Estado de Email:</strong>
-                            <span id="estadoEmail">Verificando...</span>
-                        </div>
-                        
-                        <button id="btnReenviarVerificacion" class="btn btn-outline" style="display: none; margin-top: var(--spacing-md);">
-                            <i class="fas fa-envelope"></i> Reenviar Email de Verificación
-                        </button>
                     </div>
                 </div>
             </div>
@@ -324,59 +597,85 @@
         </div>
     </footer>
 
-    <!-- App Config -->
-    <script src="../../assets/js/config/app-config.js"></script>
-
-    <!-- Firebase -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    
+    <!-- Configuración Firebase -->
     <script src="../../assets/js/config/firebase-config.js"></script>
-    <script src="../../assets/js/services/auth.service.js"></script>
+    
+    <!-- Servicios -->
+    <script src="../../assets/js/services/firebase/auth.service.js"></script>
     
     <script>
-        console.log('🔍 Inicializando perfil...');
+        console.log('📄 Perfil: Inicializando...');
 
+        // ============================================
+        // VARIABLES GLOBALES
+        // ============================================
         let currentUserData = null;
 
-        // Proteger página
-        AuthService.protegerPagina().catch(error => {
-            console.error('❌ Error protegiendo página:', error);
-        });
-
-        // Cargar datos del usuario
-        AuthService.observarEstadoAuth(async (userData) => {
-            if (!userData) {
-                console.log('🚫 No hay usuario, redirigiendo...');
-                window.location.href = AppConfig.PAGES.LOGIN();
+        // ============================================
+        // PROTEGER PÁGINA Y CARGAR USUARIO
+        // ============================================
+        firebase.auth().onAuthStateChanged(async (user) => {
+            if (!user) {
+                console.log('🚫 No hay usuario, redirigiendo a login...');
+                window.location.href = '../auth/login.html';
                 return;
             }
             
-            console.log('✅ Usuario cargado:', userData);
-            currentUserData = userData;
+            console.log('✅ Usuario autenticado:', user.email);
             
-            // Mostrar datos básicos
-            document.getElementById('userName').textContent = userData.nombre || 'Usuario';
-            document.getElementById('userEmail').textContent = userData.email || 'No especificado';
-            document.getElementById('userPhone').textContent = userData.telefono || 'No especificado';
-            
-            // Email siempre activo
-            document.getElementById('userEmailVerified').innerHTML = 
-                '<i class="fas fa-check-circle" style="color: #10B981;"></i> Cuenta Activa';
-            
-            document.getElementById('estadoEmail').innerHTML = 
-                '<span style="color: var(--color-success);"><i class="fas fa-check-circle"></i> Activo</span>';
-            
-            const btnReenviar = document.getElementById('btnReenviarVerificacion');
-            if (btnReenviar) {
-                btnReenviar.style.display = 'none';
+            try {
+                // Obtener datos adicionales de Firestore
+                const db = firebase.firestore();
+                const userDoc = await db.collection('usuarios').doc(user.uid).get();
+                
+                if (userDoc.exists) {
+                    currentUserData = {
+                        uid: user.uid,
+                        email: user.email,
+                        ...userDoc.data()
+                    };
+                } else {
+                    currentUserData = {
+                        uid: user.uid,
+                        email: user.email,
+                        nombre: user.displayName || 'Usuario',
+                        telefono: '',
+                        fechaCreacion: firebase.firestore.Timestamp.now()
+                    };
+                }
+                
+                console.log('📊 Datos del usuario cargados:', currentUserData);
+                
+                // Mostrar datos en la interfaz
+                mostrarDatosUsuario();
+                
+            } catch (error) {
+                console.error('❌ Error al cargar datos del usuario:', error);
+                showAlert('Error al cargar los datos del perfil', 'error');
             }
+        });
+
+        // ============================================
+        // MOSTRAR DATOS EN LA INTERFAZ
+        // ============================================
+        function mostrarDatosUsuario() {
+            if (!currentUserData) return;
+            
+            // Header
+            document.getElementById('userName').textContent = currentUserData.nombre || 'Usuario';
+            document.getElementById('userEmail').textContent = currentUserData.email || 'No especificado';
+            document.getElementById('userPhone').textContent = currentUserData.telefono || 'No especificado';
             
             // Fechas
-            if (userData.fechaCreacion) {
-                const fecha = userData.fechaCreacion.toDate ? 
-                    userData.fechaCreacion.toDate() : 
-                    new Date(userData.fechaCreacion);
+            if (currentUserData.fechaCreacion) {
+                const fecha = currentUserData.fechaCreacion.toDate ? 
+                    currentUserData.fechaCreacion.toDate() : 
+                    new Date(currentUserData.fechaCreacion);
                 document.getElementById('fechaRegistro').textContent = 
                     fecha.toLocaleDateString('es-PE', { 
                         year: 'numeric', 
@@ -385,10 +684,10 @@
                     });
             }
             
-            if (userData.ultimaConexion) {
-                const fecha = userData.ultimaConexion.toDate ? 
-                    userData.ultimaConexion.toDate() : 
-                    new Date(userData.ultimaConexion);
+            if (currentUserData.ultimaConexion) {
+                const fecha = currentUserData.ultimaConexion.toDate ? 
+                    currentUserData.ultimaConexion.toDate() : 
+                    new Date(currentUserData.ultimaConexion);
                 document.getElementById('ultimaConexion').textContent = 
                     fecha.toLocaleString('es-PE', { 
                         year: 'numeric', 
@@ -399,37 +698,67 @@
                     });
             }
             
-            // Cargar datos en campos de edición
-            cargarDatosEdicion();
-        });
-
-        // Cargar datos en formularios
-        function cargarDatosEdicion() {
-            if (!currentUserData) return;
-            
-            const inputNombre = document.getElementById('editNombre');
-            const inputTelefono = document.getElementById('editTelefono');
-            
-            if (inputNombre) inputNombre.value = currentUserData.nombre || '';
-            if (inputTelefono) inputTelefono.value = currentUserData.telefono || '';
+            // Campos de edición
+            document.getElementById('editNombre').value = currentUserData.nombre || '';
+            document.getElementById('editTelefono').value = currentUserData.telefono || '';
         }
 
-        // Editar nombre
+        // ============================================
+        // NAVEGACIÓN ENTRE SECCIONES
+        // ============================================
+        function showSection(sectionName) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Mostrar sección seleccionada
+            const targetSection = document.getElementById(`section-${sectionName}`);
+            if (targetSection) {
+                targetSection.style.display = 'block';
+            }
+            
+            // Actualizar menú activo
+            document.querySelectorAll('.sidebar-menu a').forEach(link => {
+                link.classList.remove('active');
+                if (link.dataset.section === sectionName) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Scroll al inicio
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Event listeners para el sidebar
+        document.querySelectorAll('.sidebar-menu a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const section = e.currentTarget.dataset.section;
+                if (section) {
+                    showSection(section);
+                }
+            });
+        });
+
+        // ============================================
+        // EDITAR NOMBRE
+        // ============================================
         async function editarNombre() {
             const nuevoNombre = document.getElementById('editNombre').value.trim();
             
             if (!nuevoNombre) {
-                alert('El nombre no puede estar vacío');
+                showAlert('El nombre no puede estar vacío', 'error');
                 return;
             }
             
             if (nuevoNombre.length < 3) {
-                alert('El nombre debe tener al menos 3 caracteres');
+                showAlert('El nombre debe tener al menos 3 caracteres', 'error');
                 return;
             }
             
             if (nuevoNombre === currentUserData.nombre) {
-                alert('El nombre no ha cambiado');
+                showAlert('El nombre no ha cambiado', 'info');
                 return;
             }
             
@@ -438,21 +767,23 @@
                 btn.disabled = true;
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
                 
-                await AuthService.actualizarPerfil(currentUserData.uid, {
-                    nombre: nuevoNombre
+                const db = firebase.firestore();
+                await db.collection('usuarios').doc(currentUserData.uid).update({
+                    nombre: nuevoNombre,
+                    fechaActualizacion: firebase.firestore.FieldValue.serverTimestamp()
                 });
                 
-                document.getElementById('userName').textContent = nuevoNombre;
                 currentUserData.nombre = nuevoNombre;
+                document.getElementById('userName').textContent = nuevoNombre;
                 
-                alert('✅ Nombre actualizado correctamente');
+                showAlert('Nombre actualizado correctamente', 'success');
                 
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fas fa-save"></i> Guardar';
                 
             } catch (error) {
-                console.error('❌ Error:', error);
-                alert('Error al actualizar el nombre');
+                console.error('❌ Error al actualizar nombre:', error);
+                showAlert('Error al actualizar el nombre', 'error');
                 
                 const btn = document.getElementById('btnGuardarNombre');
                 btn.disabled = false;
@@ -460,23 +791,25 @@
             }
         }
 
-        // Editar teléfono
+        // ============================================
+        // EDITAR TELÉFONO
+        // ============================================
         async function editarTelefono() {
             const nuevoTelefono = document.getElementById('editTelefono').value.trim();
             
             if (!nuevoTelefono) {
-                alert('El teléfono no puede estar vacío');
+                showAlert('El teléfono no puede estar vacío', 'error');
                 return;
             }
             
-            const re = /^[\+]?[0-9\s]{9,15}$/;
-            if (!re.test(nuevoTelefono)) {
-                alert('Por favor ingresa un teléfono válido');
+            const regex = /^[\+]?[0-9\s]{9,15}$/;
+            if (!regex.test(nuevoTelefono)) {
+                showAlert('Por favor ingresa un teléfono válido', 'error');
                 return;
             }
             
             if (nuevoTelefono === currentUserData.telefono) {
-                alert('El teléfono no ha cambiado');
+                showAlert('El teléfono no ha cambiado', 'info');
                 return;
             }
             
@@ -485,21 +818,25 @@
                 btn.disabled = true;
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
                 
-                await AuthService.actualizarPerfil(currentUserData.uid, {
-                    telefono: nuevoTelefono
+                const db = firebase.firestore();
+                await db.collection('usuarios').doc(currentUserData.uid).update({
+                    telefono: nuevoTelefono,
+                    fechaActualizacion: firebase.firestore.FieldValue.serverTimestamp()
                 });
                 
-                document.getElementById('userPhone').textContent = nuevoTelefono;
                 currentUserData.telefono = nuevoTelefono;
-                
-                alert('✅ Teléfono actualizado correctamente');
+                document.getElementById('userPhone').textContent = nuevoTelefono;
+
+
+
+            showAlert('Teléfono actualizado correctamente', 'success');
                 
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fas fa-save"></i> Guardar';
                 
             } catch (error) {
-                console.error('❌ Error:', error);
-                alert('Error al actualizar el teléfono');
+                console.error('❌ Error al actualizar teléfono:', error);
+                showAlert('Error al actualizar el teléfono', 'error');
                 
                 const btn = document.getElementById('btnGuardarTelefono');
                 btn.disabled = false;
@@ -507,24 +844,26 @@
             }
         }
 
-        // Cambiar contraseña
+        // ============================================
+        // CAMBIAR CONTRASEÑA
+        // ============================================
         async function cambiarPassword() {
             const passwordActual = document.getElementById('passwordActual').value;
             const passwordNueva = document.getElementById('passwordNueva').value;
             const passwordConfirm = document.getElementById('passwordConfirm').value;
             
             if (!passwordActual || !passwordNueva || !passwordConfirm) {
-                alert('Todos los campos son obligatorios');
+                showAlert('Todos los campos son obligatorios', 'error');
                 return;
             }
             
             if (passwordNueva.length < 6) {
-                alert('La nueva contraseña debe tener al menos 6 caracteres');
+                showAlert('La nueva contraseña debe tener al menos 6 caracteres', 'error');
                 return;
             }
             
             if (passwordNueva !== passwordConfirm) {
-                alert('Las contraseñas nuevas no coinciden');
+                showAlert('Las contraseñas nuevas no coinciden', 'error');
                 return;
             }
             
@@ -533,9 +872,16 @@
                 btn.disabled = true;
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cambiando...';
                 
-                await AuthService.cambiarPassword(passwordActual, passwordNueva);
+                const user = firebase.auth().currentUser;
+                const credential = firebase.auth.EmailAuthProvider.credential(
+                    user.email,
+                    passwordActual
+                );
                 
-                alert('✅ Contraseña cambiada correctamente');
+                await user.reauthenticateWithCredential(credential);
+                await user.updatePassword(passwordNueva);
+                
+                showAlert('Contraseña cambiada correctamente', 'success');
                 
                 document.getElementById('passwordActual').value = '';
                 document.getElementById('passwordNueva').value = '';
@@ -545,8 +891,14 @@
                 btn.innerHTML = '<i class="fas fa-key"></i> Cambiar Contraseña';
                 
             } catch (error) {
-                console.error('❌ Error:', error);
-                alert(error.message || 'Error al cambiar contraseña');
+                console.error('❌ Error al cambiar contraseña:', error);
+                
+                let mensaje = 'Error al cambiar contraseña';
+                if (error.code === 'auth/wrong-password') {
+                    mensaje = 'La contraseña actual es incorrecta';
+                }
+                
+                showAlert(mensaje, 'error');
                 
                 const btn = document.getElementById('btnCambiarPassword');
                 btn.disabled = false;
@@ -554,17 +906,53 @@
             }
         }
 
-        // Logout
+        // ============================================
+        // LOGOUT
+        // ============================================
         async function handleLogout() {
             if (confirm('¿Estás seguro de cerrar sesión?')) {
                 try {
-                    await AuthService.logout();
+                    await firebase.auth().signOut();
+                    window.location.href = '../auth/login.html';
                 } catch (error) {
-                    console.error('❌ Error:', error);
-                    alert('Error al cerrar sesión');
+                    console.error('❌ Error al cerrar sesión:', error);
+                    showAlert('Error al cerrar sesión', 'error');
                 }
             }
         }
+
+        // ============================================
+        // MOSTRAR ALERTAS
+        // ============================================
+        function showAlert(mensaje, tipo = 'info') {
+            const alertContainer = document.getElementById('alertContainer');
+            
+            const iconos = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                info: 'fa-info-circle'
+            };
+            
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${tipo}`;
+            alert.innerHTML = `
+                <i class="fas ${iconos[tipo]}"></i>
+                <span>${mensaje}</span>
+            `;
+            
+            alertContainer.innerHTML = '';
+            alertContainer.appendChild(alert);
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            setTimeout(() => {
+                alert.style.opacity = '0';
+                alert.style.transition = 'opacity 0.3s ease';
+                setTimeout(() => alert.remove(), 300);
+            }, 5000);
+        }
+        
+        console.log('✅ Perfil: Inicialización completa');
     </script>
 </body>
 </html>
