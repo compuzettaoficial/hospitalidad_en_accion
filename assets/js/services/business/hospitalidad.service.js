@@ -138,21 +138,32 @@ const HospitalidadService = {
    * @param {string} eventoId - ID del evento
    * @returns {Promise<Array>}
    */
-  async getEmparejamientosByEvento(eventoId) {
-    try {
-      const filters = [['eventoId', '==', eventoId]];
-      
-      return await FirestoreService.query(
-        CONSTANTS.COLLECTIONS.EMPAREJAMIENTOS,
-        filters,
-        { orderBy: 'fechaAsignacion', orderDirection: 'desc' }
-      );
-      
-    } catch (error) {
-      console.error('Error obteniendo emparejamientos:', error);
-      throw error;
-    }
-  },
+// BUSCAR la función getEmparejamientosByEvento:
+
+async getEmparejamientosByEvento(eventoId) {
+  try {
+    const filters = [['eventoId', '==', eventoId]];
+    
+    // SIN orderBy temporalmente
+    const emparejamientos = await FirestoreService.query(
+      CONSTANTS.COLLECTIONS.EMPAREJAMIENTOS,
+      filters
+    );
+    
+    // Ordenar en memoria
+    emparejamientos.sort((a, b) => {
+      const dateA = a.fechaAsignacion?.toDate?.() || new Date(0);
+      const dateB = b.fechaAsignacion?.toDate?.() || new Date(0);
+      return dateB - dateA;
+    });
+    
+    return emparejamientos;
+    
+  } catch (error) {
+    console.error('Error obteniendo emparejamientos:', error);
+    throw error;
+  }
+},
   
   /**
    * Crear emparejamiento entre visitante y anfitrión
