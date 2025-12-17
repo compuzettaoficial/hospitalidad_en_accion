@@ -35,32 +35,34 @@ const UsuariosService = {
    * @returns {Promise<Array>}
    */
   async getAll(options = {}) {
-    try {
-      const filters = [];
-      
-      // Filtrar por rol
-      if (options.rol) {
-        filters.push(['rol', '==', options.rol]);
-      }
-      
-      // Filtrar por estado activo
-      if (options.activo !== undefined) {
-        filters.push(['activo', '==', options.activo]);
-      }
-      
-      const queryOptions = {
-        orderBy: 'fechaCreacion',
-        orderDirection: 'desc',
-        ...options
-      };
-      
-      return await FirestoreService.query(this.COLLECTION, filters, queryOptions);
-      
-    } catch (error) {
-      console.error('Error obteniendo usuarios:', error);
-      throw error;
+  try {
+    const filters = [];
+    
+    if (options.rol) {
+      filters.push(['rol', '==', options.rol]);
     }
-  },
+    
+    if (options.activo !== undefined) {
+      filters.push(['activo', '==', options.activo]);
+    }
+    
+    // ELIMINADO orderBy temporalmente
+    const usuarios = await FirestoreService.query(this.COLLECTION, filters, { limit: options.limit });
+    
+    // Ordenar en memoria
+    usuarios.sort((a, b) => {
+      const dateA = a.fechaCreacion?.toDate?.() || new Date(0);
+      const dateB = b.fechaCreacion?.toDate?.() || new Date(0);
+      return dateB - dateA;
+    });
+    
+    return usuarios;
+    
+  } catch (error) {
+    console.error('Error obteniendo usuarios:', error);
+    throw error;
+  }
+},
   
   /**
    * Buscar usuarios por nombre o email
