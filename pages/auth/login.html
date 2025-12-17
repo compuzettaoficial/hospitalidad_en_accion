@@ -10,233 +10,231 @@
     
     <!-- CSS -->
     <link rel="stylesheet" href="../../assets/css/main.css">
-    <link rel="stylesheet" href="../../assets/css/components.css">
-    <link rel="stylesheet" href="../../assets/css/responsive.css">
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-<style>
-    .auth-container {
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-        padding: var(--spacing-lg);
-    }
-    
-    .auth-card {
-        background: var(--color-bg-white);
-        border-radius: var(--border-radius-xl);
-        padding: var(--spacing-xl);
-        max-width: 450px;
-        width: 100%;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    }
-    
-    .auth-header {
-        text-align: center;
-        margin-bottom: var(--spacing-xl);
-    }
-    
-    .auth-logo {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto var(--spacing-md);
-    background: var(--color-bg-white);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 15px rgba(91, 149, 194, 0.4);
-    padding: var(--spacing-sm);
-    overflow: hidden;
-}
-
-.auth-logo img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-    
-    .auth-header h1 {
-        font-size: 1.8rem;
-        color: var(--color-text-primary);
-        margin-bottom: var(--spacing-xs);
-        font-weight: var(--font-weight-bold);
-    }
-    
-    .auth-header p {
-        color: var(--color-text-secondary);
-        font-size: var(--font-size-base);
-    }
-    
-    .form-label {
-        color: var(--color-text-primary);
-        font-weight: var(--font-weight-semibold);
-        margin-bottom: var(--spacing-sm);
-        display: block;
-    }
-    
-    .form-input {
-        width: 100%;
-        padding: var(--spacing-md);
-        border: 2px solid var(--color-border-medium);
-        border-radius: var(--border-radius-md);
-        font-size: var(--font-size-base);
-        transition: var(--transition-base);
-        background: var(--color-bg-white);
-        color: var(--color-text-primary);
-    }
-    
-    .form-input:focus {
-        outline: none;
-        border-color: var(--color-primary);
-        box-shadow: 0 0 0 3px rgba(91, 149, 194, 0.1);
-    }
-    
-    .form-input::placeholder {
-        color: var(--color-text-light);
-    }
-    
-    .form-checkbox {
-        display: flex;
-        align-items: center;
-        gap: var(--spacing-sm);
-    }
-    
-    .form-checkbox label {
-        color: var(--color-text-primary);
-        font-size: var(--font-size-sm);
-        cursor: pointer;
-    }
-    
-    .auth-links {
-        text-align: center;
-        margin-top: var(--spacing-lg);
-        padding-top: var(--spacing-lg);
-        border-top: 2px solid var(--color-border-light);
-    }
-    
-    .auth-links p {
-        color: var(--color-text-secondary);
-        font-size: var(--font-size-sm);
-    }
-    
-    .auth-links a {
-        color: var(--color-primary);
-        font-weight: var(--font-weight-semibold);
-        text-decoration: none;
-        transition: var(--transition-fast);
-    }
-    
-    .auth-links a:hover {
-        color: var(--color-secondary);
-        text-decoration: underline;
-    }
-    
-    .password-toggle {
-        position: relative;
-    }
-    
-    .password-toggle .toggle-icon {
-        position: absolute;
-        right: var(--spacing-md);
-        top: 50%;
-        transform: translateY(-50%);
-        cursor: pointer;
-        color: var(--color-text-light);
-        transition: var(--transition-fast);
-    }
-    
-    .password-toggle .toggle-icon:hover {
-        color: var(--color-primary);
-    }
-    
-    .btn-primary {
-        background: var(--color-primary);
-        color: white;
-        border: none;
-        padding: var(--spacing-md) var(--spacing-xl);
-        border-radius: var(--border-radius-md);
-        font-size: var(--font-size-base);
-        font-weight: var(--font-weight-semibold);
-        cursor: pointer;
-        transition: var(--transition-base);
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: var(--spacing-sm);
-    }
-    
-    .btn-primary:hover {
-        background: var(--color-secondary);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(91, 149, 194, 0.4);
-    }
-    
-    .btn-primary:active {
-        transform: translateY(0);
-    }
-    
-    .btn-primary:disabled {
-        background: var(--color-text-light);
-        cursor: not-allowed;
-        transform: none;
-    }
-    
-    .form-group {
-        margin-bottom: var(--spacing-lg);
-    }
-    
-    /* Alertas */
-    #alertContainer {
-        margin-bottom: var(--spacing-md);
-    }
-    
-    .alert {
-        padding: var(--spacing-md);
-        border-radius: var(--border-radius-md);
-        display: flex;
-        align-items: center;
-        gap: var(--spacing-sm);
-        font-size: var(--font-size-sm);
-        animation: fadeInDown 0.3s ease;
-    }
-    
-    .alert-success {
-        background: var(--color-success);
-        color: white;
-    }
-    
-    .alert-error {
-        background: var(--color-error);
-        color: white;
-    }
-    
-    .alert-warning {
-        background: var(--color-warning);
-        color: white;
-    }
-    
-    .alert-info {
-        background: var(--color-info);
-        color: white;
-    }
-    
-    @keyframes fadeInDown {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
+    <style>
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            padding: var(--spacing-lg);
         }
-        to {
-            opacity: 1;
+        
+        .auth-card {
+            background: var(--color-bg-white);
+            border-radius: var(--border-radius-xl);
+            padding: var(--spacing-xl);
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .auth-header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+        }
+        
+        .auth-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto var(--spacing-md);
+            background: var(--color-bg-white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(91, 149, 194, 0.4);
+            padding: var(--spacing-sm);
+            overflow: hidden;
+        }
+        
+        .auth-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .auth-header h1 {
+            font-size: 1.8rem;
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-xs);
+            font-weight: var(--font-weight-bold);
+        }
+        
+        .auth-header p {
+            color: var(--color-text-secondary);
+            font-size: var(--font-size-base);
+        }
+        
+        .form-label {
+            color: var(--color-text-primary);
+            font-weight: var(--font-weight-semibold);
+            margin-bottom: var(--spacing-sm);
+            display: block;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: var(--spacing-md);
+            border: 2px solid var(--color-border-medium);
+            border-radius: var(--border-radius-md);
+            font-size: var(--font-size-base);
+            transition: var(--transition-base);
+            background: var(--color-bg-white);
+            color: var(--color-text-primary);
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(91, 149, 194, 0.1);
+        }
+        
+        .form-input::placeholder {
+            color: var(--color-text-light);
+        }
+        
+        .form-checkbox {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+        
+        .form-checkbox label {
+            color: var(--color-text-primary);
+            font-size: var(--font-size-sm);
+            cursor: pointer;
+        }
+        
+        .auth-links {
+            text-align: center;
+            margin-top: var(--spacing-lg);
+            padding-top: var(--spacing-lg);
+            border-top: 2px solid var(--color-border-light);
+        }
+        
+        .auth-links p {
+            color: var(--color-text-secondary);
+            font-size: var(--font-size-sm);
+        }
+        
+        .auth-links a {
+            color: var(--color-primary);
+            font-weight: var(--font-weight-semibold);
+            text-decoration: none;
+            transition: var(--transition-fast);
+        }
+        
+        .auth-links a:hover {
+            color: var(--color-secondary);
+            text-decoration: underline;
+        }
+        
+        .password-toggle {
+            position: relative;
+        }
+        
+        .password-toggle .toggle-icon {
+            position: absolute;
+            right: var(--spacing-md);
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--color-text-light);
+            transition: var(--transition-fast);
+        }
+        
+        .password-toggle .toggle-icon:hover {
+            color: var(--color-primary);
+        }
+        
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            padding: var(--spacing-md) var(--spacing-xl);
+            border-radius: var(--border-radius-md);
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-semibold);
+            cursor: pointer;
+            transition: var(--transition-base);
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+        }
+        
+        .btn-primary:hover {
+            background: var(--color-secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(91, 149, 194, 0.4);
+        }
+        
+        .btn-primary:active {
             transform: translateY(0);
         }
-    }
-</style>
+        
+        .btn-primary:disabled {
+            background: var(--color-text-light);
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .form-group {
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        /* Alertas */
+        #alertContainer {
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .alert {
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            font-size: var(--font-size-sm);
+            animation: fadeInDown 0.3s ease;
+        }
+        
+        .alert-success {
+            background: var(--color-success);
+            color: white;
+        }
+        
+        .alert-error {
+            background: var(--color-error);
+            color: white;
+        }
+        
+        .alert-warning {
+            background: var(--color-warning);
+            color: white;
+        }
+        
+        .alert-info {
+            background: var(--color-info);
+            color: white;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
 <body>
     
@@ -309,10 +307,7 @@
         </div>
     </div>
 
-    <!-- App Config (PRIMERO - OBLIGATORIO) -->
-    <script src="../../assets/js/config/app-config.js"></script>
-
-    <!-- Firebase SDK -->
+<!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -320,12 +315,15 @@
     <!-- Configuración Firebase -->
     <script src="../../assets/js/config/firebase-config.js"></script>
     
+    <!-- Configuraciones -->
+    <script src="../../assets/js/config/constants.js"></script>
+    <script src="../../assets/js/config/routes.js"></script>
+    
     <!-- Servicios -->
-    <script src="../../assets/js/services/auth.service.js"></script>
+    <script src="../../assets/js/services/firebase/auth.service.js"></script>
     
     <script>
         console.log('📄 Página de login cargada');
-        console.log('🔧 AppConfig:', AppConfig);
         
         // ============================================
         // VARIABLES GLOBALES
@@ -335,6 +333,13 @@
         const togglePassword = document.getElementById('togglePassword');
         const passwordInput = document.getElementById('password');
         
+        // Debug: verificar elementos
+        if (!togglePassword || !passwordInput) {
+            console.error('❌ No se encontraron los elementos del toggle');
+        } else {
+            console.log('✅ Elementos del toggle encontrados');
+        }
+        
         // ============================================
         // VERIFICAR SI YA ESTÁ LOGUEADO
         // ============================================
@@ -342,32 +347,37 @@
             if (user) {
                 console.log('✅ Usuario ya logueado:', user.email);
                 console.log('🔄 Redirigiendo a perfil...');
-                window.location.href = AppConfig.PAGES.PERFIL();
+                // Usar ruta relativa si no existe AppConfig
+                window.location.href = '../perfil.html';
             } else {
                 console.log('👤 No hay usuario logueado, mostrando formulario');
             }
         });
         
-// ============================================
-// TOGGLE PASSWORD VISIBILITY
-// ============================================
-togglePassword.addEventListener('click', () => {
-    console.log('Click en ojo detectado'); // Para debugear
-    console.log('Tipo actual:', passwordInput.type); // Ver tipo actual
-    
-    const type = passwordInput.type === 'password' ? 'text' : 'password';
-    passwordInput.type = type;
-    
-    console.log('Nuevo tipo:', passwordInput.type); // Ver nuevo tipo
-    
-    if (type === 'password') {
-        togglePassword.classList.remove('fa-eye-slash');
-        togglePassword.classList.add('fa-eye');
-    } else {
-        togglePassword.classList.remove('fa-eye');
-        togglePassword.classList.add('fa-eye-slash');
-    }
-});
+        // ============================================
+        // TOGGLE PASSWORD VISIBILITY
+        // ============================================
+        if (togglePassword && passwordInput) {
+            togglePassword.addEventListener('click', () => {
+                console.log('👁️ Click en ojo detectado');
+                console.log('📝 Tipo actual:', passwordInput.type);
+                
+                // Cambiar tipo
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    togglePassword.classList.remove('fa-eye');
+                    togglePassword.classList.add('fa-eye-slash');
+                    console.log('✅ Contraseña visible');
+                } else {
+                    passwordInput.type = 'password';
+                    togglePassword.classList.remove('fa-eye-slash');
+                    togglePassword.classList.add('fa-eye');
+                    console.log('✅ Contraseña oculta');
+                }
+                
+                console.log('📝 Nuevo tipo:', passwordInput.type);
+            });
+        }
         
         // ============================================
         // HANDLE LOGIN
@@ -393,16 +403,16 @@ togglePassword.addEventListener('click', () => {
                 
                 console.log('🚀 Iniciando proceso de login...');
                 
-                // Intentar login
-                await AuthService.login(email, password);
+                // Intentar login con Firebase directamente
+                await firebase.auth().signInWithEmailAndPassword(email, password);
                 
                 console.log('✅✅✅ Login exitoso');
                 showAlert('¡Inicio de sesión exitoso! Redirigiendo...', 'success');
                 
                 // Esperar 1 segundo antes de redirigir
                 setTimeout(() => {
-                    console.log('🔄 Redirigiendo a perfil...');
-                    window.location.href = AppConfig.PAGES.PERFIL();
+                    console.log('🔄 Redirigiendo...');
+                    window.location.href = '../perfil.html';
                 }, 1000);
                 
             } catch (error) {
