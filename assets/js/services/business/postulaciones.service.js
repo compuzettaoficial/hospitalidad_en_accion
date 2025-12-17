@@ -219,25 +219,30 @@ const PostulacionesService = {
    * @returns {Promise<Array>}
    */
   async getByEvento(eventoId, tipo = null) {
-    try {
-      const filters = [['eventoId', '==', eventoId]];
-      
-      if (tipo) {
-        filters.push(['tipo', '==', tipo]);
-      }
-      
-      const options = {
-        orderBy: 'fechaPostulacion',
-        orderDirection: 'desc'
-      };
-      
-      return await FirestoreService.query(this.COLLECTION, filters, options);
-      
-    } catch (error) {
-      console.error('Error obteniendo postulaciones del evento:', error);
-      throw error;
+  try {
+    const filters = [['eventoId', '==', eventoId]];
+    
+    if (tipo) {
+      filters.push(['tipo', '==', tipo]);
     }
-  },
+    
+    // ELIMINADO orderBy temporalmente para evitar índices
+    const postulaciones = await FirestoreService.query(this.COLLECTION, filters);
+    
+    // Ordenar en memoria
+    postulaciones.sort((a, b) => {
+      const dateA = a.fechaPostulacion?.toDate?.() || new Date(0);
+      const dateB = b.fechaPostulacion?.toDate?.() || new Date(0);
+      return dateB - dateA;
+    });
+    
+    return postulaciones;
+    
+  } catch (error) {
+    console.error('Error obteniendo postulaciones del evento:', error);
+    throw error;
+  }
+},
   
   /**
    * Obtener postulaciones de usuario para un evento
@@ -246,21 +251,27 @@ const PostulacionesService = {
    * @param {string} tipo - Tipo de postulación
    * @returns {Promise<Array>}
    */
-  async getByUsuarioEvento(usuarioId, eventoId, tipo) {
-    try {
-      const filters = [
-        ['usuarioId', '==', usuarioId],
-        ['eventoId', '==', eventoId],
-        ['tipo', '==', tipo]
-      ];
-      
-      return await FirestoreService.query(this.COLLECTION, filters);
-      
-    } catch (error) {
-      console.error('Error obteniendo postulaciones:', error);
-      throw error;
-    }
-  },
+async getByUsuario(usuarioId) {
+  try {
+    const filters = [['usuarioId', '==', usuarioId]];
+    
+    // ELIMINADO orderBy temporalmente
+    const postulaciones = await FirestoreService.query(this.COLLECTION, filters);
+    
+    // Ordenar en memoria
+    postulaciones.sort((a, b) => {
+      const dateA = a.fechaPostulacion?.toDate?.() || new Date(0);
+      const dateB = b.fechaPostulacion?.toDate?.() || new Date(0);
+      return dateB - dateA;
+    });
+    
+    return postulaciones;
+    
+  } catch (error) {
+    console.error('Error obteniendo postulaciones del usuario:', error);
+    throw error;
+  }
+},
   
   /**
    * Obtener postulaciones pendientes de un evento
